@@ -1,53 +1,98 @@
-<?php
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://www.17sucai.com/preview/1266961/2018-06-19/3007/index.html -->
+<html lang="zxx"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>懂你 - 登录</title>
+    <!-- Meta tag Keywords -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-/* @var $this yii\web\View */
+    <meta name="keywords" content="">
+    <script>
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
 
-$this->title = 'My Yii Application';
-?>
-<div class="site-index">
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+    <!-- Meta tag Keywords -->
+    <!-- css files -->
+    <link rel="stylesheet" href="/knowyou/frontend/web/home/style.css" type="text/css" media="all">
+    <!-- Style-CSS -->
+    <link rel="stylesheet" href="/knowyou/frontend/web/home/fontawesome-all.css">
+    <!-- Font-Awesome-Icons-CSS -->
+    <!-- //css files -->
+    <!-- web-fonts -->
+    <!--<link href="/knowyou/frontend/web/home/css" rel="stylesheet">
+    <link href="/knowyou/frontend/web/home/css(1)" rel="stylesheet">-->
+    <!-- //web-fonts -->
+</head>
 
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
-    </div>
+<body>
+<!-- bg effect -->
+<div id="bg">
+    <canvas width="1920" height="938"></canvas>
+    <canvas width="1920" height="938"></canvas>
+    <canvas width="1920" height="938"></canvas>
 </div>
+<!-- //bg effect -->
+<!-- title -->
+<h1>懂你 - 只为更好的你</h1>
+<!-- //title -->
+<!-- content -->
+<div class="sub-main-w3">
+    <form action="" method="post">
+        <h2>
+            马上登录
+        </h2>
+        <div class="form-style-agile">
+            <label>
+                <i class="fas fa-user"></i>
+                用户名
+            </label>
+            <input placeholder="Username" name="Name" type="text" required="">
+        </div>
+        <div class="form-style-agile">
+            <label>
+                <i class="fas fa-unlock-alt"></i>
+                密码
+            </label>
+            <input placeholder="Password" name="Password" type="password" required="">
+        </div>
+        <!-- checkbox -->
+        <div class="wthree-text">
+            <ul>
+                <li>
+                    <label class="anim">
+                        <input type="checkbox" class="checkbox" required="">
+                        <span>记住我</span>
+                    </label>
+                </li>
+                <li>
+                    <a href="">忘记密码?</a>
+                </li>
+            </ul>
+        </div>
+        <!-- //checkbox -->
+        <input type="submit" value="Log In">
+    </form>
+</div>
+<!-- //content -->
+
+<!-- copyright -->
+<div class="footer">
+    <p>Copyright © 2018.JZC All rights reserved.</p>
+</div>
+<!-- //copyright -->
+
+<!-- Jquery -->
+<script src="/knowyou/frontend/web/home/jquery-3.3.1.min.js"></script>
+<!-- //Jquery -->
+
+<!-- effect js -->
+<script src="/knowyou/frontend/web/home/canva_moving_effect.js"></script>
+<!-- //effect js -->
+
+
+
+</body></html>
