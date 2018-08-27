@@ -1,4 +1,7 @@
 <?php
+    use yii\helpers\Html;
+    use yii\helpers\Url;
+
     $this->title = "懂你 -- 只为更好的你";
 ?>
 <div id="bg">
@@ -12,23 +15,19 @@
 <!-- //title -->
 <!-- content -->
 <div class="sub-main-w3">
-    <form action="" method="post">
+    <?=Html::beginForm('actionlogin', 'post', []) ?>
         <h2>
             马上登录
         </h2>
         <div class="form-style-agile">
-            <label>
-                <i class="fas fa-user"></i>
-                用户名
-            </label>
-            <input placeholder="Username" name="Name" type="text" required="">
+            <?=Html::label('用户名:', 'username')?>
+            <?=Html::activeInput('text', $model, 'username', ['required' => '']) ?>
+            <?=Html::error($model, 'username', ['style' => 'color:red']); ?>
         </div>
         <div class="form-style-agile">
-            <label>
-                <i class="fas fa-unlock-alt"></i>
-                密码
-            </label>
-            <input placeholder="Password" name="Password" type="password" required="">
+            <?=Html::label('密码:', 'password')?>
+            <?=Html::activeInput('password', $model, 'password', ['required' => '']) ?>
+            <?=Html::error($model, 'password', ['style' => 'color:red']); ?>
         </div>
         <!-- checkbox -->
         <div class="wthree-text">
@@ -46,7 +45,7 @@
         </div>
         <!-- //checkbox -->
         <input type="submit" value="Log In">
-    </form>
+    <?=Html::endForm(); ?>
 </div>
 <!-- //content -->
 
