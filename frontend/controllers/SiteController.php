@@ -14,4 +14,9 @@ class SiteController extends Controller
 
         return $this->render('index', ['model' => $userModel]);
     }
+
+    public function actionLogin()
+    {
+        echo "login";
+    }
 }

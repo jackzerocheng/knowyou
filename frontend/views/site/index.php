@@ -1,5 +1,6 @@
 <?php
     use yii\helpers\Html;
+    use yii\helpers\Url;
 
     $this->title = "懂你 -- 只为更好的你";
 ?>
@@ -14,7 +15,7 @@
 <!-- //title -->
 <!-- content -->
 <div class="sub-main-w3">
-    <?=Html::beginForm('', 'post', []) ?>
+    <?=Html::beginForm('actionlogin', 'post', []) ?>
         <h2>
             马上登录
         </h2>
