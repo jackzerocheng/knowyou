@@ -10,10 +10,10 @@
 namespace common\models;
 
 use yii\db\ActiveRecord;
+use Yii;
 
 class User extends ActiveRecord
 {
-    protected static $uid;
     const STATUS_NORMAL = 1;
     const STATUS_STOP = 2;
     const STATUS_DELETED = 3;
@@ -24,26 +24,9 @@ class User extends ActiveRecord
         self::STATUS_DELETED => '删除'
     ];
 
-    function __construct($uid = null)
+    public static function tableName($uid = 0)
     {
-        if ($uid) {
-            self::$uid = $uid;
-        } else {
-            //   太粗糙，实际中用UUID或Redis比较合理
-            self::$uid = time() . mt_rand(0,9);
-        }
-
-        parent::__construct();
-    }
-
-    public static function tableName()
-    {
-        return '{{%user' . self::getTable() . '}}';
-    }
-
-    private static function getTable()
-    {
-        return '0' . self::$uid % 4;
+        return '{{%user0' . ($uid % 4) . '}}';
     }
 
     /**
@@ -80,6 +63,31 @@ class User extends ActiveRecord
     {
         if (!preg_match('/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/', $attribute)) {
             $this->addError($attribute, '邮箱格式不正确');
+        }
+    }
+
+    public function login($params)
+    {
+        if (self::find()->from(self::tableName($params['uid']))->where(['uid' => $params['uid']])->count() > 0) {
+            if (self::find()->from(self::tableName($params['uid']))->where(['uid' => $params['uid'], 'password' => $params['password']])->count() > 0) {
+                Yii::$app->session->setFlash('success', '登录成功');
+                return true;
+            } else {
+                Yii::$app->session->setFlash('failed', '检查密码后重试');
+            }
+        } else {
+            Yii::$app->session->setFlash('failed', '不存在该账号');
+        }
+
+        return false;
+    }
+
+    public function register()
+    {
+        $this->uid = time() . "0" . mt_rand(0,3);
+
+        if (self::tableName()) {
+
         }
     }
 
