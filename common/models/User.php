@@ -1,7 +1,7 @@
 <?php
 /**
  * Message:
- * User: jzc<jzc1@meitu.com>
+ * User: jzc
  * Date: 2018/8/25
  * Time: 下午6:59
  * Return:

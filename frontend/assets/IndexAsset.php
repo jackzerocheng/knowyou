@@ -1,7 +1,7 @@
 <?php
 /**
  * Message:
- * User: jzc<jzc1@meitu.com>
+ * User: jzc
  * Date: 2018/8/25
  * Time: 下午6:35
  * Return:
@@ -16,12 +16,19 @@ class IndexAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'home/style.css',
-        'home/fontawesome-all.css'
+        'css/style.css',
+        'css/animate.css',
+        'css/bootstrap.min.css',
+        'css/classy-nav.css',
+        'css/font-awesome.min.css',
+        'css/owl.carousel.css',
     ];
     public $js = [
-        'home/canva_moving_effect.js',
-        'home/jquery-3.3.1.min.js'
+        'js/active.js',
+        'js/bootstrap.min.js',
+        'js/map-active.js',
+        'js/plugins.js',
+        'js/popper.min.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',
