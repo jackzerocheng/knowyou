@@ -21,14 +21,16 @@ class IndexAsset extends AssetBundle
         'css/bootstrap.min.css',
         'css/classy-nav.css',
         'css/font-awesome.min.css',
-        'css/owl.carousel.css',
+        'css/owl.carousel.css'
     ];
+
     public $js = [
-        'js/active.js',
+        'js/jquery/jquery-2.2.4.min.js',
+        'js/popper.min.js',
         'js/bootstrap.min.js',
-        'js/map-active.js',
         'js/plugins.js',
-        'js/popper.min.js'
+        'js/active.js',
+        'js/map-active.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

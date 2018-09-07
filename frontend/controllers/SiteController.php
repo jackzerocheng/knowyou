@@ -16,6 +16,6 @@ class SiteController extends CommonController
     public $layout = 'index';
     public function actionIndex()
     {
-        return $this->renderPartial('index');
+        return $this->render('index');
     }
 }
