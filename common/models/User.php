@@ -14,6 +14,8 @@ use Yii;
 
 class User extends ActiveRecord
 {
+    const BASE_USER_ID = 'BASE_USER_ID';
+
     const STATUS_NORMAL = 1;
     const STATUS_STOP = 2;
     const STATUS_DELETED = 3;
@@ -24,11 +26,19 @@ class User extends ActiveRecord
         self::STATUS_DELETED => '删除'
     ];
 
+    public $password_again;
+
     public static function tableName($uid = 0)
     {
+        $uid = $uid ? : self::getUid();
         return '{{%user0' . ($uid % 4) . '}}';
     }
 
+    public static function getUid()
+    {
+        $redis = Yii::$app->redis;
+        return $redis->get(self::BASE_USER_ID);
+    }
     /**
      * 参数校验
      * @return array
@@ -36,22 +46,23 @@ class User extends ActiveRecord
     public function rules()
     {
         return [
-            ['username', 'checkName', 'max' => 30, 'tooLong' => '长度不能大于30', 'skipOnEmpty' => false],
+            ['username', 'checkName', 'skipOnEmpty' => false],
             ['password', 'string', 'min' => 6, 'tooShort' => '密码长度不能小于6位', 'skipOnEmpty' => false],
-            ['signature', 'string', 'max' => 50, 'tooLong' => '长度不能大于50', 'skipOnEmpty' => true],
-            ['phone', 'checkPhone'],
-            ['email', 'checkEmail'],
-            ['status','in', 'range' => [1, 2, 3], 'message' => '非法操作']
+            ['password_again', 'string']
         ];
     }
 
     public function checkName($attribute, $params)
     {
-        if (self::find()->where(['username' => $this->attributes])->count() > 0) {
+        if (strlen($this->username) < 1 || strlen($this->username) > 30) {
+            $this->addError($attribute, '用户名格式长度为1-30');
+        } elseif (self::find()->where(['username' => $this->username])->count() > 0) {
             $this->addError($attribute, '该用户名已存在');
+        } elseif ($this->password != $this->password_again) {
+            $this->addError($attribute, '两次输入密码不一致');
         }
     }
-
+/*
     public function checkPhone($attribute)
     {
         if (!preg_match('/^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/', $attribute)) {
@@ -65,30 +76,20 @@ class User extends ActiveRecord
             $this->addError($attribute, '邮箱格式不正确');
         }
     }
-
-    public function login($params)
+*/
+    public function beforeSave($insert)
     {
-        if (self::find()->from(self::tableName($params['uid']))->where(['uid' => $params['uid']])->count() > 0) {
-            if (self::find()->from(self::tableName($params['uid']))->where(['uid' => $params['uid'], 'password' => $params['password']])->count() > 0) {
-                Yii::$app->session->setFlash('success', '登录成功');
-                return true;
+        if (parent::beforeSave($insert)) {
+            if (empty($this->password)) {
+                unset($this->password);
             } else {
-                Yii::$app->session->setFlash('failed', '检查密码后重试');
+                $this->password = setPassword($this->password);
+                $this->uid = self::getUid();
             }
-        } else {
-            Yii::$app->session->setFlash('failed', '不存在该账号');
+
+            return true;
         }
 
         return false;
     }
-
-    public function register()
-    {
-        $this->uid = time() . "0" . mt_rand(0,3);
-
-        if (self::tableName()) {
-
-        }
-    }
-
 }

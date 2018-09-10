@@ -15,13 +15,13 @@ $this->title = "懂你 -- 只为更好的你";
 <!-- //title -->
 <!-- content -->
 <div class="sub-main-w3">
-    <?=Html::beginForm(['login'], 'post', ['id' => 'loginForm']) ?>
+    <?=Html::beginForm(['register'], 'post', ['id' => 'loginForm']) ?>
     <h2>
         立即注册
     </h2>
     <div class="form-style-agile">
         <?=Html::label('用户名:', 'username')?>
-        <?=Html::activeInput('text', $model, 'uid', ['required' => '']) ?>
+        <?=Html::activeInput('text', $model, 'username', ['required' => '']) ?>
         <?=Html::error($model, 'username', ['style' => 'color:red']); ?>
     </div>
     <div class="form-style-agile">
@@ -30,9 +30,9 @@ $this->title = "懂你 -- 只为更好的你";
         <?=Html::error($model, 'password', ['style' => 'color:red']); ?>
     </div>
     <div class="form-style-agile">
-        <?=Html::label('再次输入:', 'password')?>
-        <?=Html::activeInput('password', $model, 'password', ['required' => '']) ?>
-        <?=Html::error($model, 'password', ['style' => 'color:red']); ?>
+        <?=Html::label('再次输入:', 'password_again')?>
+        <?=Html::activeInput('password', $model, 'password_again', ['required' => '']) ?>
+        <?=Html::error($model, 'password_again', ['style' => 'color:red']); ?>
     </div>
     <div class="form-style-agile">
         <p style="text-align: center;color: red"><?=Yii::$app->session->getFlash('failed') ?></p>
@@ -54,8 +54,4 @@ $this->title = "懂你 -- 只为更好的你";
 </div>
 <!-- //content -->
 
-<!-- copyright -->
-<div class="footer">
-    <p>Copyright © 2018.JZC All rights reserved.</p>
-</div>
 

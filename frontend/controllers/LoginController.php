@@ -11,35 +11,55 @@ namespace frontend\controllers;
 
 use common\models\User;
 use Yii;
+use common\models\LoginForm;
 
 class LoginController extends CommonController
 {
+    public $requireLogin = false;
     public $layout = 'login';
+
+    public function init()
+    {
+        //登录态则跳回主页
+        if (Yii::$app->session->has(LoginForm::SESSION_USE_ID)) {
+            Yii::$app->session->setFlash('message', '您已登录');
+            return Yii::$app->response->redirect(['site/index']);
+        }
+
+        return true;
+    }
+
+    public function actions()
+    {
+        //验证码
+        return [
+            'captcha' => [
+                'class' => 'yii\captcha\captchaAction',
+                'maxLength' => 4,
+                'minLength' => 4,
+                'width' => 100,
+                'height' => 50,
+            ]
+        ];
+    }
 
     public function actionIndex()
     {
-        $userModel = new User();
-
-        return $this->render('index', ['model' => $userModel]);
-    }
-
-    public function actionLogin()
-    {
-        $user = new User();
-        $params = Yii::$app->request->post();
-        if (Yii::$app->request->isPost && $user->login($params['User'])) {
-            return $this->redirect(['Home/index']);
+        $loginForm = new LoginForm();
+        if (Yii::$app->request->isPost && $loginForm->load(Yii::$app->request->post()) && $loginForm->validate() && $loginForm->login()) {
+            return $this->redirect(['site/index']);
         }
 
-        return $this->render('index', ['model' => $user]);
+        return $this->render('index', ['model' => $loginForm]);
     }
 
     public function actionRegister()
     {
         $user = new User();
-
-        if (Yii::$app->request->isPost && $user->load(Yii::$app->request->post()) && $user->register()) {
-            Yii::$app->session->setFlash('success', '注册用户成功');
+        //echo $user::getUid();exit;
+        if (Yii::$app->request->isPost && $user->load(Yii::$app->request->post()) && $user->save()) {
+            Yii::$app->session->setFlash('success', '注册用户成功,账号为' . User::getUid());
+            Yii::$app->redis->incr(User::BASE_USER_ID);
             return $this->redirect(['index']);
         }
 

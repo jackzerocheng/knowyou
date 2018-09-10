@@ -67,6 +67,10 @@ $this->title = 'Know You - begin your colorful life';
         </div>
     </div>
 
+    <div class="form-style-agile">
+        <p style="text-align: center;color: red"><?=Yii::$app->session->getFlash('message') ?></p>
+    </div>
+
     <!-- Logo Area -->
     <div class="logo-area text-center">
         <div class="container h-100">

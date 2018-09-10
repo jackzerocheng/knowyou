@@ -1,6 +1,7 @@
 <?php
     use yii\helpers\Html;
     use yii\helpers\Url;
+    use yii\captcha\Captcha;
 
     $this->title = "懂你 -- 只为更好的你";
 ?>
@@ -15,7 +16,7 @@
 <!-- //title -->
 <!-- content -->
 <div class="sub-main-w3">
-    <?=Html::beginForm(['login'], 'post', ['id' => 'loginForm']) ?>
+    <?=Html::beginForm(['index'], 'post', ['id' => 'loginForm']) ?>
         <h2>
             马上登录
         </h2>
@@ -29,18 +30,43 @@
             <?=Html::activeInput('password', $model, 'password', ['required' => '']) ?>
             <?=Html::error($model, 'password', ['style' => 'color:red']); ?>
         </div>
+    <div class="form-style-agile">
+        <?=Html::label('验证码:', 'verify_code')?>
+        <?=Captcha::widget([
+            'model' => $model,
+            'attribute' => 'verifyCode',
+            'template' => '{input}{image}',
+            'captchaAction' => 'login/captcha',
+            'options' => [
+                'class' => '',
+                'id' => 'verifyCode',
+                'style' => 'width:60%'
+            ],
+            'imageOptions' => [
+                'class' => '',
+                'id' => 'verifyCode-image'
+            ],
+        ]) ?>
+        <?=Html::error($model, 'verifyCode', ['style' => 'color:red']); ?>
+    </div>
         <div class="form-style-agile">
             <p style="text-align: center;color: red"><?=Yii::$app->session->getFlash('failed') ?></p>
         </div>
+    <div class="form-style-agile">
+        <p style="text-align: center;color: red"><?=Yii::$app->session->getFlash('success') ?></p>
+    </div>
         <div class="wthree-text">
             <ul>
                 <li>
                     <label class="anim">
-                        <a href="<?=Url::to(['site/register']) ?>">没有账号?</a>
+                        <?=Html::label('保持登录', 'remember') ?>
+                        <?=Html::checkbox('checkbox', false, ['id' => 'remember', 'value' => 1]) ?>
                     </label>
                 </li>
+
                 <li>
-                    <a href="">忘记密码?</a>
+                    <a href="<?=Url::to(['login/register']) ?>">没有账号?</a><br>
+                    <a href="#">忘记密码?</a>
                 </li>
             </ul>
         </div>
@@ -49,8 +75,4 @@
 </div>
 <!-- //content -->
 
-<!-- copyright -->
-<div class="footer">
-    <p>Copyright © 2018.JZC All rights reserved.</p>
-</div>
 

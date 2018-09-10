@@ -79,7 +79,10 @@ IndexAsset::register($this);
                 </div>
             </div>
         </div>
-        Copyright &copy;<script>document.write(new Date().getFullYear());</script>JZC All rights reserved
+        <!-- copyright -->
+        <div class="footer">
+            <p>Copyright © <script>document.write(new Date().getFullYear());</script>.JZC All rights reserved.</p>
+        </div>
     </footer>
 
     <?php $this->endBody() ?>

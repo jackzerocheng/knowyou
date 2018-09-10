@@ -1,6 +1,6 @@
 <?php
 /**
- * Message:
+ * Message: 前台展示效果资源
  * User: jzc
  * Date: 2018/8/25
  * Time: 下午6:35
