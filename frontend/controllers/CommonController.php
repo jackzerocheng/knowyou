@@ -27,7 +27,7 @@ class CommonController extends Controller
         if ($this->requireLogin) {
             //要求登录态访问
             //获取session
-            if (!$this->getSession()) {
+            if (!$this->userId = $this->getSession()) {
                 //获取cookie
                 $cookie = Yii::$app->response->cookies;
                 if ($cookie->has(LoginForm::COOKIE_USER_INFO)) {
