@@ -36,8 +36,9 @@ class User extends ActiveRecord
 
     public static function getUid()
     {
+        //取baseID直接通过incr来返回，利用原子操作应对高并发场景
         $redis = Yii::$app->redis;
-        return $redis->get(self::BASE_USER_ID);
+        return $redis->incr(self::BASE_USER_ID);
     }
     /**
      * 参数校验
