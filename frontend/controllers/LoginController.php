@@ -56,9 +56,9 @@ class LoginController extends CommonController
     public function actionRegister()
     {
         $user = new User();
-        //echo $user::getUid();exit;
+
         if (Yii::$app->request->isPost && $user->load(Yii::$app->request->post()) && $user->save()) {
-            Yii::$app->session->setFlash('success', '注册用户成功,账号为' . User::getUid());
+            Yii::$app->session->setFlash('success', '注册用户成功,账号为' . $user::$uid);
             return $this->redirect(['index']);
         }
 

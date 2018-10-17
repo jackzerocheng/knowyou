@@ -22,10 +22,8 @@ class LoginForm extends Model
     //不存在session则去拿cookie
     const COOKIE_USER_INFO = 'COOKIE_USER_INFO';
     //多端登录时去Redis判断，是否在其他端已登录
-    const REDIS_USERNAME = 'user_name';
-    const REDIS_STATUS = 'status';
-    const REDIS_IP = 'ip';
-    const REDIS_LOGIN_TIME = 'login_time';
+    const REDIS_KEY_PREFIX = 'know_you_';
+
     //保持登录时长
     const REDIS_KEEP_TIME = 60 * 60 * 24;//一天
     const COOKIE_KEEP_TIME = 60 * 60 * 24 * 7;//七天
@@ -42,11 +40,12 @@ class LoginForm extends Model
     public function validateAccount($attribute, $params)
     {
         if (!preg_match('/^\w{2,30}$/', $this->$attribute)) {
-            $this->addError($attribute, '账号或密码错误');
+            $this->addError($attribute, '账号长度不正确');
         } elseif(strlen($this->password) < 6) {
             $this->addError($attribute, '密码长度不正确');
         } else {
-            $user = User::find()->from(User::tableName($this->uid))->where(['uid' => $this->$attribute])->asArray()->one();
+            $userModel = new User($this->uid);
+            $user = $userModel::find()->where(['uid' => $this->attributes])->asArray()->one();
             if (!$user || $user['password'] != setPassword($this->password)) {
                 $this->addError($attribute, '账号或密码错误');
             } else {
@@ -80,11 +79,11 @@ class LoginForm extends Model
         Yii::$app->session->set(self::SESSION_USE_ID, $this->uid);
 
         $redis = Yii::$app->redis;
-        $redis->hset($this->uid, self::REDIS_USERNAME, $this->user['username']);
-        $redis->hset($this->uid, self::REDIS_STATUS, $this->user['status']);
-        $redis->hset($this->uid, self::REDIS_IP, getIP());
-        $redis->hset($this->uid, self::REDIS_LOGIN_TIME, NOW_DATE);
-        $redis->expire($this->uid, self::REDIS_KEEP_TIME);
+        $redis->hset(self::REDIS_KEY_PREFIX . $this->uid, 'username', $this->user['username']);
+        $redis->hset(self::REDIS_KEY_PREFIX . $this->uid, 'status', $this->user['status']);
+        $redis->hset(self::REDIS_KEY_PREFIX . $this->uid, 'ip', getIP());
+        $redis->hset(self::REDIS_KEY_PREFIX . $this->uid, 'login_time', NOW_DATE);
+        $redis->expire(self::REDIS_KEY_PREFIX . $this->uid, self::REDIS_KEEP_TIME);
     }
 
     public function createCookie()

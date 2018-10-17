@@ -25,18 +25,26 @@ function setPassword($basePassword)
  * 获取IP方法，获取不到则返回255.255.255.255
  * @return string
  */
-function getIP(){
-    if(!empty($_SERVER["HTTP_CLIENT_IP"])){
+function getIP()
+{
+    if (!empty($_SERVER["HTTP_CLIENT_IP"])) {
         $cip = $_SERVER["HTTP_CLIENT_IP"];
-    }
-    elseif(!empty($_SERVER["HTTP_X_FORWARDED_FOR"])){
+    } elseif (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
         $cip = $_SERVER["HTTP_X_FORWARDED_FOR"];
-    }
-    elseif(!empty($_SERVER["REMOTE_ADDR"])){
+    } elseif (!empty($_SERVER["REMOTE_ADDR"])) {
         $cip = $_SERVER["REMOTE_ADDR"];
-    }
-    else{
+    } else {
         $cip = "255.255.255.255";
     }
+
     return $cip;
+}
+
+/**
+ * 返回毫秒时间戳
+ * @return float
+ */
+function getMillisecond() {
+    list($t1, $t2) = explode(' ', microtime());
+    return (float)sprintf('%.0f',(floatval($t1)+floatval($t2))*1000);
 }

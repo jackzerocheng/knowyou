@@ -21,7 +21,7 @@ class SiteController extends CommonController
         return $this->render('index');
     }
 
-    public function logout()
+    public function actionLogout()
     {
         $loginForm = new LoginForm();
         $loginForm->logout();
