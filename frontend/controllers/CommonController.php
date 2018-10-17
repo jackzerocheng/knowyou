@@ -44,17 +44,13 @@ class CommonController extends Controller
 
                     return Yii::$app->response->redirect(['login/index']);
                 }
-
-                $redis = Yii::$app->redis;
-                $info = $redis->hgetAll(LoginForm::REDIS_KEY_PREFIX . $this->userId);
-                var_dump($info);die;
-                /*
-                $this->userName = $redis->hgetAll(LoginForm::REDIS_KEY_PREFIX . $this->userId);
-                $this->status = $redis->get(LoginForm::REDIS_KEY_PREFIX . $this->userId);
-                $this->userName = $redis->get(LoginForm::REDIS_KEY_PREFIX . $this->userId);
-                $this->userName = $redis->get(LoginForm::REDIS_KEY_PREFIX . $this->userId);
-                */
             }
+
+            $redis = Yii::$app->redis;
+            $this->username = $redis->hget(LoginForm::REDIS_KEY_PREFIX . $this->userId, 'username');
+            $this->status = $redis->hget(LoginForm::REDIS_KEY_PREFIX . $this->userId, 'status');
+            $this->loginTime = $redis->hget(LoginForm::REDIS_KEY_PREFIX . $this->userId, 'login_time');
+            $this->loginIp = $redis->hget(LoginForm::REDIS_KEY_PREFIX . $this->userId, 'ip');
         }
 
         return true;
