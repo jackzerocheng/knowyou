@@ -17,7 +17,6 @@ class SiteController extends CommonController
 
     public function actionIndex()
     {
-        echo $this->userId;
         return $this->render('index');
     }
 

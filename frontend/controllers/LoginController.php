@@ -46,6 +46,7 @@ class LoginController extends CommonController
     public function actionIndex()
     {
         $loginForm = new LoginForm();
+
         if (Yii::$app->request->isPost && $loginForm->load(Yii::$app->request->post()) && $loginForm->validate() && $loginForm->login()) {
             return $this->redirect(['site/index']);
         }
