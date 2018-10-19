@@ -6,8 +6,8 @@ $this->title = 'Know You - begin your colorful life';
 
 ?>
 <?php
-foreach ($article_list as $line) {
-    var_dump($line);
+foreach ($banner_word_list as $line) {
+    //var_dump($line);
 }
 ?>
 <!-- Preloader -->
@@ -47,11 +47,11 @@ foreach ($article_list as $line) {
                     <div class="breaking-news-area">
                         <div id="breakingNewsTicker" class="ticker">
                             <ul>
-                                <li><a href="#">Hello World!</a></li>
-                                <li><a href="#">Hello Universe!</a></li>
-                                <li><a href="#">Hello Original!</a></li>
-                                <li><a href="#">Hello Earth!</a></li>
-                                <li><a href="#">Hello Colorlib!</a></li>
+                            <?php
+                                foreach ($banner_word_list as $line) {
+                                    echo "<li><a href='{$line['link']}'>{$line['name']}</a></li>";
+                                }
+                            ?>
                             </ul>
                         </div>
                     </div>

@@ -11,6 +11,7 @@ namespace frontend\controllers;
 
 use common\models\LoginForm;
 use common\models\Article;
+use common\models\Banner;
 
 class SiteController extends CommonController
 {
@@ -19,10 +20,18 @@ class SiteController extends CommonController
     public function actionIndex()
     {
         echo $this->userId;
-        $article = new Article($this->userId);
-        $articleList = $article->getListByCondition([]);
+        $articleModel = new Article($this->userId);
+        $articleList = $articleModel->getListByCondition([]);
 
-        return $this->render('index', ['article_list' => $articleList]);
+        $bannerModel = new Banner();
+        $bannerWordCondition = [
+            'platform_id' => $bannerModel::PLATFORM_WEB,
+            'status' => $bannerModel::STATUS_SHOWING,
+            'type' => $bannerModel::TYPE_INDEX_WORD_MESSAGE,
+        ];
+        $bannerWordList = $bannerModel->getListByCondition($bannerWordCondition);
+
+        return $this->render('index', ['article_list' => $articleList, 'banner_word_list' => $bannerWordList]);
     }
 
     public function actionLogout()
