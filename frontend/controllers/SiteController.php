@@ -22,7 +22,7 @@ class SiteController extends CommonController
         $article = new Article($this->userId);
         $articleList = $article->getListByCondition([]);
 
-        return $this->render('index');
+        return $this->render('index', ['article_list' => $articleList]);
     }
 
     public function actionLogout()

@@ -5,7 +5,11 @@ use yii\helpers\Url;
 $this->title = 'Know You - begin your colorful life';
 
 ?>
-
+<?php
+foreach ($article_list as $line) {
+    var_dump($line);
+}
+?>
 <!-- Preloader -->
 <div id="preloader">
     <div class="preload-content">

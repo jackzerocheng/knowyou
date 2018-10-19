@@ -46,8 +46,12 @@ class LoginForm extends Model
         } else {
             $userModel = new User($this->uid);
             $user = $userModel::find()->where(['uid' => $this->attributes])->asArray()->one();
-            if (!$user || $user['password'] != setPassword($this->password)) {
-                $this->addError($attribute, '账号或密码错误');
+            if (!$user) {
+                $this->addError($attribute, '账号不存在');
+            } elseif ($user['password'] != setPassword($this->password)) {
+                $this->addError($attribute, '密码不正确');
+            } elseif ($user['status'] != User::STATUS_NORMAL) {
+                $this->addError($attribute, '账号状态异常');
             } else {
                 $this->user = $user;
             }

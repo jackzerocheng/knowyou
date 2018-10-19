@@ -30,18 +30,12 @@ class CommonController extends Controller
 
         //要求登录态访问
         if ($this->requireLogin) {
-            //验证IP是否相同
-            if ($this->loginIp != $redis->hget(LoginForm::REDIS_KEY_PREFIX . $this->userId, 'ip')) {
-                Yii::$app->session->setFlash('failed', '你已在别处登录，请重新登录');
-                return Yii::$app->response->redirect(['login/index']);
-            }
-
             //获取session
-            if (!$this->userId = $this->getSession()) {
+            if (!$this->getSession()) {
                 //获取cookie
                 $cookie = Yii::$app->response->cookies;
                 if ($cookie->has(LoginForm::COOKIE_USER_INFO)) {
-                    //用cookie登录
+                    //cookie自动登录
                     $loginForm = new LoginForm();
                     $loginForm->loginByCookie();
                 }
@@ -50,6 +44,12 @@ class CommonController extends Controller
                     Yii::$app->session->setFlash('failed', '登录后再访问');
                     return Yii::$app->response->redirect(['login/index']);
                 }
+            }
+
+            //验证当前IP和登录时记录IP是否一致
+            if (getIP() != $redis->hget(LoginForm::REDIS_KEY_PREFIX . $this->userId, 'ip')) {
+                Yii::$app->session->setFlash('failed', '你已在别处登录，请重新登录');
+                return Yii::$app->response->redirect(['login/index']);
             }
 
             $this->userName = $redis->hget(LoginForm::REDIS_KEY_PREFIX . $this->userId, 'username');
@@ -65,6 +65,7 @@ class CommonController extends Controller
     private function getSession()
     {
         $session = Yii::$app->session;
-        return $session->get(LoginForm::SESSION_USE_ID);
+        $this->userId = $session->get(LoginForm::SESSION_USE_ID);
+        return $this->userId;
     }
 }

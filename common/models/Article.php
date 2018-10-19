@@ -20,7 +20,7 @@ class Article extends ActiveRecord
     public function __construct($uid = 0, array $config = [])
     {
         parent::__construct($config);
-        static::$tableName = '{{article0' . $uid % self::TABLE_PARTITION . '}}';
+        static::$tableName = '{{%article0' . $uid % self::TABLE_PARTITION . '}}';
     }
 
     public static function tableName()
