@@ -22,7 +22,7 @@ class LoginForm extends Model
     //不存在session则去拿cookie
     const COOKIE_USER_INFO = 'COOKIE_USER_INFO';
     //多端登录时去Redis判断，是否在其他端已登录
-    const REDIS_KEY_PREFIX = 'know_you_';
+    const REDIS_KEY_PREFIX = 'know_you_web_';
 
     //保持登录时长
     const REDIS_KEEP_TIME = 60 * 60 * 24;//一天

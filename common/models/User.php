@@ -1,6 +1,6 @@
 <?php
 /**
- * Message: 用户操作Model
+ * Message: 用户Model
  * User: jzc
  * Date: 2018/8/25
  * Time: 下午6:59
@@ -26,6 +26,8 @@ class User extends ActiveRecord
         self::STATUS_DELETED => '删除'
     ];
 
+    const TABLE_PARTITION = 4;//分表数
+
     public $password_again;
     public static $uid;
     protected static $tableName = '';
@@ -44,7 +46,7 @@ class User extends ActiveRecord
     private static function getTableName($uid = 0)
     {
         $uid = $uid ? : static::getUid();
-        return '{{%user0' . $uid % 4 . '}}';
+        return '{{%user0' . $uid % self::TABLE_PARTITION . '}}';
     }
 
     /**

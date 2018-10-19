@@ -10,6 +10,7 @@
 namespace frontend\controllers;
 
 use common\models\LoginForm;
+use common\models\Article;
 
 class SiteController extends CommonController
 {
@@ -17,6 +18,10 @@ class SiteController extends CommonController
 
     public function actionIndex()
     {
+        echo $this->userId;
+        $article = new Article($this->userId);
+        $articleList = $article->getListByCondition([]);
+
         return $this->render('index');
     }
 
