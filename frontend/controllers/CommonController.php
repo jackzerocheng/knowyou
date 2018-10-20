@@ -26,7 +26,6 @@ class CommonController extends Controller
     public function init()
     {
         parent::init();
-        $redis = Yii::$app->redis;
 
         //要求登录态访问
         if ($this->requireLogin) {
@@ -46,6 +45,7 @@ class CommonController extends Controller
                 }
             }
 
+            $redis = Yii::$app->redis;
             //验证当前IP和登录时记录IP是否一致
             if (getIP() != $redis->hget(LoginForm::REDIS_KEY_PREFIX . $this->userId, 'ip')) {
                 Yii::$app->session->setFlash('failed', '你已在别处登录，请重新登录');
