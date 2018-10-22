@@ -9,9 +9,9 @@
 
 namespace frontend\controllers;
 
-use common\models\LoginForm;
-use common\models\Article;
-use common\models\Banner;
+use common\models\UserModel;
+use common\models\ArticleModel;
+use common\models\BannerModel;
 
 class SiteController extends CommonController
 {
@@ -20,10 +20,10 @@ class SiteController extends CommonController
     public function actionIndex()
     {
         echo $this->userId;
-        $articleModel = new Article($this->userId);
+        $articleModel = new ArticleModel($this->userId);
         $articleList = $articleModel->getListByCondition([]);
 
-        $bannerModel = new Banner();
+        $bannerModel = new BannerModel();
         $bannerWordCondition = [
             'platform_id' => $bannerModel::PLATFORM_WEB,
             'status' => $bannerModel::STATUS_SHOWING,
@@ -36,7 +36,7 @@ class SiteController extends CommonController
 
     public function actionLogout()
     {
-        $loginForm = new LoginForm();
+        $loginForm = new UserModel();
         $loginForm->logout();
         return $this->redirect(['login/index']);
     }

@@ -7,7 +7,7 @@
  * Return:
  */
 
-namespace common\models;
+namespace common\dao;
 
 use yii\db\ActiveRecord;
 
@@ -35,8 +35,23 @@ class Article extends ActiveRecord
         ];
     }
 
-    public function getListByCondition($condition)
+    public function getListByCondition($condition, $limit = 1000)
     {
-        return self::find()->from(static::$tableName)->where($condition)->asArray()->all();
+        $db = self::find()->from(self::$tableName);
+        $db = $this->handlerCondition($db, $condition);
+
+        $rs = $db->limit($limit)->asArray()->all();
+        return $rs;
+    }
+
+    public function handlerCondition($db, $condition)
+    {
+        if (!empty($condition) && is_array($condition)) {
+            foreach ($condition as $k => $v) {
+                $db = $db->andWhere([$k => $v]);
+            }
+        }
+
+        return $db;
     }
 }

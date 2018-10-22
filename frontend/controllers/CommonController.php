@@ -11,7 +11,7 @@ namespace frontend\controllers;
 
 use yii\web\Controller;
 use Yii;
-use common\models\LoginForm;
+use common\models\UserModel;
 
 class CommonController extends Controller
 {
@@ -33,9 +33,9 @@ class CommonController extends Controller
             if (!$this->getSession()) {
                 //获取cookie
                 $cookie = Yii::$app->response->cookies;
-                if ($cookie->has(LoginForm::COOKIE_USER_INFO)) {
+                if ($cookie->has(UserModel::COOKIE_USER_INFO)) {
                     //cookie自动登录
-                    $loginForm = new LoginForm();
+                    $loginForm = new UserModel();
                     $loginForm->loginByCookie();
                 }
 
@@ -47,15 +47,15 @@ class CommonController extends Controller
 
             $redis = Yii::$app->redis;
             //验证当前IP和登录时记录IP是否一致
-            if (getIP() != $redis->hget(LoginForm::REDIS_KEY_PREFIX . $this->userId, 'ip')) {
+            if (getIP() != $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'ip')) {
                 Yii::$app->session->setFlash('failed', '你已在别处登录，请重新登录');
                 return Yii::$app->response->redirect(['login/index']);
             }
 
-            $this->userName = $redis->hget(LoginForm::REDIS_KEY_PREFIX . $this->userId, 'username');
-            $this->status = $redis->hget(LoginForm::REDIS_KEY_PREFIX . $this->userId, 'status');
-            $this->loginTime = $redis->hget(LoginForm::REDIS_KEY_PREFIX . $this->userId, 'login_time');
-            $this->loginIp = $redis->hget(LoginForm::REDIS_KEY_PREFIX . $this->userId, 'ip');
+            $this->userName = $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'username');
+            $this->status = $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'status');
+            $this->loginTime = $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'login_time');
+            $this->loginIp = $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'ip');
         }
 
         return true;
@@ -65,7 +65,7 @@ class CommonController extends Controller
     private function getSession()
     {
         $session = Yii::$app->session;
-        $this->userId = $session->get(LoginForm::SESSION_USE_ID);
+        $this->userId = $session->get(UserModel::SESSION_USE_ID);
         return $this->userId;
     }
 }

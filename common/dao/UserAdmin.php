@@ -7,7 +7,7 @@
  * Return:
  */
 
-namespace common\models\backend;
+namespace common\dao;
 
 use yii\db\ActiveRecord;
 
