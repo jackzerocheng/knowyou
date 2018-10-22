@@ -1,53 +1,66 @@
 <?php
-
-/* @var $this yii\web\View */
-
-$this->title = 'My Yii Application';
+use yii\helpers\Url;
 ?>
-<div class="site-index">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>smister后台登录</title>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            resizeScreen();
+        });
 
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
+        $(window).resize(function(){
+            resizeScreen();
+        });
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
+        function resizeScreen(){
+            var contentHeight = $(document).height() - 100;
+            var contentWidth = $(document).width() - 250;
+            $("#menu").height(contentHeight);
+            $("#content-right").css({height : contentHeight , width :contentWidth });
+        }
 
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+    </script>
+    <link rel="stylesheet" type="text/css" href="css/iframe.css"/>
+</head>
+<body>
+<header id="header">
+    <h1 class="header-box">Smister后台管理</h1>
+    <div class="header-right header-box">
+        <span>您好，admin</span> | <a href="#">浏览网站</a> | <a href="#">安全退出</a>
     </div>
-
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
+</header>
+<div id="content">
+    <ul id="menu">
+        <li><a href="#"><span class="icon icon-home"></span>首页</a></li>
+        <li><a href="#"><span class="icon icon-person"></span>个人中心</a></li>
+        <li>
+            <a href="#"><span class="icon icon-message"></span>前台设置</a>
+        </li>
+        <li>
+            <a href="#"><span class="icon icon-start"></span>内容管理</a>
+            <ul>
+                <li><a href="main.html" target="main">主页页面</a></li>
+                <li><a href="<?= Url::to(['user/index']) ?>" target="main">列表页面</a></li>
+                <li><a href="<?= Url::to(['user/add']) ?>" target="main">表单页面</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#"><span class="icon icon-setting"></span>系统设置</a>
+            <ul>
+                <li><a href="<?=Url::to(['user/index']) ?>" target="main">用户管理</a></li>
+                <li><a href="#">文章设置</a></li>
+                <li><a href="#">文章设置</a></li>
+            </ul>
+        </li>
+    </ul>
+    <div id="content-right">
+        <iframe name="main" style="width:100%;height:100%;" frameborder="0" src="<?= Url::to(['site/main']) ?>"></iframe>
     </div>
 </div>
+</body>
+</html>

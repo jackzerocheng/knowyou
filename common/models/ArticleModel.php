@@ -14,7 +14,7 @@ use common\dao\Article;
 
 class ArticleModel extends Model
 {
-    public function getListByCondition($condition, $limit = 100)
+    public function getListByCondition($condition = null, $limit = 100)
     {
         $count = Article::TABLE_PARTITION;
         $result = array();
@@ -22,6 +22,7 @@ class ArticleModel extends Model
         while ($count - Article::TABLE_PARTITION < Article::TABLE_PARTITION) {
             $article = new Article($count);
             $result = array_merge($result, $article->getListByCondition($condition, $limit));
+            $count++;
         }
 
         return $result;

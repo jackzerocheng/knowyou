@@ -19,19 +19,12 @@ class SiteController extends CommonController
 
     public function actionIndex()
     {
-        echo $this->userId;
-        $articleModel = new ArticleModel($this->userId);
-        $articleList = $articleModel->getListByCondition([]);
+        $articleModel = new ArticleModel();
+        $articleList = $articleModel->getListByCondition();
 
-        $bannerModel = new BannerModel();
-        $bannerWordCondition = [
-            'platform_id' => $bannerModel::PLATFORM_WEB,
-            'status' => $bannerModel::STATUS_SHOWING,
-            'type' => $bannerModel::TYPE_INDEX_WORD_MESSAGE,
-        ];
-        $bannerWordList = $bannerModel->getListByCondition($bannerWordCondition);
 
-        return $this->render('index', ['article_list' => $articleList, 'banner_word_list' => $bannerWordList]);
+
+        return $this->render('index', ['article_list' => $articleList]);
     }
 
     public function actionLogout()
