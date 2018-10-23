@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use yii\web\Cookie;
 use common\dao\User;
+use common\lib\CryptRsa;
 
 /**
  * Login form
@@ -116,7 +117,18 @@ class UserModel extends Model
             return false;
         }
 
+        $userInfo = $this->getOneByCondition($uid, ['password' => $password]);
+        if (empty($userInfo)) {
+            return false;
+        }
 
+        $data = [
+            'uid' => $uid,
+            'platform_id' => $platformID,
+            'login_time' => time()
+        ];
+        $content = json_encode($data);
+        
     }
 
     /**
@@ -272,11 +284,12 @@ class UserModel extends Model
     /**
      * 根据UID查找用户信息
      * @param $uid
+     * @param $condition
      * @return mixed
      */
-    public function getOneByUid($uid)
+    public function getOneByCondition($uid, $condition = null)
     {
         $user = new User($uid);
-        return $user->getOneByCondition();
+        return $user->getOneByCondition($condition);
     }
 }

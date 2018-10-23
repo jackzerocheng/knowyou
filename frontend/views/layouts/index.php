@@ -24,7 +24,7 @@ $bannerWordList = $bannerModel->getListByCondition($bannerWordCondition);
 $isLogin = false;
 $user = new UserModel();
 if ($uid = $user->getSession()) {
-    $userInfo = $user->getOneByUid($uid);
+    $userInfo = $user->getOneByCondition($uid);
     $isLogin = true;
 }
 
