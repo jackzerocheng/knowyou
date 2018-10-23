@@ -110,6 +110,15 @@ class UserModel extends Model
         return true;
     }
 
+    public function loginByRequest($uid, $password, $platformID)
+    {
+        if (!in_array($platformID, [BannerModel::PLATFORM_ANDROID, BannerModel::PLATFORM_IOS])) {
+            return false;
+        }
+
+
+    }
+
     /**
      * 生成session登录态
      * 本地一份，Redis一份
