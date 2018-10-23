@@ -7,9 +7,11 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\assets\IndexAsset;
 use common\models\BannerModel;
+use common\models\UserModel;
 
 IndexAsset::register($this);
 
+//首页滚动信息
 $bannerModel = new BannerModel();
 $bannerWordCondition = [
     'platform_id' => $bannerModel::PLATFORM_WEB,
@@ -17,6 +19,15 @@ $bannerWordCondition = [
     'type' => $bannerModel::TYPE_INDEX_WORD_MESSAGE,
 ];
 $bannerWordList = $bannerModel->getListByCondition($bannerWordCondition);
+
+//控制按钮显示
+$isLogin = false;
+$user = new UserModel();
+if ($uid = $user->getSession()) {
+    $userInfo = $user->getOneByUid($uid);
+    $isLogin = true;
+}
+
 ?>
 
 <?php $this->beginPage() ?>
@@ -73,9 +84,12 @@ $bannerWordList = $bannerModel->getListByCondition($bannerWordCondition);
                             <div id="breakingNewsTicker" class="ticker">
                                 <ul>
                                     <?php
-
-                                    foreach ($bannerWordList as $line) {
-                                        echo "<li><a href='{$line['link']}'>{$line['name']}</a></li>";
+                                    if (!empty($bannerWordList)) {
+                                        foreach ($bannerWordList as $line) {
+                                            echo "<li><a href='{$line['link']}'>{$line['name']}</a></li>";
+                                        }
+                                    } else {
+                                        echo "<li><a href='#'>服务器君没什么话好说</a></li>";
                                     }
                                     ?>
                                 </ul>
@@ -106,12 +120,11 @@ $bannerWordList = $bannerModel->getListByCondition($bannerWordCondition);
             <div class="container h-100">
                 <div class="row h-100 align-items-center">
                     <div class="col-12">
-                        <a href="index.html" class="original-logo"><?=Html::img('@web/img/core-img/logo.png') ?></a>
+                        <a href="<?=Url::to(['site/index']) ?>" class="original-logo"><?=Html::img('@web/img/core-img/logo.png') ?></a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="tlinks">Collect from <a href="http://www.cssmoban.com/" >网页模板</a></div>
 
         <!-- Nav Area -->
         <div class="original-nav-area" id="stickyNav">
@@ -122,7 +135,14 @@ $bannerWordList = $bannerModel->getListByCondition($bannerWordCondition);
 
                         <!-- Subscribe btn -->
                         <div class="subscribe-btn">
-                            <a href="#" class="btn subscribe-btn" data-toggle="modal" data-target="#subsModal">Subscribe</a>
+                            <?php
+                                if ($isLogin) {
+                                    echo "<a href=\"#\" class=\"btn subscribe-btn\" data-toggle=\"modal\" data-target=\"#subsModal\">{$userInfo['username']}</a>";
+                                } else {
+                                    echo "<a href=\"" . Url::to(['login/index']) . "\" class=\"btn subscribe-btn\">登录/注册</a>";
+                                }
+                            ?>
+
                         </div>
 
                         <!-- Navbar Toggler -->

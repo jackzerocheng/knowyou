@@ -122,7 +122,7 @@ class UserModel extends Model
         $redis = Yii::$app->redis;
         $redis->hset(self::REDIS_KEY_PREFIX . $this->uid, 'username', $this->user['username']);
         $redis->hset(self::REDIS_KEY_PREFIX . $this->uid, 'status', $this->user['status']);
-        $redis->hset(self::REDIS_KEY_PREFIX . $this->uid, 'ip', getIP());
+        $redis->hset(self::REDIS_KEY_PREFIX . $this->uid, 'login_ip', getIP());
         $redis->hset(self::REDIS_KEY_PREFIX . $this->uid, 'login_time', NOW_DATE);
         $redis->expire(self::REDIS_KEY_PREFIX . $this->uid, self::REDIS_KEEP_TIME);
 
@@ -190,6 +190,43 @@ class UserModel extends Model
     }
 
     /**
+     * 获取用户session
+     * @return bool|mixed
+     */
+    public function getSession()
+    {
+        $session = Yii::$app->session;
+        $uid = $session->get(self::SESSION_USE_ID);
+        if (empty($uid)) {
+            return false;
+        }
+
+        return $uid;
+    }
+
+    /**
+     * 获取用户Redis
+     * @param $uid
+     * @return array|bool
+     */
+    public function getRedis($uid)
+    {
+        $redis = Yii::$app->redis;
+        $key = self::REDIS_KEY_PREFIX . $uid;
+        if (!$redis->exists($key)) {
+            return false;
+        }
+
+        $rs = [
+            'uid' => $uid,
+            'login_time' => $redis->hget($key, 'login_time'),
+            'login_ip' => $redis->hget($key, 'login_ip')
+        ];
+
+        return $rs;
+    }
+
+    /**
      * 注册用户，返回用户账号
      * @param $data
      * @return mixed
@@ -221,5 +258,16 @@ class UserModel extends Model
         }
 
         return $number;
+    }
+
+    /**
+     * 根据UID查找用户信息
+     * @param $uid
+     * @return mixed
+     */
+    public function getOneByUid($uid)
+    {
+        $user = new User($uid);
+        return $user->getOneByCondition();
     }
 }

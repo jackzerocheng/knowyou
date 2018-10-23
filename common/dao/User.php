@@ -57,15 +57,15 @@ class User extends ActiveRecord
         return self::getDb()->schema->insert(static::tableName(), $data);
     }
 
-    public function getOneByCondition($condition)
+    public function getOneByCondition($condition = null)
     {
-        $db = self::find()->count();
+        $db = self::find();
         $db = self::handlerCondition($db, $condition);
 
         return $db->asArray()->one();
     }
 
-    public function getCountByCondition($condition)
+    public function getCountByCondition($condition = null)
     {
         $db = self::find();
         $db = self::handlerCondition($db, $condition);

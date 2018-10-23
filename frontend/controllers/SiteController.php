@@ -22,8 +22,6 @@ class SiteController extends CommonController
         $articleModel = new ArticleModel();
         $articleList = $articleModel->getListByCondition();
 
-
-
         return $this->render('index', ['article_list' => $articleList]);
     }
 

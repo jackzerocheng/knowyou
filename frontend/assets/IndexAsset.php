@@ -17,7 +17,7 @@ class IndexAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/style.css',
-        'css/animate.css',
+        //'css/animate.css',
         'css/bootstrap.min.css',
         'css/classy-nav.css',
         'css/font-awesome.min.css',
@@ -29,8 +29,7 @@ class IndexAsset extends AssetBundle
         'js/popper.min.js',
         'js/bootstrap.min.js',
         'js/plugins.js',
-        'js/active.js',
-        'js/map-active.js',
+        'js/active.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',
