@@ -47,7 +47,8 @@ class CommonController extends Controller
 
             $redis = Yii::$app->redis;
             //验证当前IP和登录时记录IP是否一致
-            if (getIP() != $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'ip')) {
+            if (getIP() != $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'login_ip')) {
+                $this->removeSession();
                 Yii::$app->session->setFlash('failed', '你已在别处登录，请重新登录');
                 return Yii::$app->response->redirect(['login/index']);
             }
@@ -55,17 +56,24 @@ class CommonController extends Controller
             $this->userName = $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'username');
             $this->status = $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'status');
             $this->loginTime = $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'login_time');
-            $this->loginIp = $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'ip');
+            $this->loginIp = $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'login_ip');
         }
 
         return true;
 
     }
 
-    private function getSession()
+    public function getSession()
     {
         $session = Yii::$app->session;
         $this->userId = $session->get(UserModel::SESSION_USE_ID);
         return $this->userId;
+    }
+
+    public function removeSession()
+    {
+        Yii::$app->session->remove(UserModel::SESSION_USE_ID);
+        Yii::$app->session->destroy();
+        return true;
     }
 }

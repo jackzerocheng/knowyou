@@ -60,7 +60,7 @@ class LoginController extends CommonController
         $userModel = new UserModel();
 
         if (Yii::$app->request->isPost) {
-            $params = Yii::$app->request->post('LoginForm');
+            $params = Yii::$app->request->post('UserModel');
 
             if ($userModel->validateRegister($params)) {
                 $data = [

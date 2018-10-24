@@ -11,7 +11,7 @@ namespace frontend\controllers;
 
 use common\models\UserModel;
 use common\models\ArticleModel;
-use common\models\BannerModel;
+use Yii;
 
 class SiteController extends CommonController
 {
@@ -19,6 +19,7 @@ class SiteController extends CommonController
 
     public function actionIndex()
     {
+        Yii::error('test', 'knowyou');
         $articleModel = new ArticleModel();
         $articleList = $articleModel->getListByCondition();
 

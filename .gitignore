@@ -27,9 +27,10 @@ composer.phar
 .DS_Store
 
 # phpunit itself is not needed
-phpunit.phar
+.phpunitphar
 # local phpunit config
 /phpunit.xml
 
 # vagrant runtime
 /.vagrant
+/log
