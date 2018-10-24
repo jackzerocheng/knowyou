@@ -2,6 +2,7 @@
 namespace common\models;
 
 use common\lib\Config;
+use common\lib\CryptAes;
 use Yii;
 use yii\base\Model;
 use yii\web\Cookie;
@@ -63,7 +64,7 @@ class UserModel extends Model
             $user = $userModel::find()->where(['uid' => $this->attributes])->asArray()->one();
             if (!$user) {
                 $this->addError($attribute, '账号不存在');
-            } elseif ($user['password'] != setPassword($this->password)) {
+            } elseif ((new CryptAes())->decrypt($user['password']) != $this->password) {
                 $this->addError('password', '密码不正确');
             } elseif ($user['status'] != self::STATUS_NORMAL) {
                 $this->addError($attribute, '账号状态异常');
@@ -128,7 +129,7 @@ class UserModel extends Model
             return false;
         }
 
-        $userInfo = $this->getOneByCondition($uid, ['password' => $password]);
+        $userInfo = $this->getOneByCondition($uid, ['password' => (new CryptAes())->encrypt($password)]);
         if (empty($userInfo)) {
             return false;
         }
@@ -265,8 +266,16 @@ class UserModel extends Model
      * @param $data
      * @return mixed
      */
-    public function register(array $data = null)
+    public function register(array $data)
     {
+        if (empty($data)) {
+            return false;
+        }
+
+        if (!empty($data['password'])) {
+            $data['password'] = (new CryptAes())->encrypt($data['password']);
+        }
+
         $user = new User();
         if (!$user->insert(false, $data)) {
             return false;

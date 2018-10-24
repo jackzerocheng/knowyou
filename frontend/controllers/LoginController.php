@@ -63,7 +63,7 @@ class LoginController extends CommonController
             if ($userModel->validateRegister($params)) {
                 $data = [
                     'username' => $params['username'],
-                    'password' => setPassword($params['password'])
+                    'password' => $params['password']
                 ];
                 if ($uid = $userModel->register($data)) {
                     Yii::$app->session->setFlash('success', '注册用户成功,账号为' . $uid);

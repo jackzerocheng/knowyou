@@ -3,6 +3,7 @@ namespace api\controllers;
 
 use common\lib\Config;
 use Yii;
+use common\lib\CryptAes;
 /**
  * Site controller
  */

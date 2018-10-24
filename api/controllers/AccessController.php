@@ -30,7 +30,7 @@ class AccessController extends CommonController
         }
 
         $data = array();
-        $data['access_token'] = (new UserModel())->getAccessToken($params['uid'], setPassword($params['password']), $params['platform_id']);
+        $data['access_token'] = (new UserModel())->getAccessToken($params['uid'], $params['password'], $params['platform_id']);
         $userInfo = (new UserModel())->getOneByCondition($params['uid']);
         unset($userInfo['password']);
         $data['userInfo'] = $userInfo;
