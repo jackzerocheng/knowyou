@@ -9,16 +9,32 @@ return [
     'components' => [
         //日志配置
         'log' => [
-            'flushInterval' => 1,
+            'flushInterval' => 1000,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning', 'info'],
+                    'levels' => ['info'],
                     'logVars' => ['_POST'],
-                    'categories' => ['knowyou'],
-                    'logFile' => '@root/log/knowyou.log',
-                    'exportInterval' => 1,
+                    'categories' => ['know_you_info'],
+                    'logFile' => '@root/log/know_you_info.log',
+                    'exportInterval' => 100,
                 ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['warning'],
+                    'logVars' => ['_POST'],
+                    'categories' => ['know_you_warn'],
+                    'logFile' => '@root/log/know_you_warn.log',
+                    'exportInterval' => 10,
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error'],
+                    'logVars' => ['*'],
+                    'categories' => ['know_you_error'],
+                    'logFile' => '@root/log/know_you_error.log',
+                    'exportInterval' => 1,
+                ]
             ]
         ],
         'cache' => [

@@ -11,6 +11,7 @@ namespace api\controllers;
 
 use common\lib\Request;
 use common\models\UserModel;
+use Yii;
 
 class AccessController extends CommonController
 {
@@ -29,11 +30,20 @@ class AccessController extends CommonController
             $this->outputJson('params_error');
         }
 
-        $data = array();
-        $data['access_token'] = (new UserModel())->getAccessToken($params['uid'], $params['password'], $params['platform_id']);
+        if (!$accessToken = (new UserModel())->getAccessToken($params['uid'], $params['password'], $params['platform_id'])) {
+            $ip = getIP();
+            Yii::warning("user try to login but failed;uid:{$params['uid']};login_ip:{$ip};platform_id:{$params['platform_id']}", CATEGORIES_WARN);
+            $this->outputJson('login_failed');
+        }
+
+        Yii::info("user login in;uid:{$params['uid']};", CATEGORIES_INFO);
         $userInfo = (new UserModel())->getOneByCondition($params['uid']);
         unset($userInfo['password']);
-        $data['userInfo'] = $userInfo;
+
+        $data = [
+            'access_token' => $accessToken,
+            'userInfo' => $userInfo
+        ];
 
         $this->success($data);
     }

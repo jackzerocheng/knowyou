@@ -19,5 +19,13 @@ return array(
     'params_error' => array(
         'code' => 100002,
         'msg'  => '参数错误'
+    ),
+    'login_failed' => array(
+        'code' => 200001,
+        'msg'  => '登录失败'
+    ),
+    'register_failed' => array(
+        'code' => 200002,
+        'msg'  => '注册失败'
     )
 );
