@@ -22,6 +22,12 @@ class CryptAes
         $this->key = $key;
         $this->method = $method;
         $this->options = $options;
+
+        if (empty($iv)) {
+            $iv_len = openssl_cipher_iv_length($method);
+            $iv = openssl_random_pseudo_bytes($iv_len);
+        }
+
         $this->iv = $iv;
     }
 

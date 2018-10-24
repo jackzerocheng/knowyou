@@ -57,7 +57,7 @@ class UserModel extends Model
     {
         if (!preg_match('/^\w{2,30}$/', $this->$attribute)) {
             $this->addError($attribute, '账号长度不正确');
-        } elseif(strlen($this->password) < 6) {
+        } elseif(strlen($this->password) < 6 || strlen($this->password) > 20) {
             $this->addError('password', '密码长度不正确');
         } elseif (!empty($this->uid)) {
             $userModel = new User($this->uid);
