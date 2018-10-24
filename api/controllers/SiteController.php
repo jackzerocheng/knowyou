@@ -11,7 +11,5 @@ class SiteController extends CommonController
     public function actionIndex()
     {
         $this->outputJson('success');
-
-        echo "api";
     }
 }

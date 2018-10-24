@@ -1,6 +1,7 @@
 <?php
 namespace common\models;
 
+use common\lib\Config;
 use Yii;
 use yii\base\Model;
 use yii\web\Cookie;
@@ -111,7 +112,17 @@ class UserModel extends Model
         return true;
     }
 
-    public function loginByRequest($uid, $password, $platformID)
+    /**
+     * 第三方接入获取access_token
+     * 有效时间默认七天
+     * 目前仅限安卓和苹果
+     * @param $uid
+     * @param $password
+     * @param $platformID
+     * @param int $expire
+     * @return bool|string
+     */
+    public function getAccessToken($uid, $password, $platformID, $expire = 604800)
     {
         if (!in_array($platformID, [BannerModel::PLATFORM_ANDROID, BannerModel::PLATFORM_IOS])) {
             return false;
@@ -125,10 +136,12 @@ class UserModel extends Model
         $data = [
             'uid' => $uid,
             'platform_id' => $platformID,
-            'login_time' => time()
+            'login_time' => time(),
+            'expire_time' => time() + $expire
         ];
         $content = json_encode($data);
-        
+
+        return (new CryptRsa())->priEncrypt($content, Config::getPem('rsa_private_key'));
     }
 
     /**

@@ -9,7 +9,6 @@
 
 namespace api\controllers;
 
-use Yii;
 use common\lib\Request;
 use common\models\UserModel;
 
@@ -30,6 +29,12 @@ class AccessController extends CommonController
             $this->outputJson('params_error');
         }
 
+        $data = array();
+        $data['access_token'] = (new UserModel())->getAccessToken($params['uid'], setPassword($params['password']), $params['platform_id']);
+        $userInfo = (new UserModel())->getOneByCondition($params['uid']);
+        unset($userInfo['password']);
+        $data['userInfo'] = $userInfo;
 
+        $this->success($data);
     }
 }
