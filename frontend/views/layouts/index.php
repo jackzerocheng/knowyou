@@ -60,10 +60,11 @@ if ($uid = $user->getSession()) {
                 <div class="modal-content">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <div class="modal-body">
-                        <h5 class="title">Subscribe to my newsletter</h5>
+                        <h5 class="title">大人，你想要做什么</h5>
                         <form action="#" class="newsletterForm" method="post">
-                            <input type="email" name="email" id="subscribesForm2" placeholder="Your e-mail here">
-                            <button type="submit" class="btn original-btn">Subscribe</button>
+                            <!--<input type="email" name="email" id="subscribesForm2" placeholder="Your e-mail here">-->
+                            <a href="#"><button type="button" class="btn original-btn">个人主页</button></a>
+                            <a href="<?=Url::to(['site/logout']) ?>"><button type="button" class="btn original-btn">退出登录</button></a>
                         </form>
                     </div>
                 </div>
@@ -136,6 +137,9 @@ if ($uid = $user->getSession()) {
                         <!-- Subscribe btn -->
                         <div class="subscribe-btn">
                             <?php
+                            /*
+                             * 判断用户是否登录选择展示内容
+                             */
                                 if ($isLogin) {
                                     echo "<a href=\"#\" class=\"btn subscribe-btn\" data-toggle=\"modal\" data-target=\"#subsModal\">{$userInfo['username']}</a>";
                                 } else {
@@ -159,6 +163,10 @@ if ($uid = $user->getSession()) {
 
                             <!-- Nav Start -->
                             <div class="classynav">
+                                <?php
+
+
+                                ?>
                                 <ul>
                                     <li><a href="<?=Url::to(['site/index']) ?>">Home</a></li>
                                     <li><a href="#">Pages</a>

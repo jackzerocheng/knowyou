@@ -19,7 +19,6 @@ class SiteController extends CommonController
 
     public function actionIndex()
     {
-        Yii::error('test', 'knowyou');
         $articleModel = new ArticleModel();
         $articleList = $articleModel->getListByCondition();
 
