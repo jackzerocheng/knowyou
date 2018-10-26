@@ -24,6 +24,8 @@ class TestController extends CommonController
             3 => ['weight' => 4]
         ];
 
-        var_dump(quickSortToArray($arr, 'weight'));
+        //var_dump(quickSortToArray($arr, 'weight'));
+        $list = (new MenuModel())->getMenuList();
+        print_r($list);
     }
 }

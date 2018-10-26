@@ -8,6 +8,7 @@ use yii\helpers\Url;
 use frontend\assets\IndexAsset;
 use common\models\BannerModel;
 use common\models\UserModel;
+use common\models\MenuModel;
 
 IndexAsset::register($this);
 
@@ -28,6 +29,8 @@ if ($uid = $user->getSession()) {
     $isLogin = true;
 }
 
+//获取菜单列表
+$menuList = (new MenuModel())->getMenuList();
 ?>
 
 <?php $this->beginPage() ?>
@@ -141,7 +144,7 @@ if ($uid = $user->getSession()) {
                              * 判断用户是否登录选择展示内容
                              */
                                 if ($isLogin) {
-                                    echo "<a href=\"#\" class=\"btn subscribe-btn\" data-toggle=\"modal\" data-target=\"#subsModal\">{$userInfo['username']}</a>";
+                                    echo "<a href=\"#\" class=\"btn subscribe-btn\" data-toggle=\"modal\" data-target=\"#subsModal\">{$userInfo['username']},你好</a>";
                                 } else {
                                     echo "<a href=\"" . Url::to(['login/index']) . "\" class=\"btn subscribe-btn\">登录/注册</a>";
                                 }
@@ -163,15 +166,36 @@ if ($uid = $user->getSession()) {
 
                             <!-- Nav Start -->
                             <div class="classynav">
-                                <?php
-
-
-                                ?>
                                 <ul>
-                                    <li><a href="<?=Url::to(['site/index']) ?>">Home</a></li>
+                                <li><a href="<?=Url::to(['site/index']) ?>">Home</a></li>
+                                <?php
+                                    if (!empty($menuList)) {
+                                        foreach ($menuList as $menu) {
+                                ?>
+
+                                <li><a href="<?=$menu['url'] ?>"><?=$menu['name'] ?></a>
+                                    <?php
+                                    if (!empty($menu['child_menu'])) {
+                                        echo "<ul class='dropdown'>";
+                                        foreach ($menu['child_menu'] as $_line) {
+                                            echo "<li><a href=\'{$_line['url']}\'>{$_line['name']}</a></li>";
+                                        }
+                                        echo "</ul>";
+                                    }
+                                    ?>
+                                </li>
+
+                                <?php
+                                        }
+                                    }
+                                ?>
+                                </ul>
+                                <!--
+                                <ul>
+                                    <li><a href="">Home</a></li>
                                     <li><a href="#">Pages</a>
                                         <ul class="dropdown">
-                                            <li><a href="<?=Url::to(['site/index']) ?>">Home</a></li>
+                                            <li><a href="">Home</a></li>
                                             <li><a href="about-us.html">About Us</a></li>
                                             <li><a href="single-post.html">Single Post</a></li>
                                             <li><a href="contact.html">Contact</a></li>
@@ -189,10 +213,6 @@ if ($uid = $user->getSession()) {
                                                     <li><a href="#">Catagory 2</a>
                                                         <ul class="dropdown">
                                                             <li><a href="#">Catagory 3</a></li>
-                                                            <li><a href="#">Catagory 3</a></li>
-                                                            <li><a href="#">Catagory 3</a></li>
-                                                            <li><a href="#">Catagory 3</a></li>
-                                                            <li><a href="#">Catagory 3</a></li>
                                                         </ul>
                                                     </li>
                                                     <li><a href="#">Catagory 2</a></li>
@@ -209,39 +229,24 @@ if ($uid = $user->getSession()) {
                                             <ul class="single-mega cn-col-4">
                                                 <li class="title">Headline 1</li>
                                                 <li><a href="#">Mega Menu Item 1</a></li>
-                                                <li><a href="#">Mega Menu Item 2</a></li>
-                                                <li><a href="#">Mega Menu Item 3</a></li>
-                                                <li><a href="#">Mega Menu Item 4</a></li>
-                                                <li><a href="#">Mega Menu Item 5</a></li>
                                             </ul>
                                             <ul class="single-mega cn-col-4">
                                                 <li class="title">Headline 2</li>
                                                 <li><a href="#">Mega Menu Item 1</a></li>
-                                                <li><a href="#">Mega Menu Item 2</a></li>
-                                                <li><a href="#">Mega Menu Item 3</a></li>
-                                                <li><a href="#">Mega Menu Item 4</a></li>
-                                                <li><a href="#">Mega Menu Item 5</a></li>
                                             </ul>
                                             <ul class="single-mega cn-col-4">
                                                 <li class="title">Headline 3</li>
                                                 <li><a href="#">Mega Menu Item 1</a></li>
-                                                <li><a href="#">Mega Menu Item 2</a></li>
-                                                <li><a href="#">Mega Menu Item 3</a></li>
-                                                <li><a href="#">Mega Menu Item 4</a></li>
-                                                <li><a href="#">Mega Menu Item 5</a></li>
                                             </ul>
                                             <ul class="single-mega cn-col-4">
                                                 <li class="title">Headline 4</li>
                                                 <li><a href="#">Mega Menu Item 1</a></li>
-                                                <li><a href="#">Mega Menu Item 2</a></li>
-                                                <li><a href="#">Mega Menu Item 3</a></li>
-                                                <li><a href="#">Mega Menu Item 4</a></li>
-                                                <li><a href="#">Mega Menu Item 5</a></li>
                                             </ul>
                                         </div>
                                     </li>
                                     <li><a href="contact.html">Contact</a></li>
                                 </ul>
+                                -->
 
                                 <!-- Search Form  -->
                                 <div id="search-wrapper">

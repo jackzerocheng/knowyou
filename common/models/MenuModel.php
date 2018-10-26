@@ -27,7 +27,7 @@ class MenuModel extends Model
      */
     public function getMenuList()
     {
-        $menuList = (new Menu())->getListByCondition();
+        $menuList = (new Menu())->getListByCondition(['status' => self::MENU_STATUS_USING]);
 
         if (empty($menuList)) {
             return array();
@@ -44,10 +44,10 @@ class MenuModel extends Model
             }
         }
 
-        quickSortToArray($menu_first, 'weight');
+        $menu_first = quickSortToArray($menu_first, 'weight');
 
         if (!empty($menu_second)) {
-            quickSortToArray($menu_second, 'weight');
+            $menu_second = quickSortToArray($menu_second, 'weight');
             foreach ($menu_first as $k => $v) {
                 foreach ($menu_second as $_temp) {
                     if ($v['id'] == $_temp['parent_id']) {
