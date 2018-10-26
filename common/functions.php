@@ -44,7 +44,45 @@ function getIP()
  * 返回毫秒时间戳
  * @return float
  */
-function getMillisecond() {
+function getMillisecond()
+{
     list($t1, $t2) = explode(' ', microtime());
     return (float)sprintf('%.0f',(floatval($t1)+floatval($t2))*1000);
+}
+
+/**
+ * 快排
+ * 按照某一索引值对二维数组排序
+ * @param $arr
+ * @param $index
+ * @param $asc
+ * @return array
+ */
+function quickSortToArray($arr, $index, $asc = true)
+{
+    if (empty($arr)) {
+        return array();
+    }
+
+    $key = $arr[0];
+    unset($arr[0]);
+    $arr_left = array();
+    $arr_right = array();
+    foreach ($arr as $k => $v) {
+        if ($asc ? ($v[$index] <= $key[$index]) : ($v[$index] >= $key[$index])) {
+            $arr_left[] = $v;
+        } else {
+            $arr_right[] = $v;
+        }
+    }
+
+    if (!empty($arr_left)) {
+        $arr_left = quickSortToArray($arr_left, $index);
+    }
+
+    if (!empty($arr_right)) {
+        $arr_right = quickSortToArray($arr_right, $index);
+    }
+
+    return array_merge($arr_left, array($key), $arr_right);
 }

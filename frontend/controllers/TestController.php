@@ -17,7 +17,13 @@ class TestController extends CommonController
 
     public function actionIndex()
     {
-        $menuList = (new MenuModel())->getMenuList();
-        var_dump($menuList);
+        $arr = [
+            0 => ['weight' => 1],
+            1 => ['weight' => 2],
+            2 => ['weight' => 3],
+            3 => ['weight' => 4]
+        ];
+
+        var_dump(quickSortToArray($arr, 'weight'));
     }
 }

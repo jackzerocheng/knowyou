@@ -44,7 +44,10 @@ class MenuModel extends Model
             }
         }
 
+        quickSortToArray($menu_first, 'weight');
+
         if (!empty($menu_second)) {
+            quickSortToArray($menu_second, 'weight');
             foreach ($menu_first as $k => $v) {
                 foreach ($menu_second as $_temp) {
                     if ($v['id'] == $_temp['parent_id']) {
