@@ -21,6 +21,11 @@ class MenuModel extends Model
     const MENU_STATUS_USING = 1;
     const MENU_STATUS_STOP = 2;
 
+    public $menuStatusMap = [
+        self::MENU_STATUS_USING => '使用中',
+        self::MENU_STATUS_STOP => '下架'
+    ];
+
     /**
      * 获取完整菜单
      * @return array

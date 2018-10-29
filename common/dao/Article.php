@@ -10,9 +10,11 @@
 namespace common\dao;
 
 use yii\db\ActiveRecord;
+use Yii;
 
 class Article extends ActiveRecord
 {
+    const BASE_ARTICLE_ID = 'BASE_ARTICLE_ID';//id = base_id * partition + uid % partition
     const TABLE_PARTITION = 4;
     protected static $tableName = '';
 
@@ -28,20 +30,58 @@ class Article extends ActiveRecord
         return static::$tableName;
     }
 
-    public function rules()
+    public function insert($runValidation = true, $data = null)
     {
-        return [
-            ['title', 'string', 'min' => 6, 'skipOnEmpty' => false]
-        ];
+        $data['created_at'] = empty($data['created_at']) ? NOW_DATE : $data['created_at'];
+        $id = Yii::$app->redis->incr(self::BASE_ARTICLE_ID) * self::TABLE_PARTITION + $data['uid'] % self::TABLE_PARTITION;
+        $data['id'] = $id;
+
+        if (!self::getDb()->schema->insert(static::tableName(), $data)) {
+            return false;
+        }
+
+        return $id;
     }
 
-    public function getListByCondition($condition, $limit = 1000)
+    /**
+     * @param $condition
+     * @param string $orderBy
+     * @param int $limit
+     * @param $offset
+     * @return mixed
+     */
+    public function getListByCondition($condition, $limit = 1000, $offset = 0, $orderBy = 'created_at desc')
     {
         $db = self::find()->from(self::$tableName);
         $db = $this->handlerCondition($db, $condition);
 
-        $rs = $db->limit($limit)->asArray()->all();
+        $rs = $db->offset($offset)->limit($limit)->orderBy($orderBy)->asArray()->all();
         return $rs;
+    }
+
+    /**
+     * @param $condition
+     * @return mixed
+     */
+    public function getOneByCondition($condition)
+    {
+        $db = self::find()->from(self::$tableName);
+        $db = $this->handlerCondition($db, $condition);
+
+        $rs = $db->asArray()->one();
+        return $rs;
+    }
+
+    /**
+     * @param $condition
+     * @return int
+     */
+    public function getCountByCondition($condition)
+    {
+        $db = self::find()->from(self::$tableName);
+        $db = $this->handlerCondition($db, $condition);
+
+        return intval($db->count());
     }
 
     public function handlerCondition($db, $condition)

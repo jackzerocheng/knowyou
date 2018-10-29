@@ -12,50 +12,28 @@ $this->title = 'Know You - begin your colorful life';
     <!-- Hero Slides Area -->
     <div class="hero-slides owl-carousel">
         <!-- Single Slide -->
-        <div class="single-hero-slide bg-img" style="background-image: url(<?=Url::to('@web/img/bg-img/b2.jpg') ?>);">
+        <?php
+            foreach ($banner_index_image as $line) {
+        ?>
+
+        <div class="single-hero-slide bg-img" style="background-image: url(<?=Url::to($line['img']) ?>);">
             <div class="container h-100">
                 <div class="row h-100 align-items-center">
                     <div class="col-12">
                         <div class="slide-content text-center">
                             <div class="post-tag">
-                                <a href="#" data-animation="fadeInUp">lifestyle</a>
+                                <a href="#" data-animation="fadeInUp">每周精选</a>
                             </div>
-                            <h2 data-animation="fadeInUp" data-delay="250ms"><a href="single-post.html">Take a look at last night’s party!</a></h2>
+                            <h2 data-animation="fadeInUp" data-delay="250ms"><a href="<?=$line['link'] ?>"><?=$line['name'] ?></a></h2>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Single Slide -->
-        <div class="single-hero-slide bg-img" style="background-image: url(<?=Url::to('@web/img/bg-img/b1.jpg') ?>);">
-            <div class="container h-100">
-                <div class="row h-100 align-items-center">
-                    <div class="col-12">
-                        <div class="slide-content text-center">
-                            <div class="post-tag">
-                                <a href="#" data-animation="fadeInUp">lifestyle</a>
-                            </div>
-                            <h2 data-animation="fadeInUp" data-delay="250ms"><a href="single-post.html">Take a look at last night’s party!</a></h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Single Slide -->
-        <div class="single-hero-slide bg-img" style="background-image: url(<?=Url::to('@web/img/bg-img/b3.jpg') ?>);">
-            <div class="container h-100">
-                <div class="row h-100 align-items-center">
-                    <div class="col-12">
-                        <div class="slide-content text-center">
-                            <div class="post-tag">
-                                <a href="#" data-animation="fadeInUp">lifestyle</a>
-                            </div>
-                            <h2 data-animation="fadeInUp" data-delay="250ms"><a href="single-post.html">Take a look at last night’s party!</a></h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+        <?php
+            }
+        ?>
     </div>
 </div>
 <!-- ##### Hero Area End ##### -->
@@ -245,199 +223,6 @@ $this->title = 'Know You - begin your colorful life';
                 </div>
             </div>
 
-            <!-- ##### Sidebar Area ##### -->
-            <div class="col-12 col-md-4 col-lg-3">
-                <div class="post-sidebar-area">
 
-                    <!-- Widget Area -->
-                    <div class="sidebar-widget-area">
-                        <form action="#" class="search-form">
-                            <input type="search" name="search" id="searchForm" placeholder="Search">
-                            <input type="submit" value="submit">
-                        </form>
-                    </div>
 
-                    <!-- Widget Area -->
-                    <div class="sidebar-widget-area">
-                        <h5 class="title subscribe-title">Subscribe to my newsletter</h5>
-                        <div class="widget-content">
-                            <form action="#" class="newsletterForm">
-                                <input type="email" name="email" id="subscribesForm" placeholder="Your e-mail here">
-                                <button type="submit" class="btn original-btn">Subscribe</button>
-                            </form>
-                        </div>
-                    </div>
 
-                    <!-- Widget Area -->
-                    <div class="sidebar-widget-area">
-                        <h5 class="title">Advertisement</h5>
-                        <a href="#"><?=Html::img('@web/img/bg-img/add.gif') ?></a>
-                    </div>
-
-                    <!-- Widget Area -->
-                    <div class="sidebar-widget-area">
-                        <h5 class="title">Latest Posts</h5>
-
-                        <div class="widget-content">
-
-                            <!-- Single Blog Post -->
-                            <div class="single-blog-post d-flex align-items-center widget-post">
-                                <!-- Post Thumbnail -->
-                                <div class="post-thumbnail">
-                                    <?=Html::img('@web/img/blog-img/lp1.jpg') ?>
-                                </div>
-                                <!-- Post Content -->
-                                <div class="post-content">
-                                    <a href="#" class="post-tag">Lifestyle</a>
-                                    <h4><a href="#" class="post-headline">Party people in the house</a></h4>
-                                    <div class="post-meta">
-                                        <p><a href="#">12 March</a></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Single Blog Post -->
-                            <div class="single-blog-post d-flex align-items-center widget-post">
-                                <!-- Post Thumbnail -->
-                                <div class="post-thumbnail">
-                                    <?=Html::img('@web/img/blog-img/lp2.jpg') ?>
-                                </div>
-                                <!-- Post Content -->
-                                <div class="post-content">
-                                    <a href="#" class="post-tag">Lifestyle</a>
-                                    <h4><a href="#" class="post-headline">A sunday in the park</a></h4>
-                                    <div class="post-meta">
-                                        <p><a href="#">12 March</a></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Single Blog Post -->
-                            <div class="single-blog-post d-flex align-items-center widget-post">
-                                <!-- Post Thumbnail -->
-                                <div class="post-thumbnail">
-                                    <?=Html::img('@web/img/blog-img/lp3.jpg') ?>
-                                </div>
-                                <!-- Post Content -->
-                                <div class="post-content">
-                                    <a href="#" class="post-tag">Lifestyle</a>
-                                    <h4><a href="#" class="post-headline">Party people in the house</a></h4>
-                                    <div class="post-meta">
-                                        <p><a href="#">12 March</a></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Single Blog Post -->
-                            <div class="single-blog-post d-flex align-items-center widget-post">
-                                <!-- Post Thumbnail -->
-                                <div class="post-thumbnail">
-                                    <?=Html::img('@web/img/blog-img/lp4.jpg') ?>
-                                </div>
-                                <!-- Post Content -->
-                                <div class="post-content">
-                                    <a href="#" class="post-tag">Lifestyle</a>
-                                    <h4><a href="#" class="post-headline">A sunday in the park</a></h4>
-                                    <div class="post-meta">
-                                        <p><a href="#">12 March</a></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Widget Area -->
-                    <div class="sidebar-widget-area">
-                        <h5 class="title">Tags</h5>
-                        <div class="widget-content">
-                            <ul class="tags">
-                                <li><a href="#">design</a></li>
-                                <li><a href="#">fashion</a></li>
-                                <li><a href="#">travel</a></li>
-                                <li><a href="#">music</a></li>
-                                <li><a href="#">party</a></li>
-                                <li><a href="#">video</a></li>
-                                <li><a href="#">photography</a></li>
-                                <li><a href="#">adventure</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- ##### Blog Wrapper End ##### -->
-
-<!-- ##### Instagram Feed Area Start ##### -->
-<div class="instagram-feed-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="insta-title">
-                    <h5>Follow us @ Instagram</h5>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Instagram Slides -->
-    <div class="instagram-slides owl-carousel">
-        <!-- Single Insta Feed -->
-        <div class="single-insta-feed">
-            <?=Html::img('@web/img/instagram-img/1.png') ?>
-            <!-- Hover Effects -->
-            <div class="hover-effects">
-                <a href="#" class="d-flex align-items-center justify-content-center"><i class="fa fa-instagram"></i></a>
-            </div>
-        </div>
-        <!-- Single Insta Feed -->
-        <div class="single-insta-feed">
-            <?=Html::img('@web/img/instagram-img/2.png') ?>
-            <!-- Hover Effects -->
-            <div class="hover-effects">
-                <a href="#" class="d-flex align-items-center justify-content-center"><i class="fa fa-instagram"></i></a>
-            </div>
-        </div>
-        <!-- Single Insta Feed -->
-        <div class="single-insta-feed">
-            <?=Html::img('@web/img/instagram-img/3.png') ?>
-            <!-- Hover Effects -->
-            <div class="hover-effects">
-                <a href="#" class="d-flex align-items-center justify-content-center"><i class="fa fa-instagram"></i></a>
-            </div>
-        </div>
-        <!-- Single Insta Feed -->
-        <div class="single-insta-feed">
-            <?=Html::img('@web/img/instagram-img/4.png') ?>
-            <!-- Hover Effects -->
-            <div class="hover-effects">
-                <a href="#" class="d-flex align-items-center justify-content-center"><i class="fa fa-instagram"></i></a>
-            </div>
-        </div>
-        <!-- Single Insta Feed -->
-        <div class="single-insta-feed">
-            <?=Html::img('@web/img/instagram-img/5.png') ?>
-            <!-- Hover Effects -->
-            <div class="hover-effects">
-                <a href="#" class="d-flex align-items-center justify-content-center"><i class="fa fa-instagram"></i></a>
-            </div>
-        </div>
-        <!-- Single Insta Feed -->
-        <div class="single-insta-feed">
-            <?=Html::img('@web/img/instagram-img/6.png') ?>
-            <!-- Hover Effects -->
-            <div class="hover-effects">
-                <a href="#" class="d-flex align-items-center justify-content-center"><i class="fa fa-instagram"></i></a>
-            </div>
-        </div>
-        <!-- Single Insta Feed -->
-        <div class="single-insta-feed">
-            <?=Html::img('@web/img/instagram-img/7.png') ?>
-            <!-- Hover Effects -->
-            <div class="hover-effects">
-                <a href="#" class="d-flex align-items-center justify-content-center"><i class="fa fa-instagram"></i></a>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- ##### Instagram Feed Area End ##### -->

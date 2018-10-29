@@ -16,7 +16,9 @@ use common\models\UserModel;
 class CommonController extends Controller
 {
     public $userId;
-    public $redisSession;
+    public $username;
+    public $status;
+    public $redisSession;//uid,time,ip
 
     public $requireLogin = true;
 
@@ -60,6 +62,10 @@ class CommonController extends Controller
             }
 
             $this->redisSession = $redisSession;
+
+            $userInfo = $userModel->getOneByCondition($this->userId);
+            $this->username = $userInfo['username'];
+            $this->status = $userInfo['status'];
         }
 
         return true;

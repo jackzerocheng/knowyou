@@ -9,6 +9,7 @@
 
 namespace frontend\controllers;
 
+use common\models\BannerModel;
 use common\models\UserModel;
 use common\models\ArticleModel;
 use Yii;
@@ -22,7 +23,16 @@ class SiteController extends CommonController
         $articleModel = new ArticleModel();
         $articleList = $articleModel->getListByCondition();
 
-        return $this->render('index', ['article_list' => $articleList]);
+        $bannerModel = new BannerModel();
+        $bannerCondition = [
+            'platform_id' => $bannerModel::PLATFORM_WEB,
+            'status' => $bannerModel::STATUS_SHOWING,
+            'type' => $bannerModel::TYPE_INDEX_ROLL_IMAGE
+        ];
+        //首页滚屏图片
+        $bannerIndexImage = $bannerModel->getListByCondition($bannerCondition);
+
+        return $this->render('index', ['article_list' => $articleList, 'banner_index_image' => $bannerIndexImage]);
     }
 
     public function actionLogout()

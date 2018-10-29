@@ -23,10 +23,23 @@ class BannerModel extends Model
     const TYPE_NORMAL_BANNER = 1;//普通文图类
     const TYPE_AD =2;//广告类
     const TYPE_INDEX_WORD_MESSAGE = 3;//首页滚动文字链消息
+    const TYPE_INDEX_ROLL_IMAGE = 4;//首页滚动大图
+
+    public $bannerTypeMap = [
+        self::TYPE_NORMAL_BANNER => '普通图文类',
+        self::TYPE_AD => '广告',
+        self::TYPE_INDEX_WORD_MESSAGE => '首页滚动文字链消息',
+        self::TYPE_INDEX_ROLL_IMAGE => '首页滚动大图'
+    ];
 
     //运营位状态
     const STATUS_SHOWING = 1;//投放中
     const STATUS_STOPPED = 2;//下架
+
+    public $bannerStatusMap = [
+        self::STATUS_SHOWING => '投放中',
+        self::STATUS_STOPPED => '下架'
+    ];
 
     public function getListByCondition($condition, $limit = 100)
     {
