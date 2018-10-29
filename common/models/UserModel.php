@@ -4,6 +4,7 @@ namespace common\models;
 use common\lib\Config;
 use common\lib\CryptAes;
 use Yii;
+use yii\base\Exception;
 use yii\base\Model;
 use yii\web\Cookie;
 use common\dao\User;
@@ -104,7 +105,7 @@ class UserModel extends Model
             return false;
         }
 
-        $this->createSession();
+        $this->createSession($this->user['uid']);
 
         if ($this->remember) {
             $this->createCookie();
@@ -148,18 +149,23 @@ class UserModel extends Model
     /**
      * 生成session登录态
      * 本地一份，Redis一份
+     * @param  int $uid
+     * @throws Exception
      * @return bool
      */
-    public function createSession()
+    public function createSession($uid)
     {
-        Yii::$app->session->set(self::SESSION_USE_ID, $this->uid);
+        try {
+            Yii::$app->session->set(self::SESSION_USE_ID, $uid);
 
-        $redis = Yii::$app->redis;
-        $redis->hset(self::REDIS_KEY_PREFIX . $this->uid, 'username', $this->user['username']);
-        $redis->hset(self::REDIS_KEY_PREFIX . $this->uid, 'status', $this->user['status']);
-        $redis->hset(self::REDIS_KEY_PREFIX . $this->uid, 'login_ip', getIP());
-        $redis->hset(self::REDIS_KEY_PREFIX . $this->uid, 'login_time', NOW_DATE);
-        $redis->expire(self::REDIS_KEY_PREFIX . $this->uid, self::REDIS_KEEP_TIME);
+            $redis = Yii::$app->redis;
+            $redis->hset(self::REDIS_KEY_PREFIX . $uid, 'login_ip', getIP());
+            $redis->hset(self::REDIS_KEY_PREFIX . $uid, 'login_time', NOW_DATE);
+            $redis->expire(self::REDIS_KEY_PREFIX . $uid, self::REDIS_KEEP_TIME);
+        } catch (Exception $e) {
+            Yii::error("create session failed;uid:{$uid};error:{$e}", CATEGORIES_ERROR);
+            throw $e;
+        }
 
         return true;
     }
@@ -174,7 +180,7 @@ class UserModel extends Model
         $cookie->name = self::COOKIE_USER_INFO;
         $cookie->value = [
             'uid' => $this->user['uid'],
-            'username' => $this->user['username'],
+            'password' => $this->user['password'],
             'status' => $this->user['status'],
         ];
         $cookie->expire = time() + self::COOKIE_KEEP_TIME;
@@ -193,10 +199,10 @@ class UserModel extends Model
         $cookie = Yii::$app->response->cookies;
         if ($cookie->has(self::COOKIE_USER_INFO)) {
             $userInfo = $cookie->getValue(self::COOKIE_USER_INFO);
-            if (isset($userInfo['uid']) && isset($userInfo['username'])) {
-                $this->user = User::find()->where(['uid' => $userInfo['uid'], 'username' => $userInfo['username']])->asArray()->one();
+            if (isset($userInfo['uid']) && isset($userInfo['password'])) {
+                $this->user = User::find()->where(['uid' => $userInfo['uid'], 'password' => $userInfo['password']])->asArray()->one();
                 if ($this->user) {
-                    $this->createSession();
+                    $this->createSession($this->user['uid']);
                     return true;
                 }
             }

@@ -16,10 +16,7 @@ use common\models\UserModel;
 class CommonController extends Controller
 {
     public $userId;
-    public $userName;
-    public $status;
-    public $loginTime;
-    public $loginIp;
+    public $redisSession;
 
     public $requireLogin = true;
 
@@ -29,45 +26,44 @@ class CommonController extends Controller
 
         //要求登录态访问
         if ($this->requireLogin) {
+            $nowIP = getIP();
+            $userModel = new UserModel();
             //获取session
-            if (!$this->getSession()) {
+            if (!$this->userId = $userModel->getSession()) {
                 //获取cookie
                 $cookie = Yii::$app->response->cookies;
-                if ($cookie->has(UserModel::COOKIE_USER_INFO)) {
+                if ($cookie->has($userModel::COOKIE_USER_INFO)) {
                     //cookie自动登录
-                    $loginForm = new UserModel();
-                    $loginForm->loginByCookie();
+                    $userModel->loginByCookie();
                 }
 
-                if (!$this->getSession()) {
+                if (!$this->userId = $userModel->getSession()) {
+                    Yii::warning("try to login by cookie failed!login_ip:{$nowIP}", CATEGORIES_WARN);
                     Yii::$app->session->setFlash('failed', '登录后再访问');
                     return Yii::$app->response->redirect(['login/index']);
                 }
+
+                Yii::info("login by cookie success!uid:{$this->userId}", CATEGORIES_INFO);
             }
 
-            $redis = Yii::$app->redis;
+            $redisSession = $userModel->getRedis($this->userId);
+            if (!$redisSession) {
+                Yii::$app->session->setFlash('failed', '登录失效，请重新登录');
+                return Yii::$app->response->redirect(['login/index']);
+            }
             //验证当前IP和登录时记录IP是否一致
-            if (getIP() != $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'login_ip')) {
+            if ($nowIP != $redisSession['login_ip']) {
+                Yii::warning("force to logout because of ip diff;old_ip:{$redisSession['login_ip']};now_ip:{$nowIP};uid:{$this->userId}", CATEGORIES_WARN);
                 $this->removeSession();
                 Yii::$app->session->setFlash('failed', '你已在别处登录，请重新登录');
                 return Yii::$app->response->redirect(['login/index']);
             }
 
-            $this->userName = $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'username');
-            $this->status = $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'status');
-            $this->loginTime = $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'login_time');
-            $this->loginIp = $redis->hget(UserModel::REDIS_KEY_PREFIX . $this->userId, 'login_ip');
+            $this->redisSession = $redisSession;
         }
 
         return true;
 
-    }
-
-    public function getSession()
-    {
-        $session = Yii::$app->session;
-        $this->userId = $session->get(UserModel::SESSION_USE_ID);
-        return $this->userId;
     }
 
     public function removeSession()

@@ -27,8 +27,8 @@ class SiteController extends CommonController
 
     public function actionLogout()
     {
-        $loginForm = new UserModel();
-        $loginForm->logout();
+        Yii::info("user logout;uid:{$this->userId}", CATEGORIES_INFO);
+        (new UserModel())->logout();
         return $this->redirect(['login/index']);
     }
 }

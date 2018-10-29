@@ -144,7 +144,7 @@ $menuList = (new MenuModel())->getMenuList();
                              * 判断用户是否登录选择展示内容
                              */
                                 if ($isLogin) {
-                                    echo "<a href=\"#\" class=\"btn subscribe-btn\" data-toggle=\"modal\" data-target=\"#subsModal\">{$userInfo['username']},你好</a>";
+                                    echo "<a href=\"#\" class=\"btn subscribe-btn\" data-toggle=\"modal\" data-target=\"#subsModal\">{$userInfo['username']}，你好</a>";
                                 } else {
                                     echo "<a href=\"" . Url::to(['login/index']) . "\" class=\"btn subscribe-btn\">登录/注册</a>";
                                 }
@@ -190,63 +190,6 @@ $menuList = (new MenuModel())->getMenuList();
                                     }
                                 ?>
                                 </ul>
-                                <!--
-                                <ul>
-                                    <li><a href="">Home</a></li>
-                                    <li><a href="#">Pages</a>
-                                        <ul class="dropdown">
-                                            <li><a href="">Home</a></li>
-                                            <li><a href="about-us.html">About Us</a></li>
-                                            <li><a href="single-post.html">Single Post</a></li>
-                                            <li><a href="contact.html">Contact</a></li>
-                                            <li><a href="coming-soon.html">Coming Soon</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">Catagory</a>
-                                        <ul class="dropdown">
-                                            <li><a href="#">Catagory 1</a></li>
-                                            <li><a href="#">Catagory 1</a></li>
-                                            <li><a href="#">Catagory 1</a>
-                                                <ul class="dropdown">
-                                                    <li><a href="#">Catagory 2</a></li>
-                                                    <li><a href="#">Catagory 2</a></li>
-                                                    <li><a href="#">Catagory 2</a>
-                                                        <ul class="dropdown">
-                                                            <li><a href="#">Catagory 3</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><a href="#">Catagory 2</a></li>
-                                                    <li><a href="#">Catagory 2</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Catagory 1</a></li>
-                                            <li><a href="#">Catagory 1</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="about-us.html">About Us</a></li>
-                                    <li><a href="#">Megamenu</a>
-                                        <div class="megamenu">
-                                            <ul class="single-mega cn-col-4">
-                                                <li class="title">Headline 1</li>
-                                                <li><a href="#">Mega Menu Item 1</a></li>
-                                            </ul>
-                                            <ul class="single-mega cn-col-4">
-                                                <li class="title">Headline 2</li>
-                                                <li><a href="#">Mega Menu Item 1</a></li>
-                                            </ul>
-                                            <ul class="single-mega cn-col-4">
-                                                <li class="title">Headline 3</li>
-                                                <li><a href="#">Mega Menu Item 1</a></li>
-                                            </ul>
-                                            <ul class="single-mega cn-col-4">
-                                                <li class="title">Headline 4</li>
-                                                <li><a href="#">Mega Menu Item 1</a></li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li><a href="contact.html">Contact</a></li>
-                                </ul>
-                                -->
 
                                 <!-- Search Form  -->
                                 <div id="search-wrapper">
