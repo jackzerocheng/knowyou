@@ -13,9 +13,19 @@ use yii\db\ActiveRecord;
 
 class Comment extends ActiveRecord
 {
+    const BASE_ARTICLE_ID = 'BASE_ARTICLE_ID';//id = base_id * partition + uid % partition
+    const TABLE_PARTITION = 4;
+    protected static $tableName = '';
+
+    public function __construct($id, array $config = [])
+    {
+        parent::__construct($config);
+        static::$tableName = '{{%comment0' . $id % self::TABLE_PARTITION . '}}';
+    }
+
     public static function tableName()
     {
-        return '{{%comment}}';
+        return static::$tableName;
     }
 
     public function getCountByCondition($condition)
