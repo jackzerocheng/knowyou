@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = '文章名';
+$this->title = $article_info['name'];
 
 ?>
 
@@ -12,7 +12,7 @@ $this->title = '文章名';
     <!-- Single Blog Area  -->
     <div class="single-blog-area blog-style-2 mb-50">
         <div class="single-blog-thumbnail">
-            <?=Html::img('@web/img/bg-img/b5.jpg') ?>
+            <?=Html::img($article_info['cover']) ?>
             <div class="post-tag-content">
                 <div class="container">
                     <div class="row">
@@ -39,8 +39,8 @@ $this->title = '文章名';
                         <a href="#" class="post-tag">Know you</a>
                         <h4><a href="#" class="post-headline mb-0"><?=$article_info['title'] ?></a></h4>
                         <div class="post-meta mb-50">
-                            <p>By <a href="#"><?=$username ?></a></p>
-                            <p> 阅读：<?=$readNumber ?></p>
+                            <p>By <a href="#"><?=$user_info['username'] ?></a></p>
+                            <p> 阅读：<?=$read_number ?></p>
                             <p> 评论：123</p>
                         </div>
                         <p>
@@ -52,13 +52,13 @@ $this->title = '文章名';
                 <!-- About Author -->
                 <div class="blog-post-author mt-100 d-flex">
                     <div class="author-thumbnail">
-                        <img src="<?=Url::to('@web/img/bg-img/b6.jpg') ?>" alt="">
+                        <img src="<?=Url::to($user_info['head']) ?>" alt="">
                     </div>
                     <div class="author-info">
                         <div class="line"></div>
                         <span class="author-role">Author</span>
-                        <h4><a href="#" class="author-name">James Morrison</a></h4>
-                        <p>Curabitur venenatis efficitur lorem sed tempor. Integer aliquet tempor cursus. Nullam vestibulum convallis risus vel condimentum. Nullam auctor lorem in libero luctus, vel volutpat quam tincidunt. Nullam vestibulum convallis risus vel condimentum. Nullam auctor lorem in libero.</p>
+                        <h4><a href="#" class="author-name"><?=$user_info['username'] ?></a></h4>
+                        <p><?=$user_info['signature'] ?></p>
                     </div>
                 </div>
 

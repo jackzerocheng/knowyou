@@ -50,6 +50,8 @@ class CommonController extends Controller
 
             $redisSession = $userModel->getRedis($this->userId);
             if (!$redisSession) {
+                Yii::warning("cannot find redis info;uid:{$this->userId}", CATEGORIES_WARN);
+                $this->removeSession();
                 Yii::$app->session->setFlash('failed', '登录失效，请重新登录');
                 return Yii::$app->response->redirect(['login/index']);
             }

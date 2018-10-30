@@ -47,7 +47,7 @@ class ArticleModel extends Model
     {
         $redis = Yii::$app->redis;
         $key = self::REDIS_ARTICLE_READ_NUMBER . $id;
-        if (!$redis->exist($key)) {
+        if (!$redis->exists($key)) {
             $redis->set($key, 1);
             return 1;
         }
@@ -57,23 +57,37 @@ class ArticleModel extends Model
     }
 
     /**
+     * 搜索文章，返回数据
+     * @param $key
+     * @param int $limit
+     * @param int $offset
+     * @return array
+     */
+    public function search($key, $limit = 10, $offset = 0)
+    {
+        $key = trim($key);
+        $condition = ["name like %{$key}% or content like %{$key}%"];
+
+        return self::getListByCondition($condition, $limit, $offset);
+    }
+
+    /**
      * 从所有表中获取文章记录
      * 当记录分布不均匀需要调整记录数
      * @param null $condition
-     * @param int $limit
+     * @param int $limit //每个分表里取的数量
      * @param $offset
      * @return array
      */
-    public function getListByCondition($condition = null, $limit = 100, $offset = 0)
+    public function getListByCondition($condition = null, $limit = 10, $offset = 0)
     {
         $count = Article::TABLE_PARTITION;
-        $realLimit = intval($limit / Article::TABLE_PARTITION);
         $result = array();
 
         while ($count - Article::TABLE_PARTITION < Article::TABLE_PARTITION) {
             $article = new Article($count);
 
-            $result = array_merge($result, $article->getListByCondition($condition, $realLimit));
+            $result = array_merge($result, $article->getListByCondition($condition, $limit, $offset));
             $count++;
         }
 

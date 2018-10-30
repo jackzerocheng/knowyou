@@ -10,6 +10,7 @@
 namespace frontend\controllers;
 
 use common\models\ArticleModel;
+use common\models\UserModel;
 use common\lib\Request;
 use Yii;
 
@@ -21,7 +22,7 @@ class ArticleController extends CommonController
     {
         $articleModel = new ArticleModel();
         $id = (new Request())->get('id');
-        $id = 
+        $id = 5;
         if (empty($id)) {
             Yii::$app->session->setFlash('message', '对不起，你访问的页面不存在哦');
             return $this->redirect(['site/index']);
@@ -33,12 +34,20 @@ class ArticleController extends CommonController
             Yii::$app->session->setFlash('message', '主人，我没找到你想要的！');
             return $this->redirect(['site/index']);
         }
+        //增加阅读数
+        $articleModel->addReadNumber($id);
 
+        $userInfo = (new UserModel())->getOneByCondition($this->userId);
         $data = [
             'article_info' => $articleInfo,
             'read_number' => $readNumber,
-            'username' => $this->username
+            'user_info' => $userInfo
         ];
         return $this->render('article', $data);
+    }
+
+    public function actionSearch()
+    {
+
     }
 }

@@ -24,6 +24,7 @@ class BannerModel extends Model
     const TYPE_AD =2;//广告类
     const TYPE_INDEX_WORD_MESSAGE = 3;//首页滚动文字链消息
     const TYPE_INDEX_ROLL_IMAGE = 4;//首页滚动大图
+    const TYPE_FOOTER_ROLL_IMAGE = 5;//底部滚动图片
 
     public $bannerTypeMap = [
         self::TYPE_NORMAL_BANNER => '普通图文类',

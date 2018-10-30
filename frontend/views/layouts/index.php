@@ -21,6 +21,14 @@ $bannerWordCondition = [
 ];
 $bannerWordList = $bannerModel->getListByCondition($bannerWordCondition);
 
+//底部轮播图
+$footerCondition = [
+    'platform_id' => $bannerModel::PLATFORM_WEB,
+    'status' => $bannerModel::STATUS_SHOWING,
+    'type' => $bannerModel::TYPE_FOOTER_ROLL_IMAGE
+];
+$bannerFooterImage = $bannerModel->getListByCondition($footerCondition);
+
 //控制按钮显示
 $isLogin = false;
 $user = new UserModel();
@@ -193,8 +201,8 @@ $menuList = (new MenuModel())->getMenuList();
 
                                 <!-- Search Form  -->
                                 <div id="search-wrapper">
-                                    <form action="#">
-                                        <input type="text" id="search" placeholder="Search something...">
+                                    <form action="<?=Url::to(['article/search']) ?>">
+                                        <input type="text" id="search" placeholder="搜索文章">
                                         <div id="close-icon"></div>
                                         <input class="d-none" type="submit" value="">
                                     </form>
@@ -342,13 +350,28 @@ $menuList = (new MenuModel())->getMenuList();
                 <div class="row">
                     <div class="col-12">
                         <div class="insta-title">
-                            <h5>Follow us @ Instagram</h5>
+                            <h5><a href="#">加入我们@JZC</a></h5>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- Instagram Slides -->
             <div class="instagram-slides owl-carousel">
+                <?php
+                    if (!empty($bannerFooterImage)) {
+                        foreach ($bannerFooterImage as $line) {
+                ?>
+                    <div class="single-insta-feed">
+                        <?=Html::img($line['img']) ?>
+                        <!-- Hover Effects -->
+                        <div class="hover-effects">
+                            <a href="<?=$line['link'] ?>" class="d-flex align-items-center justify-content-center"><i class="fa fa-instagram"></i></a>
+                        </div>
+                    </div>
+                <?php
+                        }
+                    }
+                ?>
                 <!-- Single Insta Feed -->
                 <div class="single-insta-feed">
                     <?=Html::img('@web/img/instagram-img/1.png') ?>
@@ -436,12 +459,14 @@ $menuList = (new MenuModel())->getMenuList();
                                 <!-- Nav Start -->
                                 <div class="classynav">
                                     <ul>
-                                        <li><a href="#">Home</a></li>
-                                        <li><a href="#">About Us</a></li>
-                                        <li><a href="#">Lifestyle</a></li>
-                                        <li><a href="#">travel</a></li>
-                                        <li><a href="#">Music</a></li>
-                                        <li><a href="#">Contact</a></li>
+                                        <li><a href="<?=Url::to(['site/index']) ?>">Home</a></li>
+                                        <?php
+                                            foreach ($menuList as $menu) {
+                                        ?>
+                                        <li><a href="<?=$menu['url'] ?>"><?=$menu['name'] ?></a></li>
+                                        <?php
+                                            }
+                                        ?>
                                     </ul>
                                 </div>
                                 <!-- Nav End -->
