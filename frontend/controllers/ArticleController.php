@@ -10,6 +10,7 @@
 namespace frontend\controllers;
 
 use common\models\ArticleModel;
+use common\models\CommentModel;
 use common\models\UserModel;
 use common\models\TagModel;
 use common\lib\Request;
@@ -39,10 +40,12 @@ class ArticleController extends CommonController
         $articleModel->addReadNumber($id);
 
         $userInfo = (new UserModel())->getOneByCondition($this->userId);
+        $commentNumber = (new CommentModel())->getCountByCondition(['article_id' => $articleInfo['id'], 'status' => CommentModel::COMMENT_STATUS_NORMAL]);
         $data = [
             'article_info' => $articleInfo,
             'read_number' => $readNumber,
-            'user_info' => $userInfo
+            'user_info' => $userInfo,
+            'comment_number' => $commentNumber
         ];
         return $this->render('article', $data);
     }

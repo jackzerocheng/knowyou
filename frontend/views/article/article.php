@@ -42,8 +42,9 @@ $day = date('d', strtotime($article_info['created_at']));
                         <h4><a href="#" class="post-headline mb-0"><?=$article_info['title'] ?></a></h4>
                         <div class="post-meta mb-50">
                             <p>By <a href="#"><?=$user_info['username'] ?></a></p>
-                            <p> 阅读：<?=$read_number ?></p>
-                            <p> 评论：123</p>
+                            <p><?='阅读：' . $read_number ?></p>
+                            <p><?='点赞：' . $article_info['praise_number'] ?></p>
+                            <p> <?='评论：' . $comment_number ?></p>
                         </div>
                         <p>
                             <?=$article_info['content'] ?>
