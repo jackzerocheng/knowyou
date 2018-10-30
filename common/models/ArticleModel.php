@@ -66,14 +66,14 @@ class ArticleModel extends Model
     public function search($key, $limit = 10, $offset = 0)
     {
         $key = trim($key);
-        $condition = ["name like %{$key}% or content like %{$key}%"];
+        $condition = ["search" => $key];
 
         return self::getListByCondition($condition, $limit, $offset);
     }
 
     /**
      * 从所有表中获取文章记录
-     * 当记录分布不均匀需要调整记录数
+     * 需要当无指定条件时，每次返回数据不同
      * @param null $condition
      * @param int $limit //每个分表里取的数量
      * @param $offset
@@ -86,6 +86,12 @@ class ArticleModel extends Model
 
         while ($count - Article::TABLE_PARTITION < Article::TABLE_PARTITION) {
             $article = new Article($count);
+            //无指定条件下，需要随机返回数据
+            if (empty($condition) && $offset == 0) {
+                $sum = $article->getCountByCondition(null);
+                $page = is_int($sum / $limit) ? $sum / $limit : (intval($sum / $limit) + 1);
+                $offset = mt_rand(0, $page);
+            }
 
             $result = array_merge($result, $article->getListByCondition($condition, $limit, $offset));
             $count++;

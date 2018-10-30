@@ -10,9 +10,6 @@ use yii\web\Cookie;
 use common\dao\User;
 use common\lib\CryptRsa;
 
-/**
- * Login form
- */
 class UserModel extends Model
 {
     public $uid;

@@ -4,6 +4,8 @@ use yii\helpers\Url;
 
 $this->title = $article_info['name'];
 
+$month = date('m', strtotime($article_info['created_at']));
+$day = date('d', strtotime($article_info['created_at']));
 ?>
 
 <!-- ##### Single Blog Area Start ##### -->
@@ -18,7 +20,7 @@ $this->title = $article_info['name'];
                     <div class="row">
                         <div class="col-12">
                             <div class="post-date">
-                                <a href="#"><?=date('d') ?><span><?=date('m') ?>月</span></a>
+                                <a href="#"><?=$day ?><span><?=$month ?>月</span></a>
                             </div>
                         </div>
                     </div>

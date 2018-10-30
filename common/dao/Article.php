@@ -88,7 +88,12 @@ class Article extends ActiveRecord
     {
         if (!empty($condition) && is_array($condition)) {
             foreach ($condition as $k => $v) {
-                $db = $db->andWhere([$k => $v]);
+                if ($k == 'search') {
+                    $db = $db->orWhere("title like '%{$v}%'");
+                    $db = $db->orWhere("content like '%{$v}%'");
+                } else {
+                    $db = $db->andWhere([$k => $v]);
+                }
             }
         }
 

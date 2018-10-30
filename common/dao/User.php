@@ -65,6 +65,14 @@ class User extends ActiveRecord
         return $db->asArray()->one();
     }
 
+    public function getListByCondition($condition, $limit = 100, $offset = 0, $orderBy = 'created_at desc')
+    {
+        $db = self::find();
+        $db = self::handlerCondition($db, $condition);
+
+        return $db->offset($offset)->limit($limit)->orderBy($orderBy)->asArray()->all();
+    }
+
     public function getCountByCondition($condition)
     {
         $db = self::find();

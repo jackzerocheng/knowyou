@@ -11,6 +11,7 @@ namespace frontend\controllers;
 
 use common\models\ArticleModel;
 use common\models\UserModel;
+use common\models\TagModel;
 use common\lib\Request;
 use Yii;
 
@@ -44,6 +45,27 @@ class ArticleController extends CommonController
             'user_info' => $userInfo
         ];
         return $this->render('article', $data);
+    }
+
+    public function actionList()
+    {
+        $articleModel = new ArticleModel();
+        $articleList = $articleModel->getListByCondition();
+
+        $tagList = (new TagModel())->getListByCondition(['status' => TagModel::TAG_STATUS_USING]);
+        $tagMap = array();
+        foreach ($tagList as $_tag) {
+            $tagMap[$_tag['type']] = $_tag;
+        }
+
+        $userInfo = (new UserModel())->getOneByCondition($this->userId);
+        $data = [
+            'article_list' => $articleList,
+            'tag_map' => $tagMap,
+            'user_info' => $userInfo
+        ];
+
+        return $this->render('list', $data);
     }
 
     public function actionSearch()
