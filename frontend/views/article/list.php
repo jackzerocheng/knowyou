@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\LinkPager;
 
 $this->title = '文章列表';
 ?>
@@ -49,6 +50,9 @@ $this->title = '文章列表';
                         }
                     }
                 ?>
+                <div>
+                    <?=LinkPager::widget(['pagination' => $pages]) ?>
+                </div>
 
                 <!-- Load More -->
                 <div class="load-more-btn mt-100 wow fadeInUp" data-wow-delay="0.7s" data-wow-duration="1000ms">

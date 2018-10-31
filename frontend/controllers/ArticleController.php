@@ -15,6 +15,7 @@ use common\models\UserModel;
 use common\models\TagModel;
 use common\lib\Request;
 use Yii;
+use yii\data\Pagination;
 
 class ArticleController extends CommonController
 {
@@ -50,7 +51,9 @@ class ArticleController extends CommonController
     public function actionList()
     {
         $articleModel = new ArticleModel();
-        $articleList = $articleModel->getListByCondition();
+        $count = $articleModel->getCountByCondition();
+        $page = new Pagination(['totalCount' => $count,'pageSize' => '1']);
+        $articleList = $articleModel->getListByCondition(null, $page->limit, $page->offset);
 
         $tagList = (new TagModel())->getListByCondition(['status' => TagModel::TAG_STATUS_USING]);
         $tagMap = array();
@@ -62,7 +65,8 @@ class ArticleController extends CommonController
         $data = [
             'article_list' => $articleList,
             'tag_map' => $tagMap,
-            'user_info' => $userInfo
+            'user_info' => $userInfo,
+            'pages' => $page
         ];
 
         return $this->render('list', $data);

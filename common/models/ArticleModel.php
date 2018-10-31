@@ -64,6 +64,26 @@ class ArticleModel extends Model
     }
 
     /**
+     * 获取总表记录数
+     * @param null $condition
+     * @return int
+     */
+    public function getCountByCondition($condition = null)
+    {
+        $count = Article::TABLE_PARTITION;
+        $result = 0;
+
+        while ($count - Article::TABLE_PARTITION < Article::TABLE_PARTITION) {
+            $article  = new Article($count);
+
+            $result = $result + $article->getCountByCondition($condition);
+            $count++;
+        }
+
+        return $result;
+    }
+
+    /**
      * 从所有表中获取文章记录
      * 需要当无指定条件时，每次返回数据不同
      * @param null $condition
@@ -79,11 +99,13 @@ class ArticleModel extends Model
         while ($count - Article::TABLE_PARTITION < Article::TABLE_PARTITION) {
             $article = new Article($count);
             //无指定条件下，需要随机返回数据
+            /*
             if (empty($condition) && $offset == 0) {
                 $sum = $article->getCountByCondition(null);
                 $page = is_int($sum / $limit) ? $sum / $limit : (intval($sum / $limit) + 1);
                 $offset = mt_rand(0, $page);
             }
+            */
 
             $result = array_merge($result, $article->getListByCondition($condition, $limit, $offset));
             $count++;
