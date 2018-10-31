@@ -55,22 +55,19 @@ $this->title = '文章列表';
                     <div class="row align-items-center">
                         <div class="col-12 col-md-6">
                             <div class="single-blog-thumbnail">
-                                <?=Html::img($_article['cover']) ?>
-                                <div class="post-date">
-                                    <a href="#"><?=$day ?> <span><?=$month ?></span></a>
-                                </div>
+                                <?=Html::img('@web/img/sys_img/not_found.gif') ?>
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
                             <!-- Blog Content -->
                             <div class="single-blog-content">
                                 <div class="line"></div>
-                                <a href="#" class="post-tag"><?=!empty($tag_map[$_article['tag']]) ? $tag_map[$_article['tag']]['name'] : '无' ?></a>
-                                <h4><a href="<?=Url::to(['article/index', 'id' => $_article['id']]) ?>" class="post-headline"><?=$_article['title'] ?></a></h4>
-                                <p><?=substr($_article['content'], 0, 20) . '...' ?></p>
+                                <a href="#" class="post-tag"></a>
+                                <p>对不起，你想要的我们还没有(T.T),<a href="<?=Url::to(['article/list']) ?>" class="post-headline">看看别的吧</a></p>
+                                <h4></h4>
+                                <p>有更好的意见？<a href="<?=Url::to(['contact/index']) ?>">联系我们</a></p>
                                 <div class="post-meta">
-                                    <p>By <a href="#"><?=$user_info['username'] ?></a></p>
-                                    <p><?=$_article['redis_read_number'] . '人已读' ?></p>
+                                    <p>By <a href="#">JZC</a></p>
                                 </div>
                             </div>
                         </div>
