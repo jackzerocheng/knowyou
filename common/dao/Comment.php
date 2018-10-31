@@ -13,7 +13,7 @@ use yii\db\ActiveRecord;
 
 class Comment extends ActiveRecord
 {
-    const BASE_ARTICLE_ID = 'BASE_ARTICLE_ID';//id = base_id * partition + uid % partition
+    const BASE_ARTICLE_ID = 'BASE_COMMENT_ID';//id = base_id * partition + uid % partition
     const TABLE_PARTITION = 4;
     protected static $tableName = '';
 

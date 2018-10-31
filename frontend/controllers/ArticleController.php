@@ -24,20 +24,17 @@ class ArticleController extends CommonController
     {
         $articleModel = new ArticleModel();
         $id = (new Request())->get('id');
-        $id = 5;
         if (empty($id)) {
             Yii::$app->session->setFlash('message', '对不起，你访问的页面不存在哦');
             return $this->redirect(['site/index']);
         }
 
         $articleInfo = $articleModel->getOneByCondition($id, ['id' => $id]);
-        $readNumber = $articleModel->getReadNumber($id);
         if (empty($articleInfo)) {
             Yii::$app->session->setFlash('message', '主人，我没找到你想要的！');
             return $this->redirect(['site/index']);
         }
-        //增加阅读数
-        $articleModel->addReadNumber($id);
+        $readNumber = $articleModel->getReadNumber($id);
 
         $userInfo = (new UserModel())->getOneByCondition($this->userId);
         $commentNumber = (new CommentModel())->getCountByCondition(['article_id' => $articleInfo['id'], 'status' => CommentModel::COMMENT_STATUS_NORMAL]);
