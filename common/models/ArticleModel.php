@@ -31,9 +31,10 @@ class ArticleModel extends Model
     /**
      * 获取or初始化阅读数
      * @param $id
+     * @param $add
      * @return int
      */
-    public function getReadNumber($id)
+    public function getReadNumber($id, $add = true)
     {
         $redis = Yii::$app->redis;
         $nowDate = date('Ymd');
@@ -53,14 +54,21 @@ class ArticleModel extends Model
                 $readNumber = $articleInfo['read_number'];
                 Yii::warning("msg:get db read number;article_id:{$id};", CATEGORIES_WARN);
             }
+
+            if ($add) {
+                $readNumber = $readNumber + 1;
+            }
             //重设缓存
-            $redis->hset(self::REDIS_ARTICLE_READ_NUMBER . date('Ymd'), $id, $readNumber + 1);
+            $redis->hset(self::REDIS_ARTICLE_READ_NUMBER . date('Ymd'), $id, $readNumber);
         } else {
             $readNumber = $redis->hget(self::REDIS_ARTICLE_READ_NUMBER . date('Ymd'), $id);
-            $redis->hset(self::REDIS_ARTICLE_READ_NUMBER . date('Ymd'), $id, $readNumber + 1);
+            if ($add) {
+                $readNumber = $readNumber + 1;
+            }
+            $redis->hset(self::REDIS_ARTICLE_READ_NUMBER . date('Ymd'), $id, $readNumber);
         }
 
-        return $readNumber + 1;
+        return $readNumber;
     }
 
     /**
@@ -98,14 +106,6 @@ class ArticleModel extends Model
 
         while ($count - Article::TABLE_PARTITION < Article::TABLE_PARTITION) {
             $article = new Article($count);
-            //无指定条件下，需要随机返回数据
-            /*
-            if (empty($condition) && $offset == 0) {
-                $sum = $article->getCountByCondition(null);
-                $page = is_int($sum / $limit) ? $sum / $limit : (intval($sum / $limit) + 1);
-                $offset = mt_rand(0, $page);
-            }
-            */
 
             $result = array_merge($result, $article->getListByCondition($condition, $limit, $offset));
             $count++;

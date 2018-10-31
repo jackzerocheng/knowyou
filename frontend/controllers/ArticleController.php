@@ -50,10 +50,20 @@ class ArticleController extends CommonController
 
     public function actionList()
     {
+        $condition = array();
+        //搜索
+        if ($key = Yii::$app->request->post('search')) {
+            $condition = ['search' => $key];
+        }
+
         $articleModel = new ArticleModel();
-        $count = $articleModel->getCountByCondition();
-        $page = new Pagination(['totalCount' => $count,'pageSize' => '1']);
-        $articleList = $articleModel->getListByCondition(null, $page->limit, $page->offset);
+        $count = $articleModel->getCountByCondition($condition);
+        $page = new Pagination(['totalCount' => $count,'pageSize' => '10']);
+        $articleList = $articleModel->getListByCondition($condition, $page->limit, $page->offset);
+        //获取缓存数据
+        foreach ($articleList as $k => $v) {
+            $articleList[$k]['redis_read_number'] = $articleModel->getReadNumber($v['id'], false);
+        }
 
         $tagList = (new TagModel())->getListByCondition(['status' => TagModel::TAG_STATUS_USING]);
         $tagMap = array();

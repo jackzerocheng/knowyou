@@ -29,7 +29,7 @@ $footerCondition = [
 ];
 $bannerFooterImage = $bannerModel->getListByCondition($footerCondition);
 
-//控制按钮显示
+//控制按钮显示,用户信息
 $isLogin = false;
 $user = new UserModel();
 if ($uid = $user->getSession()) {
@@ -72,6 +72,7 @@ $menuList = (new MenuModel())->getMenuList();
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <div class="modal-body">
                         <h5 class="title">大人，你想要做什么</h5>
+                        <p>您的账号是：<?=$userInfo['uid'] ?></p>
                         <form action="#" class="newsletterForm" method="post">
                             <!--<input type="email" name="email" id="subscribesForm2" placeholder="Your e-mail here">-->
                             <a href="#"><button type="button" class="btn original-btn">个人主页</button></a>
@@ -201,11 +202,12 @@ $menuList = (new MenuModel())->getMenuList();
 
                                 <!-- Search Form  -->
                                 <div id="search-wrapper">
-                                    <form action="<?=Url::to(['article/search']) ?>">
-                                        <input type="text" id="search" placeholder="搜索文章">
-                                        <div id="close-icon"></div>
-                                        <input class="d-none" type="submit" value="">
-                                    </form>
+                                    <?=Html::beginForm(['article/list'], 'post', ['id' => 'searchForm']) ?>
+                                    <?=Html::input('text', 'search', '', ['placeholder' => 'test', 'id' => 'search']) ?>
+                                    <div id="close-icon"></div>
+                                    <?=Html::submitInput('', ['class' => 'd-none']) ?>
+                                    <?=Html::endForm() ?>
+
                                 </div>
                             </div>
                             <!-- Nav End -->

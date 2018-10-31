@@ -39,7 +39,7 @@ $this->title = '文章列表';
                                 <p><?=substr($_article['content'], 0, 20) . '...' ?></p>
                                 <div class="post-meta">
                                     <p>By <a href="#"><?=$user_info['username'] ?></a></p>
-                                    <p><?=$_article['read_number'] . '人已读' ?></p>
+                                    <p><?=$_article['redis_read_number'] . '人已读' ?></p>
                                 </div>
                             </div>
                         </div>
@@ -48,14 +48,45 @@ $this->title = '文章列表';
 
                 <?php
                         }
+                    } else {
+                ?>
+
+                <div class="single-blog-area blog-style-2 mb-50 wow fadeInUp" data-wow-delay="0.2s" data-wow-duration="1000ms">
+                    <div class="row align-items-center">
+                        <div class="col-12 col-md-6">
+                            <div class="single-blog-thumbnail">
+                                <?=Html::img($_article['cover']) ?>
+                                <div class="post-date">
+                                    <a href="#"><?=$day ?> <span><?=$month ?></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <!-- Blog Content -->
+                            <div class="single-blog-content">
+                                <div class="line"></div>
+                                <a href="#" class="post-tag"><?=!empty($tag_map[$_article['tag']]) ? $tag_map[$_article['tag']]['name'] : '无' ?></a>
+                                <h4><a href="<?=Url::to(['article/index', 'id' => $_article['id']]) ?>" class="post-headline"><?=$_article['title'] ?></a></h4>
+                                <p><?=substr($_article['content'], 0, 20) . '...' ?></p>
+                                <div class="post-meta">
+                                    <p>By <a href="#"><?=$user_info['username'] ?></a></p>
+                                    <p><?=$_article['redis_read_number'] . '人已读' ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <?php
                     }
                 ?>
                 <div>
                     <?=LinkPager::widget(['pagination' => $pages]) ?>
                 </div>
 
-                <!-- Load More -->
+                <!--
                 <div class="load-more-btn mt-100 wow fadeInUp" data-wow-delay="0.7s" data-wow-duration="1000ms">
                     <a href="#" class="btn original-btn">换一波</a>
                 </div>
+                -->
             </div>
