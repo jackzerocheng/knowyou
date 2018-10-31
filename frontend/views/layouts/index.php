@@ -372,62 +372,7 @@ $menuList = (new MenuModel())->getMenuList();
                         }
                     }
                 ?>
-                <!-- Single Insta Feed -->
-                <div class="single-insta-feed">
-                    <?=Html::img('@web/img/instagram-img/1.png') ?>
-                    <!-- Hover Effects -->
-                    <div class="hover-effects">
-                        <a href="#" class="d-flex align-items-center justify-content-center"><i class="fa fa-instagram"></i></a>
-                    </div>
-                </div>
-                <!-- Single Insta Feed -->
-                <div class="single-insta-feed">
-                    <?=Html::img('@web/img/instagram-img/2.png') ?>
-                    <!-- Hover Effects -->
-                    <div class="hover-effects">
-                        <a href="#" class="d-flex align-items-center justify-content-center"><i class="fa fa-instagram"></i></a>
-                    </div>
-                </div>
-                <!-- Single Insta Feed -->
-                <div class="single-insta-feed">
-                    <?=Html::img('@web/img/instagram-img/3.png') ?>
-                    <!-- Hover Effects -->
-                    <div class="hover-effects">
-                        <a href="#" class="d-flex align-items-center justify-content-center"><i class="fa fa-instagram"></i></a>
-                    </div>
-                </div>
-                <!-- Single Insta Feed -->
-                <div class="single-insta-feed">
-                    <?=Html::img('@web/img/instagram-img/4.png') ?>
-                    <!-- Hover Effects -->
-                    <div class="hover-effects">
-                        <a href="#" class="d-flex align-items-center justify-content-center"><i class="fa fa-instagram"></i></a>
-                    </div>
-                </div>
-                <!-- Single Insta Feed -->
-                <div class="single-insta-feed">
-                    <?=Html::img('@web/img/instagram-img/5.png') ?>
-                    <!-- Hover Effects -->
-                    <div class="hover-effects">
-                        <a href="#" class="d-flex align-items-center justify-content-center"><i class="fa fa-instagram"></i></a>
-                    </div>
-                </div>
-                <!-- Single Insta Feed -->
-                <div class="single-insta-feed">
-                    <?=Html::img('@web/img/instagram-img/6.png') ?>
-                    <!-- Hover Effects -->
-                    <div class="hover-effects">
-                        <a href="#" class="d-flex align-items-center justify-content-center"><i class="fa fa-instagram"></i></a>
-                    </div>
-                </div>
-                <!-- Single Insta Feed -->
-                <div class="single-insta-feed">
-                    <?=Html::img('@web/img/instagram-img/7.png') ?>
-                    <!-- Hover Effects -->
-                    <div class="hover-effects">
-                        <a href="#" class="d-flex align-items-center justify-content-center"><i class="fa fa-instagram"></i></a>
-                    </div>
-                </div>
+
             </div>
         </div>
         <!-- ##### Instagram Feed Area End ##### -->

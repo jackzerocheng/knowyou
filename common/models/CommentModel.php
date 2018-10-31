@@ -18,8 +18,8 @@ class CommentModel extends Model
     const COMMENT_STATUS_FORBIDDEN = 2;
     const COMMENT_STATUS_DELETED = 3;
 
-    public function getCountByCondition($condition)
+    public function getCountByCondition($id, $condition)
     {
-        return (new Comment())->getCountByCondition($condition);
+        return (new Comment($id))->getCountByCondition($condition);
     }
 }

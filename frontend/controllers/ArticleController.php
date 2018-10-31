@@ -37,7 +37,7 @@ class ArticleController extends CommonController
         $readNumber = $articleModel->getReadNumber($id);
 
         $userInfo = (new UserModel())->getOneByCondition($this->userId);
-        $commentNumber = (new CommentModel())->getCountByCondition(['article_id' => $articleInfo['id'], 'status' => CommentModel::COMMENT_STATUS_NORMAL]);
+        $commentNumber = (new CommentModel())->getCountByCondition($articleInfo['id'], ['article_id' => $articleInfo['id'], 'status' => CommentModel::COMMENT_STATUS_NORMAL]);
         $data = [
             'article_info' => $articleInfo,
             'read_number' => $readNumber,
