@@ -3,7 +3,7 @@
     use yii\helpers\Url;
     use yii\captcha\Captcha;
 
-    $this->title = "懂你 -- 只为更好的你";
+    $this->title = "简 · 默";
 ?>
 <div id="bg">
     <canvas width="1920" height="938"></canvas>
@@ -12,7 +12,7 @@
 </div>
 <!-- //bg effect -->
 <!-- title -->
-<h1>懂你 - 只为更好的你</h1>
+<h1>简 · 默</h1>
 <!-- //title -->
 <!-- content -->
 <div class="sub-main-w3">

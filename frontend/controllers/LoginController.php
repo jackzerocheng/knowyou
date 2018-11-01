@@ -19,10 +19,8 @@ class LoginController extends CommonController
 
     public function init()
     {
-        parent::init();
-
         //登录态则跳回主页
-        if (Yii::$app->session->has(UserModel::SESSION_USE_ID)) {
+        if ((new UserModel())->getSession()) {
             Yii::$app->session->setFlash('message', '您已登录');
             return Yii::$app->response->redirect(['site/index']);
         }

@@ -31,6 +31,7 @@ $bannerFooterImage = $bannerModel->getListByCondition($footerCondition);
 
 //控制按钮显示,用户信息
 $isLogin = false;
+$userInfo = array();
 $user = new UserModel();
 if ($uid = $user->getSession()) {
     $userInfo = $user->getOneByCondition($uid);
@@ -72,7 +73,7 @@ $menuList = (new MenuModel())->getMenuList();
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <div class="modal-body">
                         <h5 class="title">大人，你想要做什么</h5>
-                        <p>您的账号是：<?=$userInfo['uid'] ?></p>
+                        <p>您的账号是：<?=!empty($userInfo['uid']) ? $userInfo['uid'] : '' ?></p>
                         <form action="#" class="newsletterForm" method="post">
                             <!--<input type="email" name="email" id="subscribesForm2" placeholder="Your e-mail here">-->
                             <a href="#"><button type="button" class="btn original-btn">个人主页</button></a>
