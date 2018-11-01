@@ -30,6 +30,10 @@ class RegisterController extends CommonController
             $this->outputJson('params_error');
         }
 
+        if ((new UserModel())->getCountByCondition(['username' => $params['username']]) > 0) {
+            $this->outputJson('repeat_username');
+        }
+
         $data = [
             'username' => $params['username'],
             'password' => $params['password']

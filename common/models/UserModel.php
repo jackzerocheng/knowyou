@@ -284,7 +284,7 @@ class UserModel extends Model
             return false;
         }
 
-        return $user::$uid;
+        return intval($user::$uid);
     }
 
     /**

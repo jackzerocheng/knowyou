@@ -49,9 +49,9 @@ $this->title = 'Know You - begin your colorful life';
                     <div class="single-blog-content">
                         <div class="line"></div>
                         <a href="#" class="post-tag">Lifestyle</a>
-                        <h4><a href="#" class="post-headline">Welcome to this Lifestyle blog</a></h4>
-                        <p>Curabitur venenatis efficitur lorem sed tempor. Integer aliquet tempor cursus. Nullam vestibulum convallis risus vel condimentum. Nullam auctor lorem in libero luctus, vel volutpat quam tincidunt. Morbi sodales, dolor id ultricies dictum</p>
-                        <a href="#" class="btn original-btn">Read More</a>
+                        <h4><a href="#" class="post-headline">欢迎来到 简 · 默</a></h4>
+                        <p>人来人往，春去秋来，世界之大，何处为家。愿 远方的你、孤独的你、可爱的你，心中存一份净土</p>
+                        <a href="<?=Url::to(['site/index']) ?>"><button class="btn original-btn">我要发文</button></a>
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@ $this->title = 'Know You - begin your colorful life';
                     <?=Html::img('@web/img/blog-img/1.jpg') ?>
                     <!-- Catagory Title -->
                     <div class="catagory-title">
-                        <a href="#">Lifestyle posts</a>
+                        <a href="#">看看文章</a>
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@ $this->title = 'Know You - begin your colorful life';
                     <?=Html::img('@web/img/blog-img/2.jpg') ?>
                     <!-- Catagory Title -->
                     <div class="catagory-title">
-                        <a href="#">latest posts</a>
+                        <a href="#">逛逛论坛</a>
                     </div>
                 </div>
             </div>
@@ -81,6 +81,13 @@ $this->title = 'Know You - begin your colorful life';
     <div class="container">
         <div class="row">
             <div class="col-12 col-lg-9">
+
+                <?php
+                /**
+                 * 混合feed流
+                 */
+
+                ?>
 
                 <!-- Single Blog Area  -->
                 <div class="single-blog-area blog-style-2 mb-50 wow fadeInUp" data-wow-delay="0.2s" data-wow-duration="1000ms">

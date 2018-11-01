@@ -9,6 +9,7 @@
 
 namespace frontend\controllers;
 
+use common\dao\Article;
 use common\models\ArticleModel;
 use common\models\CommentModel;
 use common\models\UserModel;
@@ -82,8 +83,18 @@ class ArticleController extends CommonController
         return $this->render('list', $data);
     }
 
-    public function actionSearch()
+    public function actionCreate()
     {
+        $data = array();
+        if (Yii::$app->request->isPost) {
+            $data = Yii::$app->request->post();
+            if (!$articleID = (new Article())->insert(false, $data)) {
+                Yii::$app->session->setFlash('message', '发表失败');
+            } else {
+                $this->redirect(['article/index', 'id' => $articleID]);
+            }
+        }
 
+        return $this->render('create', ['data' => $data]);
     }
 }

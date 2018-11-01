@@ -27,5 +27,9 @@ return array(
     'register_failed' => array(
         'code' => 200002,
         'msg'  => '注册失败'
+    ),
+    'repeat_username' => array(
+        'code' => 200003,
+        'msg'  => '重复的用户名'
     )
 );
