@@ -41,7 +41,6 @@ class CommonController extends Controller
                     Yii::warning("try to login by cookie failed!login_ip:{$nowIP}", CATEGORIES_WARN);
                     Yii::$app->session->setFlash('failed', '登录后再访问');
                     return Yii::$app->response->redirect(['login/index']);
-
                 }
 
                 Yii::info("login by cookie success!uid:{$this->userId}", CATEGORIES_INFO);
