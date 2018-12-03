@@ -145,4 +145,10 @@ class ArticleModel extends Model
 
         return $articleID;
     }
+
+    public function praiseArticle($id)
+    {
+        $article = new Article($id);
+        return $article->save();
+    }
 }

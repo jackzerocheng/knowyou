@@ -34,3 +34,4 @@ composer.phar
 # vagrant runtime
 /.vagrant
 /log
+#/environments/doc
