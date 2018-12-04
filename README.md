@@ -25,6 +25,11 @@
 * frontend  前台展示
 * api       请求接口
 ----
+* Ueditor：引用富文本编辑器
+* 文档地址：http://fex.baidu.com/ueditor/#server-php
+
+---
+
 * **Lib所用工具**
 * AES加密算法
 * RSA加密算法
