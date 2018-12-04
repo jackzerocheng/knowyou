@@ -44,6 +44,30 @@ class Article extends ActiveRecord
         return $id;
     }
 
+    public function insertBatch($data)
+    {
+        return Yii::$app->db->createCommand()->batchInsert(self::tableName(),array_keys($data), $data)->execute();
+    }
+
+    public function updateBatch($data, $index)
+    {
+        $sql = "";
+        $tableName = self::tableName();
+        foreach ($data as $line) {
+            $head = "update {$tableName} set ";
+            foreach ($line as $k => $v) {
+                $head = $head . "{$k} = {$v},";
+            }
+
+            $head = substr($head, 0, strlen($head) - 1);//去掉多余逗号
+            $head = $head . " where {$index} = {$line[$index]};\n";//拼接条件
+
+            $sql = $sql . $head;
+        }
+
+        return Yii::$app->db->createCommand($sql)->execute();
+    }
+
     /**
      * @param $condition
      * @param string $orderBy
@@ -110,7 +134,7 @@ class Article extends ActiveRecord
     public function praiseArticle($id, $change = 1)
     {
         $rs = Yii::$app->db->createCommand()
-            ->update(static::tableName(), [
+            ->update(self::tableName(), [
                 'praise_number' => new Expression("praise_number + $change")
             ], "id = $id")->execute();
         if ($rs) {

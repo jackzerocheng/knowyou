@@ -9,7 +9,6 @@
 
 namespace frontend\controllers;
 
-use common\dao\Article;
 use common\models\ArticleModel;
 use common\models\CommentModel;
 use common\models\UserModel;

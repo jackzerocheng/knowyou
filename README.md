@@ -33,3 +33,13 @@
 * **Lib所用工具**
 * AES加密算法
 * RSA加密算法
+
+---
+* 手动执行脚本方式：/项目根目录/yii /console下控制器名/方法名
+* 如 php /www/yii2/yii /test/index
+* 多个单词的controller用-划分
+* 如post-comment 对应 app\controllers\PostCommentController
+---
+定时任务配置：crontab
+
+

@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = 'Know You - begin your colorful life';
+$this->title = '简 · 默';
 
 ?>
 
@@ -61,7 +61,7 @@ $this->title = 'Know You - begin your colorful life';
                     <?=Html::img('@web/img/blog-img/1.jpg') ?>
                     <!-- Catagory Title -->
                     <div class="catagory-title">
-                        <a href="#">看看文章</a>
+                        <a href="<?=Url::to(['article/list']) ?>">看看文章</a>
                     </div>
                 </div>
             </div>

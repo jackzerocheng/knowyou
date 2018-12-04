@@ -23,7 +23,8 @@ class ArticleModel extends Model
     const REDIS_ARTICLE_READ_NUMBER = 'know_you_article_read_number_';//文章阅读数 hash 有效期三天
     const REDIS_EXPIRE_TIME = 259200;//三天
 
-    const ARTICLE_COVER_DEFAULT = '/test.jpg';
+    const ARTICLE_COVER_DEFAULT = '/img/knowyou_article_img/default_article_cover.jpg';//文章默认封面
+    const TABLE_PARTITION = Article::TABLE_PARTITION;
 
     public function rules()
     {
@@ -148,9 +149,26 @@ class ArticleModel extends Model
         return $articleID;
     }
 
-    public function praiseArticle($id)
+    /**
+     * 批量更新
+     * index只能指定一个条件！
+     * @param $data
+     * @param $index
+     * @return int
+     */
+    public function updateBatch($data, $index)
     {
-        $article = new Article($id);
-        return $article->save();
+        return (new Article())->updateBatch($data, $index);
+    }
+
+    /**
+     * 文章点赞
+     * @param $id
+     * @param int $change
+     * @return bool
+     */
+    public function praiseArticle($id, $change = 1)
+    {
+        return (new Article($id))->praiseArticle($id);
     }
 }
