@@ -51,7 +51,7 @@ $this->title = 'Know You - begin your colorful life';
                         <a href="#" class="post-tag">Lifestyle</a>
                         <h4><a href="#" class="post-headline">欢迎来到 简 · 默</a></h4>
                         <p>人来人往，春去秋来，世界之大，何处为家。愿 远方的你、孤独的你、可爱的你，心中存一份净土</p>
-                        <a href="<?=Url::to(['site/index']) ?>"><button class="btn original-btn">我要发文</button></a>
+                        <a href="<?=Url::to(['article/create']) ?>"><button class="btn original-btn">我要发文</button></a>
                     </div>
                 </div>
             </div>
@@ -227,6 +227,126 @@ $this->title = 'Know You - begin your colorful life';
                 <!-- Load More -->
                 <div class="load-more-btn mt-100 wow fadeInUp" data-wow-delay="0.7s" data-wow-duration="1000ms">
                     <a href="#" class="btn original-btn">Read More</a>
+                </div>
+            </div>
+
+            <!-- ##### Sidebar Area ##### -->
+            <div class="col-12 col-md-4 col-lg-3">
+                <div class="post-sidebar-area">
+
+                    <!-- Widget Area -->
+                    <div class="sidebar-widget-area">
+                        <form action="#" class="search-form">
+                            <input type="search" name="search" id="searchForm" placeholder="Search">
+                            <input type="submit" value="submit">
+                        </form>
+                    </div>
+
+                    <!-- Widget Area -->
+                    <div class="sidebar-widget-area">
+                        <h5 class="title subscribe-title">Subscribe to my newsletter</h5>
+                        <div class="widget-content">
+                            <form action="#" class="newsletterForm">
+                                <input type="email" name="email" id="subscribesForm" placeholder="Your e-mail here">
+                                <button type="submit" class="btn original-btn">Subscribe</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Widget Area -->
+                    <div class="sidebar-widget-area">
+                        <h5 class="title">Advertisement</h5>
+                        <a href="#"><?=Html::img('@web/img/bg-img/add.gif') ?></a>
+                    </div>
+
+                    <!-- Widget Area -->
+                    <div class="sidebar-widget-area">
+                        <h5 class="title">Latest Posts</h5>
+
+                        <div class="widget-content">
+
+                            <!-- Single Blog Post -->
+                            <div class="single-blog-post d-flex align-items-center widget-post">
+                                <!-- Post Thumbnail -->
+                                <div class="post-thumbnail">
+                                    <?=Html::img('@web/img/blog-img/lp1.jpg') ?>
+                                </div>
+                                <!-- Post Content -->
+                                <div class="post-content">
+                                    <a href="#" class="post-tag">Lifestyle</a>
+                                    <h4><a href="#" class="post-headline">Party people in the house</a></h4>
+                                    <div class="post-meta">
+                                        <p><a href="#">12 March</a></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Single Blog Post -->
+                            <div class="single-blog-post d-flex align-items-center widget-post">
+                                <!-- Post Thumbnail -->
+                                <div class="post-thumbnail">
+                                    <?=Html::img('@web/img/blog-img/lp2.jpg') ?>
+                                </div>
+                                <!-- Post Content -->
+                                <div class="post-content">
+                                    <a href="#" class="post-tag">Lifestyle</a>
+                                    <h4><a href="#" class="post-headline">A sunday in the park</a></h4>
+                                    <div class="post-meta">
+                                        <p><a href="#">12 March</a></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Single Blog Post -->
+                            <div class="single-blog-post d-flex align-items-center widget-post">
+                                <!-- Post Thumbnail -->
+                                <div class="post-thumbnail">
+                                    <?=Html::img('@web/img/blog-img/lp3.jpg') ?>
+                                </div>
+                                <!-- Post Content -->
+                                <div class="post-content">
+                                    <a href="#" class="post-tag">Lifestyle</a>
+                                    <h4><a href="#" class="post-headline">Party people in the house</a></h4>
+                                    <div class="post-meta">
+                                        <p><a href="#">12 March</a></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Single Blog Post -->
+                            <div class="single-blog-post d-flex align-items-center widget-post">
+                                <!-- Post Thumbnail -->
+                                <div class="post-thumbnail">
+                                    <?=Html::img('@web/img/blog-img/lp4.jpg') ?>
+                                </div>
+                                <!-- Post Content -->
+                                <div class="post-content">
+                                    <a href="#" class="post-tag">Lifestyle</a>
+                                    <h4><a href="#" class="post-headline">A sunday in the park</a></h4>
+                                    <div class="post-meta">
+                                        <p><a href="#">12 March</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Widget Area -->
+                    <div class="sidebar-widget-area">
+                        <h5 class="title">Tags</h5>
+                        <div class="widget-content">
+                            <ul class="tags">
+                                <li><a href="#">design</a></li>
+                                <li><a href="#">fashion</a></li>
+                                <li><a href="#">travel</a></li>
+                                <li><a href="#">music</a></li>
+                                <li><a href="#">party</a></li>
+                                <li><a href="#">video</a></li>
+                                <li><a href="#">photography</a></li>
+                                <li><a href="#">adventure</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
 

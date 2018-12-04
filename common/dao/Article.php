@@ -11,6 +11,7 @@ namespace common\dao;
 
 use yii\db\ActiveRecord;
 use Yii;
+use yii\db\Expression;
 
 class Article extends ActiveRecord
 {
@@ -98,5 +99,35 @@ class Article extends ActiveRecord
         }
 
         return $db;
+    }
+
+    /**
+     * 点赞数改动
+     * @param $id
+     * @param int $change
+     * @return bool
+     */
+    public function praiseArticle($id, $change = 1)
+    {
+        $rs = Yii::$app->db->createCommand()
+            ->update(static::tableName(), [
+                'praise_number' => new Expression("praise_number + $change")
+            ], "id = $id")->execute();
+        if ($rs) {
+            return true;
+        }
+
+        return false;
+        //Yii::$app->db->createCommand('')->execute();
+        //Yii::$app->db->createCommand()->upsert('a', [], ['b' => new \yii\db\Expression('b + 1')])->execute();
+        /*
+        $article = self::findOne($id);
+        $article->praise = $article['praise'] + $change;
+        if ($article->update()) {
+            return true;
+        }
+
+        return false;
+        */
     }
 }
