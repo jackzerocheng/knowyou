@@ -60,9 +60,11 @@ class ArticleController extends CommonController
         $count = $articleModel->getCountByCondition($condition);
         $page = new Pagination(['totalCount' => $count,'pageSize' => '10']);
         $articleList = $articleModel->getListByCondition($condition, $page->limit, $page->offset);
+        $uid = array();
         //获取缓存数据
         foreach ($articleList as $k => $v) {
             $articleList[$k]['redis_read_number'] = $articleModel->getReadNumber($v['id'], false);
+            $uid[] = $v['uid'];
         }
 
         $tagList = (new TagModel())->getListByCondition(['status' => TagModel::TAG_STATUS_USING]);
@@ -71,7 +73,7 @@ class ArticleController extends CommonController
             $tagMap[$_tag['type']] = $_tag;
         }
 
-        $userInfo = (new UserModel())->getOneByCondition($this->userId);
+        $userInfo = (new UserModel())->getUserMap($uid);
         $data = [
             'article_list' => $articleList,
             'tag_map' => $tagMap,

@@ -12,6 +12,7 @@ namespace frontend\controllers;
 use common\models\BannerModel;
 use common\models\UserModel;
 use common\models\ArticleModel;
+use common\models\TagModel;
 use Yii;
 
 class SiteController extends CommonController
@@ -21,7 +22,13 @@ class SiteController extends CommonController
     public function actionIndex()
     {
         $articleModel = new ArticleModel();
-        $articleList = $articleModel->getListByCondition();
+        $articleList = $articleModel->getListByCondition(['status' => ArticleModel::ARTICLE_STATUS_NORMAL]);
+
+        //获取缓存数据
+        foreach ($articleList as $k => $v) {
+            $articleList[$k]['redis_read_number'] = $articleModel->getReadNumber($v['id'], false);
+            $uid[] = $v['uid'];
+        }
 
         $bannerModel = new BannerModel();
         $bannerCondition = [
@@ -32,7 +39,23 @@ class SiteController extends CommonController
         //首页滚屏图片
         $bannerIndexImage = $bannerModel->getListByCondition($bannerCondition);
 
-        return $this->render('index', ['article_list' => $articleList, 'banner_index_image' => $bannerIndexImage]);
+        //标签获取
+        $tagList = (new TagModel())->getListByCondition(['status' => TagModel::TAG_STATUS_USING]);
+        $tagMap = array();
+        foreach ($tagList as $_tag) {
+            $tagMap[$_tag['type']] = $_tag;
+        }
+
+        //用户数据获取
+        $userInfo = (new UserModel())->getUserMap($uid);
+
+        $data = [
+            'article_list' => $articleList,
+            'banner_index_image' => $bannerIndexImage,
+            'tag_map' => $tagMap,
+            'user_info' => $uid
+        ];
+        return $this->render('index', $data);
     }
 
     public function actionLogout()

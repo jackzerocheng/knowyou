@@ -40,5 +40,16 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        //URL配置
+        /*
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'enableStrictParsing' => false,
+            'rules' => [
+                '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+            ]
+        ],
+        */
     ],
 ];

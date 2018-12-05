@@ -30,7 +30,8 @@ class BannerModel extends Model
         self::TYPE_NORMAL_BANNER => '普通图文类',
         self::TYPE_AD => '广告',
         self::TYPE_INDEX_WORD_MESSAGE => '首页滚动文字链消息',
-        self::TYPE_INDEX_ROLL_IMAGE => '首页滚动大图'
+        self::TYPE_INDEX_ROLL_IMAGE => '首页滚动大图',
+        self::TYPE_FOOTER_ROLL_IMAGE => '底部滚动图片'
     ];
 
     //运营位状态

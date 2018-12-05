@@ -317,4 +317,32 @@ class UserModel extends Model
         $user = new User($uid);
         return $user->getOneByCondition($condition);
     }
+
+    /**
+     * 获取UID => 用户信息 映射
+     * @param array $uid
+     * @return array
+     */
+    public function getUserMap(array $uid)
+    {
+        if (empty($uid) || !is_array($uid)) {
+            return [];
+        }
+
+        $group = array();
+        foreach ($uid as $_uid) {
+            $part = $_uid % User::TABLE_PARTITION;
+            $group[$part][] = $_uid;
+        }
+
+        $rs = array();
+        foreach ($group as $k => $v) {
+            $temp = (new User($k))->getListByCondition(['uid' => $v]);
+            foreach ($temp as $_temp) {
+                $rs[$_temp['uid']] = $temp;
+            }
+        }
+
+        return $rs;
+    }
 }

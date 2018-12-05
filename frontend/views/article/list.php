@@ -38,7 +38,7 @@ $this->title = '文章列表';
                                 <h4><a href="<?=Url::to(['article/index', 'id' => $_article['id']]) ?>" class="post-headline"><?=$_article['title'] ?></a></h4>
                                 <p><?=substr($_article['content'], 0, 20) . '...' ?></p>
                                 <div class="post-meta">
-                                    <p>By <a href="#"><?=$user_info['username'] ?></a></p>
+                                    <p>By <a href="#"><?=$user_info[$_article['uid']] ?></a></p>
                                     <p><?=$_article['redis_read_number'] . '人已读' ?></p>
                                 </div>
                             </div>

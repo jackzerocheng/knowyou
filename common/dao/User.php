@@ -14,7 +14,8 @@ use Yii;
 
 class User extends ActiveRecord
 {
-    const BASE_USER_ID = 'BASE_USER_ID';
+    const BASE_USER_ID_KEY = 'BASE_USER_ID';
+    const BASE_USER_ID = 10000000;
 
     const TABLE_PARTITION = 4;//分表数
 
@@ -45,7 +46,11 @@ class User extends ActiveRecord
     private static function getUid()
     {
         $redis = Yii::$app->redis;
-        static::$uid = $redis->incr(self::BASE_USER_ID);
+        if (!$redis->exists(self::BASE_USER_ID_KEY)) {
+            $redis->set(self::BASE_USER_ID_KEY, self::BASE_USER_ID);
+        }
+
+        static::$uid = $redis->incr(self::BASE_USER_ID_KEY);
         return static::$uid;
     }
 

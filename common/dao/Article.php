@@ -15,7 +15,8 @@ use yii\db\Expression;
 
 class Article extends ActiveRecord
 {
-    const BASE_ARTICLE_ID = 'BASE_ARTICLE_ID';//id = base_id * partition + uid % partition
+    const BASE_ARTICLE_ID_KEY = 'BASE_ARTICLE_ID';//id = base_id * partition + uid % partition
+    const BASE_ARTICLE_ID = 1;
     const TABLE_PARTITION = 4;
     protected static $tableName = '';
 
@@ -34,7 +35,11 @@ class Article extends ActiveRecord
     public function insert($runValidation = true, $data = null)
     {
         $data['created_at'] = empty($data['created_at']) ? NOW_DATE : $data['created_at'];
-        $id = Yii::$app->redis->incr(self::BASE_ARTICLE_ID) * self::TABLE_PARTITION + $data['uid'] % self::TABLE_PARTITION;
+
+        if (!Yii::$app->redis->exists(self::BASE_ARTICLE_ID_KEY)) {
+            Yii::$app->redis->set(self::BASE_ARTICLE_ID_KEY, self::BASE_ARTICLE_ID);
+        }
+        $id = Yii::$app->redis->incr(self::BASE_ARTICLE_ID_KEY) * self::TABLE_PARTITION + $data['uid'] % self::TABLE_PARTITION;
         $data['id'] = $id;
 
         if (!self::getDb()->schema->insert(static::tableName(), $data)) {
