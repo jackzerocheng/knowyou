@@ -332,7 +332,10 @@ class UserModel extends Model
         $group = array();
         foreach ($uid as $_uid) {
             $part = $_uid % User::TABLE_PARTITION;
-            $group[$part][] = $_uid;
+            $group[$part] = array();
+            if (!in_array($_uid, $group[$part])) {
+                $group[$part][] = $_uid;
+            }
         }
 
         $rs = array();

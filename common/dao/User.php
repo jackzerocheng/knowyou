@@ -22,7 +22,12 @@ class User extends ActiveRecord
     public static $uid;
     protected static $tableName = '';
 
-    public function __construct($uid = 0, array $config = [])
+    /**
+     * User constructor.
+     * @param string $uid
+     * @param array $config
+     */
+    public function __construct($uid, array $config = [])
     {
         parent::__construct($config);
         static::$tableName = static::getTableName($uid);
@@ -33,9 +38,9 @@ class User extends ActiveRecord
         return static::$tableName;
     }
 
-    private static function getTableName($uid = 0)
+    private static function getTableName($uid)
     {
-        $uid = $uid ? : static::getUid();
+        $uid = isset($uid) ? $uid : static::getUid();
         return '{{%user0' . $uid % self::TABLE_PARTITION . '}}';
     }
 
@@ -66,7 +71,6 @@ class User extends ActiveRecord
     {
         $db = self::find();
         $db = self::handlerCondition($db, $condition);
-
         return $db->asArray()->one();
     }
 

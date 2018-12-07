@@ -25,9 +25,13 @@ class SiteController extends CommonController
         $articleList = $articleModel->getListByCondition(['status' => ArticleModel::ARTICLE_STATUS_NORMAL]);
 
         //获取缓存数据
+        $uid = array();
         foreach ($articleList as $k => $v) {
             $articleList[$k]['redis_read_number'] = $articleModel->getReadNumber($v['id'], false);
-            $uid[] = $v['uid'];
+            //去重
+            if (!in_array($v['uid'], $uid)) {
+                $uid[] = $v['uid'];
+            }
         }
 
         $bannerModel = new BannerModel();
@@ -53,7 +57,7 @@ class SiteController extends CommonController
             'article_list' => $articleList,
             'banner_index_image' => $bannerIndexImage,
             'tag_map' => $tagMap,
-            'user_info' => $uid
+            'user_info' => $userInfo
         ];
         return $this->render('index', $data);
     }
