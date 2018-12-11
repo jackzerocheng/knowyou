@@ -52,7 +52,6 @@ class SiteController extends CommonController
 
         //用户数据获取
         $userInfo = (new UserModel())->getUserMap($uid);
-
         $data = [
             'article_list' => $articleList,
             'banner_index_image' => $bannerIndexImage,

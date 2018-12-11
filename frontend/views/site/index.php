@@ -109,7 +109,7 @@ $this->title = '简 · 默';
                                 <h4><a href="#" class="post-headline"><?=$_article['title'] ?></a></h4>
                                 <p><?=$_article['content'] ?></p>
                                 <div class="post-meta">
-                                    <p>By <a href="#"><?=$user_info[$_article['uid']] ?></a></p>
+                                    <p>By <a href="#"><?=$user_info[$_article['uid']]['username'] ?></a></p>
                                     <p><?=$_article['redis_read_number'] . '人已读' ?></p>
                                 </div>
                             </div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Message: 文章Model
+ * Message: 文章dao
  * User: jzc
  * Date: 2018/10/18
  * Time: 下午6:37

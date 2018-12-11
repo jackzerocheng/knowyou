@@ -342,7 +342,7 @@ class UserModel extends Model
         foreach ($group as $k => $v) {
             $temp = (new User($k))->getListByCondition(['uid' => $v]);
             foreach ($temp as $_temp) {
-                $rs[$_temp['uid']] = $temp;
+                $rs[$_temp['uid']] = $temp[0];
             }
         }
 
