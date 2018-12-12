@@ -34,6 +34,14 @@ return [
                     'categories' => ['know_you_error'],
                     'logFile' => '@root/log/know_you_error.log',
                     'exportInterval' => 1,
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['info', 'warning', 'error'],
+                    'logVars' => ['*'],
+                    'categories' => ['know_you_console'],
+                    'logFile' => '@root/log/know_you_console.log',
+                    'exportInterval' => 100,
                 ]
             ]
         ],

@@ -166,18 +166,19 @@ class ArticleModel extends Model
 
         //插入文章数据
         if (!(new Article($data['uid']))->insertData($data)) {
+            Yii::warning("insert data into article failed;uid:{$data['uid']};article_id:{$articleID}", CATEGORIES_WARN);
             $transaction->rollBack();
             return 0;
         }
 
         //插入索引数据
-        if (!(new ArticleIndexModel())->insert($articleID)) {
+        if (!$articleIndexID = (new ArticleIndexModel())->insert($articleID)) {
             $transaction->rollBack();
             return 0;
         }
 
         $transaction->commit();
-
+        Yii::info("new article data;article_id:{$articleID};article_index_id:{$articleIndexID}", CATEGORIES_INFO);
         return $articleID;
     }
 

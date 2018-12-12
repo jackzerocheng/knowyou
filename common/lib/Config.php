@@ -55,4 +55,27 @@ class Config
 
         return file_get_contents($pemFile);
     }
+
+    /**
+     * 获取ENV下配置
+     * @param $path
+     * @param string $suffix
+     * @return array|bool|mixed|string
+     */
+    public function getEnv($path, $suffix = '.php')
+    {
+        $basePath = dirname(dirname(__DIR__)) . '/environments/' . YII_ENV . '/';
+
+        if (strpos($path, '.') !== false) {
+            $temp = explode('.', $path);
+            $content = file_get_contents($basePath . $temp[0] . $suffix);
+            if (is_array($content)) {
+                return $content[$temp[1]];
+            }
+
+            return [];
+        } else {
+            return file_get_contents($basePath . $path . $suffix);
+        }
+    }
 }

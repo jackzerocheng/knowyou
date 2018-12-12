@@ -21,6 +21,6 @@ class TestController extends CommonController
         $data = (new ArticleIndexModel())->getArticleByTime(5, 10);
         var_dump($data);
 
-        
+
     }
 }
