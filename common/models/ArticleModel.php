@@ -22,6 +22,7 @@ class ArticleModel extends Model
 
     const REDIS_ARTICLE_READ_NUMBER = 'know_you_article_read_number_';//文章阅读数 hash 有效期三天
     const REDIS_EXPIRE_TIME = 259200;//三天
+    const BASE_ARTICLE_ID_KEY = 'BASE_ARTICLE_ID';//id = base_id * partition + uid % partition
 
     const ARTICLE_COVER_DEFAULT = '/img/knowyou_article_img/default_article_cover.jpg';//文章默认封面
     const TABLE_PARTITION = Article::TABLE_PARTITION;
@@ -118,6 +119,19 @@ class ArticleModel extends Model
     }
 
     /**
+     * 获取符合条件的所有数据，受limit限制
+     * @param $key
+     * @param array $condition
+     * @param int $limit
+     * @return mixed
+     */
+    public function getAllList($key, $condition = array(), $limit = 1000)
+    {
+        $rs = (new Article($key))->getAllList($condition, $limit);
+        return $rs;
+    }
+
+    /**
      * 查询单条文章记录，注意ID可传入UID或者article_id
      * @param $id
      * @param null $condition
@@ -133,7 +147,7 @@ class ArticleModel extends Model
     /**
      * 插入文章并返回文章ID
      * @param array $data
-     * @return bool
+     * @return int
      */
     public function insert(array $data)
     {
@@ -141,10 +155,28 @@ class ArticleModel extends Model
             return false;
         }
 
-        $article = new Article($data['uid']);
-        if (!$articleID = $article->insert(false, $data)) {
-            return false;
+        if (!Yii::$app->redis->exists(self::BASE_ARTICLE_ID_KEY)) {
+            Yii::$app->redis->set(self::BASE_ARTICLE_ID_KEY, 0);
         }
+
+        $articleID = Yii::$app->redis->incr(self::BASE_ARTICLE_ID_KEY) * self::TABLE_PARTITION + $data['uid'] % self::TABLE_PARTITION;
+        $data['id'] = $articleID;
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        //插入文章数据
+        if (!(new Article($data['uid']))->insertData($data)) {
+            $transaction->rollBack();
+            return 0;
+        }
+
+        //插入索引数据
+        if (!(new ArticleIndexModel())->insert($articleID)) {
+            $transaction->rollBack();
+            return 0;
+        }
+
+        $transaction->commit();
 
         return $articleID;
     }
@@ -152,13 +184,14 @@ class ArticleModel extends Model
     /**
      * 批量更新
      * index只能指定一个条件！
+     * @param $key
      * @param $data
      * @param $index
      * @return int
      */
-    public function updateBatch($data, $index)
+    public function updateBatch($key, $data, $index)
     {
-        return (new Article())->updateBatch($data, $index);
+        return (new Article($key))->updateBatch($data, $index);
     }
 
     /**
@@ -169,6 +202,6 @@ class ArticleModel extends Model
      */
     public function praiseArticle($id, $change = 1)
     {
-        return (new Article($id))->praiseArticle($id);
+        return (new Article($id))->praiseArticle($id, $change);
     }
 }

@@ -15,11 +15,8 @@ use yii\db\Expression;
 
 class Article extends ActiveRecord
 {
-    const BASE_ARTICLE_ID_KEY = 'BASE_ARTICLE_ID';//id = base_id * partition + uid % partition
-    const BASE_ARTICLE_ID = 1;
     const TABLE_PARTITION = 4;
     protected static $tableName = '';
-
 
     public function __construct($uid = 0, array $config = [])
     {
@@ -32,21 +29,12 @@ class Article extends ActiveRecord
         return static::$tableName;
     }
 
-    public function insert($runValidation = true, $data = null)
+    public function insertData($data = array())
     {
         $data['created_at'] = empty($data['created_at']) ? NOW_DATE : $data['created_at'];
 
-        if (!Yii::$app->redis->exists(self::BASE_ARTICLE_ID_KEY)) {
-            Yii::$app->redis->set(self::BASE_ARTICLE_ID_KEY, self::BASE_ARTICLE_ID);
-        }
-        $id = Yii::$app->redis->incr(self::BASE_ARTICLE_ID_KEY) * self::TABLE_PARTITION + $data['uid'] % self::TABLE_PARTITION;
-        $data['id'] = $id;
-
-        if (!self::getDb()->schema->insert(static::tableName(), $data)) {
-            return false;
-        }
-
-        return $id;
+        $rs = Yii::$app->db->createCommand()->insert(static::$tableName, $data)->execute();
+        return $rs;
     }
 
     public function insertBatch($data)
@@ -86,6 +74,15 @@ class Article extends ActiveRecord
         $db = $this->handlerCondition($db, $condition);
 
         $rs = $db->offset($offset)->limit($limit)->orderBy($orderBy)->asArray()->all();
+        return $rs;
+    }
+
+    public function getAllList($condition, $limit, $orderBy = 'created_at desc')
+    {
+        $db = self::find()->from(self::$tableName);
+        $db = $this->handlerCondition($db, $condition);
+
+        $rs = $db->limit($limit)->orderBy($orderBy)->asArray()->all();
         return $rs;
     }
 

@@ -49,7 +49,7 @@ class UpdateArticleReadNumberController extends BaseController
         $count = 0;
         foreach ($order as $k => $line) {
             if (!empty($line)) {
-                $rs = (new ArticleModel($k))->updateBatch($line, 'id');
+                $rs = (new ArticleModel())->updateBatch($key, $line, 'id');
                 if (!$rs) {
                     Yii::error("update read number to db failed!partition:{$k}", CATEGORIES_ERROR);
                 }

@@ -40,6 +40,10 @@
 * 多个单词的controller用-划分
 * 如post-comment 对应 app\controllers\PostCommentController
 ---
-定时任务配置：crontab
+* 定时任务配置：crontab
+
+----
+> 文章索引表，用于按时间顺序存储文章
+> 水平分表
 
 
