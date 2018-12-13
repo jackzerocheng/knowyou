@@ -31,7 +31,7 @@ class CommonController extends Controller
             //获取session
             if (!$this->userId = $userModel->getSession()) {
                 //获取cookie
-                $cookie = Yii::$app->response->cookies;
+                $cookie = Yii::$app->request->cookies;
                 if ($cookie->has($userModel::COOKIE_USER_INFO)) {
                     //cookie自动登录
                     $userModel->loginByCookie();

@@ -47,7 +47,9 @@ $menuList = (new MenuModel())->getMenuList();
     <html lang="<?= Yii::$app->language ?>">
     <head>
         <meta charset="<?= Yii::$app->charset ?>">
-        <meta name="description" content="">
+        <meta name="keywords" content="简默,社交,论坛,博客,新闻,文章,交友,社区,美文,美图,文艺,交流,心情">
+        <meta name="description" content="一个开放的平台，天南海北，无所不谈。人来人往，唯我独醉">
+        <meta name="baidu-site-verification" content="kDVUlX6sBx" /><!-- 百度验证 -->
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <?php $this->registerCsrfMetaTags() ?>

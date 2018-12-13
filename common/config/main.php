@@ -48,6 +48,9 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'session' => [
+            'timeout' => 7200,
+        ]
         //URL配置
         /*
         'urlManager' => [

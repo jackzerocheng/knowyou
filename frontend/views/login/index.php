@@ -60,7 +60,7 @@
                 <li>
                     <label class="anim">
                         <?=Html::label('保持登录', 'remember') ?>
-                        <?=Html::checkbox('checkbox', false, ['id' => 'remember', 'value' => 1]) ?>
+                        <?=Html::activeInput('checkbox', $model, 'remember', ['value' => 1, 'checked' => true]) ?>
                     </label>
                 </li>
 

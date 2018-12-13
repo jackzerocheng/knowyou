@@ -193,7 +193,7 @@ class UserModel extends Model
      */
     public function loginByCookie()
     {
-        $cookie = Yii::$app->response->cookies;
+        $cookie = Yii::$app->request->cookies;
         if ($cookie->has(self::COOKIE_USER_INFO)) {
             $userInfo = $cookie->getValue(self::COOKIE_USER_INFO);
             if (isset($userInfo['uid']) && isset($userInfo['password'])) {
