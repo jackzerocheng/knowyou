@@ -10,6 +10,7 @@
 namespace frontend\controllers;
 
 use common\models\ArticleModel;
+use common\models\ArticleIndexModel;
 use common\models\CommentModel;
 use common\models\UserModel;
 use common\models\TagModel;
@@ -109,5 +110,38 @@ class ArticleController extends CommonController
         }
 
         return $this->render('create', ['data' => $data]);
+    }
+
+    public function actionTimeLine()
+    {
+        $maxID = (new Request())->get('max_id');
+        $data = (new ArticleIndexModel())->getArticleByTime($maxID);
+
+        $userInfo = array();
+        //获取缓存数据
+        if (!empty($data)) {
+            $uid = array();
+            foreach ($data as $k => $v) {
+                $articleList[$k]['redis_read_number'] = (new ArticleModel())->getReadNumber($v['id'], false);
+                $uid[] = $v['uid'];
+            }
+
+            $userInfo = (new UserModel())->getUserMap($uid);
+        }
+
+        $tagList = (new TagModel())->getListByCondition(['status' => TagModel::TAG_STATUS_USING]);
+        $tagMap = array();
+        foreach ($tagList as $_tag) {
+            $tagMap[$_tag['type']] = $_tag;
+        }
+
+
+        $data = [
+            'data' => $data,
+            'tag_map' => $tagMap,
+            'user_info' => $userInfo
+        ];
+
+        return $this->render('newest', ['data' => $data]);
     }
 }

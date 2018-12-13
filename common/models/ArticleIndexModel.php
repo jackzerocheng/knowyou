@@ -25,11 +25,17 @@ class ArticleIndexModel extends Model
      * 依照MAXID来定位
      * @param int $maxID
      * @param int $limit
-     * @param int $offset
      * @return mixed
      */
-    public function getArticleByTime($maxID = 0, $limit = 10, $offset = 0)
+    public function getArticleByTime($maxID = 0, $limit = 10)
     {
+        if (!$maxID) {//不存在maxid则尝试获取Redis数值
+            $nowID = Yii::$app->redis->get(ArticleIndexModel::ARTICLE_NUMBER_COUNT);
+            if (!$nowID) {//如果redis崩了，尝试抢救一下
+
+            }
+        }
+
         $key = intval($maxID / self::MAX_RECORD_NUMBER);
 
         $count = (new ArticleIndex($key))->getCountByCondition(['max_id' => $maxID]);

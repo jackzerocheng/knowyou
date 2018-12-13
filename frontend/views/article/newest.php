@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 
-$this->title = '文章列表';
+$this->title = '最新文章';
 ?>
 
 <!-- ##### Blog Wrapper Start ##### -->
@@ -14,8 +14,8 @@ $this->title = '文章列表';
             <div class="col-12 col-lg-9">
 
                 <?php
-                    if (!empty($article_list)) {
-                        foreach ($article_list as $_article) {
+                    if (!empty($data)) {
+                        foreach ($data as $_article) {
                             $month = date('m', strtotime($_article['created_at']));
                             $day = date('d', strtotime($_article['created_at']));
                 ?>
@@ -79,7 +79,9 @@ $this->title = '文章列表';
                     }
                 ?>
                 <div>
-                    <?=LinkPager::widget(['pagination' => $pages]) ?>
+                    <div class="load-more-btn mt-100 wow fadeInUp" data-wow-delay="0.7s" data-wow-duration="1000ms">
+                        <a href="<?=Url::to(['article/time-line']) ?>"><button class="btn original-btn">下一页</button></a>
+                    </div>
                 </div>
 
                 <!--

@@ -125,7 +125,7 @@ $this->title = '简 · 默';
 
                 <!-- Load More -->
                 <div class="load-more-btn mt-100 wow fadeInUp" data-wow-delay="0.7s" data-wow-duration="1000ms">
-                    <a href="#" class="btn original-btn">换一批</a>
+                    <a href="<?=Url::to(['article/list']) ?>"><button class="btn original-btn">我要发文</button></a>
                 </div>
             </div>
 
