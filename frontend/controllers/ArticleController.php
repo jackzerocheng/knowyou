@@ -86,6 +86,8 @@ class ArticleController extends CommonController
 
     public function actionCreate()
     {
+        $this->checkLogin();
+
         $data = array();
         if (Yii::$app->request->isPost) {
             $data = Yii::$app->request->post();
