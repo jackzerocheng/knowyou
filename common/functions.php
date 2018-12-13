@@ -86,3 +86,12 @@ function quickSortToArray($arr, $index, $asc = true)
 
     return array_merge($arr_left, array($key), $arr_right);
 }
+
+function getEnvParam($key, $default = '')
+{
+    if (getenv($key)) {
+        return getenv($key);
+    } else {
+        return $default;
+    }
+}

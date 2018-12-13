@@ -46,4 +46,29 @@
 > 文章索引表，用于按时间顺序存储文章
 > 水平分表
 
+----
+**关于环境配置**
+* 参数YII_ENV决定了当前项目环境
+框架中写法
+> defined('YII_ENV') or define('YII_ENV', 'dev');
+ 
+> 但这样的话测试环境和线上环境需要来回改代码
+
+> 采用Nginx配置中fastcgi_param来配置参数，如fastcgi_param YII_ENV prod;
+
+> 但是这样只能获取到字符串，所以还待改良
+
+```php
+if (getenv('YII_DEBUG')) {
+    define('YII_DEBUG', boolval(getenv('YII_DEBUG')));
+} else {
+    defined('YII_DEBUG') or define('YII_DEBUG', true);
+}
+
+if (getenv('YII_ENV')) {
+    define('YII_ENV', getenv('YII_ENV'));
+} else {
+    defined('YII_ENV') or define('YII_ENV', 'dev');
+}
+```
 
