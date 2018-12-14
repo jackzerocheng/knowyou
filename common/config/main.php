@@ -16,7 +16,7 @@ return [
                     'levels' => ['info'],
                     'logVars' => ['_POST'],
                     'categories' => ['know_you_info'],
-                    'logFile' => '@root/log/know_you_info.log',
+                    'logFile' => '@root/log/know_you/know_you_info.log',
                     'exportInterval' => 100,
                 ],
                 [
@@ -24,7 +24,7 @@ return [
                     'levels' => ['warning'],
                     'logVars' => ['_POST'],
                     'categories' => ['know_you_warn'],
-                    'logFile' => '@root/log/know_you_warn.log',
+                    'logFile' => '@root/log/know_you/know_you_warn.log',
                     'exportInterval' => 10,
                 ],
                 [
@@ -32,7 +32,7 @@ return [
                     'levels' => ['error'],
                     'logVars' => ['*'],
                     'categories' => ['know_you_error'],
-                    'logFile' => '@root/log/know_you_error.log',
+                    'logFile' => '@root/log/know_you/know_you_error.log',
                     'exportInterval' => 1,
                 ],
                 [
@@ -40,7 +40,7 @@ return [
                     'levels' => ['info', 'warning', 'error'],
                     'logVars' => ['*'],
                     'categories' => ['know_you_console'],
-                    'logFile' => '@root/log/know_you_console.log',
+                    'logFile' => '@root/log/know_you/know_you_console.log',
                     'exportInterval' => 100,
                 ]
             ]
