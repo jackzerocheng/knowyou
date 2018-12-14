@@ -43,6 +43,12 @@ class ArticleIndex extends ActiveRecord
         return $rs;
     }
 
+    public function getMaxID()
+    {
+        $rs = Yii::$app->db->createCommand('select max(id) as max_id from knowyou_article_index00')->queryOne();
+        return $rs['max_id'] ? intval($rs['max_id']) : 0;
+    }
+
     public function getCountByCondition($condition)
     {
         $db = self::find()->from(self::$tableName);

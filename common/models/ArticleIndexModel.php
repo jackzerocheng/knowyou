@@ -10,6 +10,7 @@
 
 namespace common\models;
 
+use common\dao\Article;
 use yii\base\Model;
 use common\dao\ArticleIndex;
 use Yii;
@@ -29,11 +30,13 @@ class ArticleIndexModel extends Model
      */
     public function getArticleByTime($maxID = 0, $limit = 10)
     {
-        if (!$maxID) {//不存在maxid则尝试获取Redis数值
-            $nowID = Yii::$app->redis->get(ArticleIndexModel::ARTICLE_NUMBER_COUNT);
-            if (!$nowID) {//如果redis崩了，尝试抢救一下
+        $articleCount = $this->getArticleNumberCount();//获取计数
+        if (!$maxID) {
+            $maxID = $articleCount + 1;
+        }
 
-            }
+        if ($maxID > $articleCount) {
+            $oldMaxID = -1;
         }
 
         $key = intval($maxID / self::MAX_RECORD_NUMBER);
@@ -52,23 +55,36 @@ class ArticleIndexModel extends Model
             $data = array_merge($data, $temp);
         }
 
-        $sort = array();
-        if (!empty($data)) {//将ARTICLE_ID分组
+        //循环获取文章列表 -- 保证时间顺序 所以不用批量查询
+        $articleList = array();
+        $newMaxID = -1;
+        if (!empty($data)) {
             foreach ($data as $_data) {
-                $partition = $_data['article_id'] % ArticleModel::TABLE_PARTITION;
-                $sort[$partition][] = $_data['article_id'];
+                $articleList[] = (new ArticleModel())->getOneByCondition($_data['article_id'], ['id' => $_data['article_id']]);
+                $newMaxID = $_data['id'];
             }
         }
 
-        $rs = array();
-        if (!empty($sort)) {//依次获取数据
-            foreach ($sort as $k => $v) {
-                $temp = (new ArticleModel())->getAllList($k, ['id' => $v]);
-                $rs = array_merge($rs, $temp);
-            }
+        //计算上一页
+        if (!isset($oldMaxID)) {
+            $oldMaxID = $maxID + $limit;
         }
 
-        return $rs;
+        return array($articleList, $newMaxID, $oldMaxID);
+    }
+
+    /**
+     * 获取当前文章计数  -- 或者返货第一张表的最大值
+     * @return int
+     */
+    public function getArticleNumberCount()
+    {
+        $redis = Yii::$app->redis;
+        if ($redis->exists(self::ARTICLE_NUMBER_COUNT)) {
+            return $redis->get(self::ARTICLE_NUMBER_COUNT);
+        } else {
+            return (new ArticleIndex())->getMaxID();
+        }
     }
 
     /**

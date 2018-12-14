@@ -114,14 +114,14 @@ class ArticleController extends CommonController
 
     public function actionTimeLine()
     {
-        $maxID = (new Request())->get('max_id');
-        $data = (new ArticleIndexModel())->getArticleByTime($maxID);
+        $maxID = (new Request())->get('max_id');//当前页的索引ID,由此计算上一页和下一页
+        list($articleList, $newMaxID, $oldMaxID) = (new ArticleIndexModel())->getArticleByTime($maxID);
 
         $userInfo = array();
         //获取缓存数据
-        if (!empty($data)) {
+        if (!empty($articleList)) {
             $uid = array();
-            foreach ($data as $k => $v) {
+            foreach ($articleList as $k => $v) {
                 $articleList[$k]['redis_read_number'] = (new ArticleModel())->getReadNumber($v['id'], false);
                 $uid[] = $v['uid'];
             }
@@ -137,11 +137,13 @@ class ArticleController extends CommonController
 
 
         $data = [
-            'data' => $data,
+            'article_list' => $articleList,
             'tag_map' => $tagMap,
-            'user_info' => $userInfo
+            'user_info' => $userInfo,
+            'new_max_id' => $newMaxID,
+            'old_max_id' => $oldMaxID
         ];
 
-        return $this->render('newest', ['data' => $data]);
+        return $this->render('newest', $data);
     }
 }

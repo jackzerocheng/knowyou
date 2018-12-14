@@ -5,17 +5,16 @@ use yii\widgets\LinkPager;
 
 $this->title = '最新文章';
 ?>
-
+<div style="text-align: center"><h2>最新文章</h2></div>
 <!-- ##### Blog Wrapper Start ##### -->
 <div class="blog-wrapper section-padding-100 clearfix">
-
     <div class="container">
         <div class="row">
             <div class="col-12 col-lg-9">
 
                 <?php
-                    if (!empty($data)) {
-                        foreach ($data as $_article) {
+                    if (!empty($article_list)) {
+                        foreach ($article_list as $_article) {
                             $month = date('m', strtotime($_article['created_at']));
                             $day = date('d', strtotime($_article['created_at']));
                 ?>
@@ -80,7 +79,9 @@ $this->title = '最新文章';
                 ?>
                 <div>
                     <div class="load-more-btn mt-100 wow fadeInUp" data-wow-delay="0.7s" data-wow-duration="1000ms">
-                        <a href="<?=Url::to(['article/time-line']) ?>"><button class="btn original-btn">下一页</button></a>
+                        <a href="<?=Url::to(['article/time-line']) ?>"><button class="btn original-btn">首页</button></a>
+                        <a href="<?=Url::to(['article/time-line', 'max_id' => $old_max_id]) ?>"><button class="btn original-btn" <?php if ($old_max_id < 0){echo 'disabled';} ?>>上一页</button></a>
+                        <a href="<?=Url::to(['article/time-line', 'max_id' => $new_max_id]) ?>"><button class="btn original-btn" <?php if ($new_max_id < 0){echo 'disabled';} ?>>下一页</button></a>
                     </div>
                 </div>
 
