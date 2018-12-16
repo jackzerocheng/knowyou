@@ -1,4 +1,4 @@
-create table knowyou_user_level_journals00 (
+create table knowyou_user_level_journals03 (
 uid int(11) comment '用户ID',
 number int(10) not null default 0 comment '获得经验值',
 type tinyint(4) not null default 1 comment '1签到，2活动',

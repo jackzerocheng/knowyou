@@ -1,4 +1,4 @@
-create table knowyou_article_index00 (
+create table knowyou_article_index05 (
 id int(11) not null default 0,
 article_id int(11) not null default 0,
 created_at timestamp not null default current_timestamp,

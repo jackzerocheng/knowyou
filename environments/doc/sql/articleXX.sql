@@ -1,4 +1,4 @@
-create table knowyou_article00 (
+create table knowyou_article03 (
 id int(11) PRIMARY KEY comment 'baseID * partition + uid % partition',
 uid int(11) not null default 0,
 title varchar(50) not null default '' comment '标题',
