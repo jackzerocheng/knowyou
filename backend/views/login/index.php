@@ -1,56 +1,62 @@
-<?php
-//$this->registerCssFile('@web/css/login.css');
-use backend\assets\LoginAsset;
-use yii\helpers\Html;
-use yii\captcha\Captcha;
-
-LoginAsset::register($this);
-?>
-
-<?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
-    <title>smister后台登录</title>
-    <?php $this->head() ?>
+    <title>登录--layui后台管理模板</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="../../css/login.css" media="all" />
 </head>
-<?php $this->beginBody() ?>
 <body>
-<div id="login_box">
-    <h1>smister后台登录</h1>
-    <?=Html::beginForm('', 'post', ['id' => 'form']) ?>
-        <ul>
-            <li class="text">用户名：<?= Html::activeInput('text', $model, 'username', ['class' => 'input'])?></li>
-            <li class="tip">&nbsp;<?=Html::error($model, 'username', ['class' => 'error']) ?></li>
-            <li>密　码：<?= Html::activeInput('password', $model, 'password', ['class' => 'input'])?></li>
-            <li class="tip">&nbsp;<?=Html::error($model, 'password', ['class' => 'error']) ?></li>
-            <li style="position:relative;">验证码：
-                <?=Captcha::widget([
-                    'model' => $model,
-                    'attribute' => 'verifyCode',
-                    'template' => '{input}{image}',
-                    'captchaAction' => 'login/captcha',
-                    'options' => [
-                        'class' => 'input verifycode',
-                        'id' => 'verifyCode'
-                    ],
-                    'imageOptions' => [
-                        'class' => 'imagecode',
-                        'id' => 'verifyCode-image'
-                    ],
-                ]) ?>
-            </li>
-            <li class="tip">&nbsp;<?=Html::error($model, 'verifyCode', ['class' => 'error']) ?></li>
-            <li class="tip remember"><input type="checkbox" id="remember" name="loginForm[remember]" value="1"><label for="remember">&nbsp;保持登录状态</label></li>
-        </ul>
-        <div>
-            <?=Html::submitButton('登录', ['id' => 'login_submit']) ?>
+<video class="video-player" preload="auto" autoplay="autoplay" loop="loop" data-height="1080" data-width="1920" height="1080" width="1920">
+    <source src="login.mp4" type="video/mp4">
+    <!-- 此视频文件为支付宝所有，在此仅供样式参考，如用到商业用途，请自行更换为其他视频或图片，否则造成的任何问题使用者本人承担，谢谢 -->
+</video>
+<div class="video_mask"></div>
+<div class="login">
+    <h1>layuiCMS-管理登录</h1>
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <input class="layui-input" name="username" placeholder="用户名" lay-verify="required" type="text" autocomplete="off">
         </div>
+        <div class="layui-form-item">
+            <input class="layui-input" name="password" placeholder="密码" lay-verify="required" type="password" autocomplete="off">
+        </div>
+        <div class="layui-form-item form_code">
+            <input class="layui-input" name="code" placeholder="验证码" lay-verify="required" type="text" autocomplete="off">
+            <div class="code"><img src="../../images/code.jpg" width="116" height="36"></div>
+        </div>
+        <button class="layui-btn login_btn" lay-submit="" lay-filter="login">登录</button>
+    </form>
 </div>
-<?=Html::endForm() ?>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript">
+    layui.config({
+        base : "js/"
+    }).use(['form','layer'],function(){
+        var form = layui.form(),
+            layer = parent.layer === undefined ? layui.layer : parent.layer,
+            $ = layui.jquery;
+        //video背景
+        $(window).resize(function(){
+            if($(".video-player").width() > $(window).width()){
+                $(".video-player").css({"height":$(window).height(),"width":"auto","left":-($(".video-player").width()-$(window).width())/2});
+            }else{
+                $(".video-player").css({"width":$(window).width(),"height":"auto","left":-($(".video-player").width()-$(window).width())/2});
+            }
+        }).resize();
+
+        //登录按钮事件
+        form.on("submit(login)",function(data){
+            window.location.href = "../../index.html";
+            return false;
+        })
+    })
+</script>
 </body>
-<?php $this->endBody() ?>
 </html>
-<?php $this->endPage() ?>

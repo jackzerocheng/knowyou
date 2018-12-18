@@ -16,7 +16,7 @@
 <!-- //title -->
 <!-- content -->
 <div class="sub-main-w3">
-    <?=Html::beginForm(['index'], 'post', ['id' => 'loginForm']) ?>
+    <?=Html::beginForm(['index'], 'post', ['id' => 'loginForm', 'onsubmit' => 'return checkForm()']) ?>
         <h2>
             马上登录
         </h2>
@@ -27,7 +27,7 @@
         </div>
         <div class="form-style-agile">
             <?=Html::label('密码:', 'password')?>
-            <?=Html::activeInput('password', $model, 'password', ['required' => '']) ?>
+            <?=Html::activeInput('password', $model, 'password', ['required' => '', 'id' => 'passwd']) ?>
             <?=Html::error($model, 'password', ['style' => 'color:red']); ?>
         </div>
     <div class="form-style-agile">
@@ -74,5 +74,21 @@
     <?=Html::endForm(); ?>
 </div>
 <!-- //content -->
+<script>
+    function checkForm() {
+        //var login = document.getElementById('loginForm');
+        //var passwd = document.getElementById('passwd');
+        //passwd.value = 'abcabc';
+        return true;
+    }
+
+    $("#login__Form").submit(function () {
+        var obj = this;
+        var array = $(this).serializeArray();
+
+    });
+
+    }
+</script>
 
 

@@ -53,3 +53,31 @@
 > defined('YII_ENV') or define('YII_ENV', 'dev');
 
 > 于入口文件index.php定义
+
+----
+* 后台采用layui
+* 链接：https://www.layui.com/doc/
+
+-----
+* yii操作数据库
+* 查询所有：$posts = Yii::$app->db->createCommand('SELECT * FROM post')->queryAll();
+* 查询一条：$post = Yii::$app->db->createCommand('SELECT * FROM post WHERE id=1')->queryOne();
+* 查询一列：$titles = Yii::$app->db->createCommand('SELECT title FROM post')->queryColumn();
+* 查询标量值：$count = Yii::$app->db->createCommand('SELECT COUNT(*) FROM post')->queryScalar();
+* `绑定参数`：$post = Yii::$app->db->createCommand('SELECT * FROM post WHERE id=:id AND status=:status')
+                    ->bindValue(':id', $_GET['id'])
+                    ->bindValue(':status', 1)
+                    ->queryOne();
+* 插入：Yii::$app->db->createCommand()->insert('user', [
+           'name' => 'Sam',
+           'age' => 30,
+       ])->execute();
+* 更新：Yii::$app->db->createCommand()->update('user', ['status' => 1], 'age > 30')->execute();
+* 删除：Yii::$app->db->createCommand()->delete('user', 'status = 0')->execute();
+* 原子操作：Yii::$app->db->createCommand()->upsert('pages', [
+           'name' => 'Front page',
+           'url' => 'http://example.com/', // url is unique
+           'visits' => 0,
+       ], [
+           'visits' => new \yii\db\Expression('visits + 1'),
+       ], $params)->execute();

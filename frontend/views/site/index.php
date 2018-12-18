@@ -105,7 +105,7 @@ $this->title = '简 · 默';
                             <!-- Blog Content -->
                             <div class="single-blog-content">
                                 <div class="line"></div>
-                                <a href="#" class="post-tag"><?=$_article['tag'] ?></a>
+                                <a href="#" class="post-tag"><?=$tag_map[$_article['tag']]['name'] ?></a>
                                 <h4><a href="#" class="post-headline"><?=$_article['title'] ?></a></h4>
                                 <p><?=$_article['content'] ?></p>
                                 <div class="post-meta">

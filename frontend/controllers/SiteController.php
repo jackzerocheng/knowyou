@@ -67,4 +67,14 @@ class SiteController extends CommonController
         (new UserModel())->logout();
         return $this->redirect(['login/index']);
     }
+
+    public function actionError()
+    {
+        $exception = Yii::$app->errorHandler->exception;
+        if ($exception !== null) {
+            return $this->render('error', ['exception' => $exception]);
+        }
+
+        return true;
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Message:
- * User: jzc<jzc1@meitu.com>
+ * Message: 后台登录页
+ * User: jzc
  * Date: 2018/8/28
  * Time: 下午10:41
  * Return:
@@ -10,9 +10,12 @@
 namespace backend\controllers;
 
 use Yii;
+use common\models\AdminModel;
 
 class LoginController extends CommonController
 {
+    protected $requireLogin = false;
+
     public function init()
     {
         parent::init();
@@ -39,6 +42,11 @@ class LoginController extends CommonController
 
     public function actionIndex()
     {
-        return $this->renderPartial('index');
+        $admin = new AdminModel();
+        if (Yii::$app->request->isPost) {
+
+        }
+
+        return $this->renderPartial('index', ['model' => $admin]);
     }
 }

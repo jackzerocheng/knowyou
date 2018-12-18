@@ -9,6 +9,7 @@
 
 namespace common\dao;
 
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use Yii;
 
@@ -90,6 +91,11 @@ class User extends ActiveRecord
         return intval($db->count());
     }
 
+    /**
+     * @param ActiveQuery $db
+     * @param $condition
+     * @return mixed
+     */
     public function handlerCondition($db, $condition)
     {
         if (!empty($condition) && is_array($condition)) {
