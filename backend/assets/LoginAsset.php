@@ -12,11 +12,13 @@ class LoginAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
+        'css/layui.css',
         'css/login.css',
     ];
     public $js = [
+
     ];
     public $depends = [
-        'yii\bootstrap\BootstrapAsset',
+        //'yii\bootstrap\BootstrapAsset',
     ];
 }

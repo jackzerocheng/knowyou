@@ -31,11 +31,21 @@ class CryptAes
         $this->iv = $iv;
     }
 
+    /**
+     * AES加密
+     * @param $data  //待加密字符串
+     * @return string
+     */
     public function encrypt($data)
     {
         return openssl_encrypt($data, $this->method, $this->key, $this->options, $this->iv);
     }
 
+    /**
+     * AES解密，需保证密钥一致
+     * @param $data  //待解密字符串
+     * @return string
+     */
     public function decrypt($data)
     {
         return openssl_decrypt($data, $this->method, $this->key, $this->options, $this->iv);

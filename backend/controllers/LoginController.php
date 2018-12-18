@@ -15,6 +15,7 @@ use common\models\AdminModel;
 class LoginController extends CommonController
 {
     protected $requireLogin = false;
+    public $layout = 'login';
 
     public function init()
     {
@@ -47,6 +48,6 @@ class LoginController extends CommonController
 
         }
 
-        return $this->renderPartial('index', ['model' => $admin]);
+        return $this->render('index', ['model' => $admin]);
     }
 }
