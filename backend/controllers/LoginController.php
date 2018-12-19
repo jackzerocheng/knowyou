@@ -43,11 +43,17 @@ class LoginController extends CommonController
 
     public function actionIndex()
     {
-        $admin = new AdminModel();
+        $adminModel = new AdminModel();
         if (Yii::$app->request->isPost) {
+            $data = Yii::$app->request->post();
 
+            if ($adminModel->load($data) && $adminModel->validate() && $adminModel->login()) {
+                return $this->redirect(['site/index']);
+            }
+
+            Yii::warning('admin_login_failed;msg:'.json_encode($data), CATEGORIES_WARN);
         }
 
-        return $this->render('index', ['model' => $admin]);
+        return $this->render('index', ['model' => $adminModel]);
     }
 }

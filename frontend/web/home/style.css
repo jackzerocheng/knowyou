@@ -315,6 +315,26 @@ h2 {
     background: #fff;
 }
 
+.form-verify-code {
+    margin-bottom: 1.5em;
+    flex-basis: 100%;
+    -webkit-flex-basis: 100%;
+}
+
+.form-verify-code input {
+    width: 75%;
+    color: #000;
+    outline: none;
+    font-size: 14px;
+    letter-spacing: 1px;
+    padding: 15px 15px;
+    box-sizing: border-box;
+    border: none;
+    border: 1px solid #000;
+    background: #fff;
+}
+
+
 .sub-main-w3 input[type="submit"] {
     color: #fff;
     background: #f7296f;

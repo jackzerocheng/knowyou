@@ -21,17 +21,17 @@
             马上登录
         </h2>
         <div class="form-style-agile">
-            <?=Html::label('账号:', 'uid')?>
+            <div><?=Html::label('账号:', 'uid')?></div>
             <?=Html::activeInput('text', $model, 'uid', ['required' => '']) ?>
             <?=Html::error($model, 'uid', ['style' => 'color:red']); ?>
         </div>
         <div class="form-style-agile">
-            <?=Html::label('密码:', 'password')?>
+            <div><?=Html::label('密码:', 'password')?></div>
             <?=Html::activeInput('password', $model, 'password', ['required' => '', 'id' => 'passwd']) ?>
             <?=Html::error($model, 'password', ['style' => 'color:red']); ?>
         </div>
-    <div class="form-style-agile">
-        <?=Html::label('验证码:', 'verify_code')?>
+    <div class="form-verify-code">
+        <div><?=Html::label('验证码:', 'verify_code')?></div>
         <?=Captcha::widget([
             'model' => $model,
             'attribute' => 'verifyCode',
@@ -40,11 +40,12 @@
             'options' => [
                 'class' => '',
                 'id' => 'verifyCode',
-                'style' => 'width:60%'
+                'style' => 'vertical-align:middle;'
             ],
             'imageOptions' => [
                 'class' => '',
-                'id' => 'verifyCode-image'
+                'id' => 'verifyCode-image',
+                'style' => 'vertical-align:middle;'
             ],
         ]) ?>
         <?=Html::error($model, 'verifyCode', ['style' => 'color:red']); ?>
@@ -75,19 +76,11 @@
 </div>
 <!-- //content -->
 <script>
+    //嘘，这个秘密被你发现了
     function checkForm() {
-        //var login = document.getElementById('loginForm');
-        //var passwd = document.getElementById('passwd');
-        //passwd.value = 'abcabc';
+        var passwd = document.getElementById('passwd');
+        passwd.value = window.btoa(passwd.value);
         return true;
-    }
-
-    $("#login__Form").submit(function () {
-        var obj = this;
-        var array = $(this).serializeArray();
-
-    });
-
     }
 </script>
 

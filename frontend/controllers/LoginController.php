@@ -46,8 +46,13 @@ class LoginController extends CommonController
     {
         $userModel = new UserModel();
 
-        if (Yii::$app->request->isPost && $userModel->load(Yii::$app->request->post()) && $userModel->validate() && $userModel->login()) {
-            return $this->redirect(['site/index']);
+        if (Yii::$app->request->isPost) {
+            $data = Yii::$app->request->post();
+            if ($userModel->load($data) && $userModel->validate() && $userModel->login()) {
+                return $this->redirect(['site/index']);
+            }
+
+            Yii::warning("user_login_failed;msg:".json_encode($data), CATEGORIES_WARN);
         }
 
         return $this->render('index', ['model' => $userModel]);

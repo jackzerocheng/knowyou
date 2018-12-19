@@ -30,11 +30,6 @@ LoginAsset::register($this);
 
             <?= $content ?>
 
-
-            <div style="height: 30px;background-color: #f5f5f5;border-top: 1px solid #ddd;padding-top: 20px;">
-                <p style="text-align: center">Copyright © <script>document.write(new Date().getFullYear());</script>.JZC All rights reserved.</p>
-            </div>
-
             <?php $this->endBody() ?>
     </body>
     </html>

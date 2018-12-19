@@ -14,17 +14,26 @@ use common\dao\UserAdmin;
 
 class AdminModel extends Model
 {
-    public $username;
+    public $uid;
     public $password;
     public $verifyCode;
 
     public function rules()
     {
-        return ['verifyCode', 'captcha', 'captchaAction' => 'login/captcha', 'message' => '验证码错误'];
+        return [
+            ['uid'],
+            ['password'],
+            ['verifyCode', 'captcha', 'captchaAction' => 'login/captcha', 'message' => '验证码错误'],
+        ];
     }
 
     public function getOneByCondition($condition)
     {
         return (new UserAdmin())->getOneByCondition($condition);
+    }
+
+    public function login()
+    {
+        
     }
 }
