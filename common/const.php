@@ -13,3 +13,7 @@ define('CATEGORIES_INFO', 'know_you_info');
 define('CATEGORIES_WARN', 'know_you_warn');
 define('CATEGORIES_ERROR', 'know_you_error');
 define('CATEGORIES_CONSOLE', 'know_you_console');
+
+//aes家加密
+define('ADMIN_AES_KEY', 'JD9rW4Vyj6Ymzaub');
+define('USER_AES_KEY', 'o0SH5QgugPYS4Uw');

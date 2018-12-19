@@ -62,7 +62,7 @@ class UserModel extends Model
             $user = $userModel::find()->where(['uid' => $this->attributes])->asArray()->one();
             if (!$user) {
                 $this->addError($attribute, '账号不存在');
-            } elseif ((new CryptAes())->decrypt($user['password']) != $this->password) {
+            } elseif ((new CryptAes(USER_AES_KEY))->encrypt($this->password) != $user['password']) {
                 $this->addError('password', '密码不正确');
             } elseif ($user['status'] != self::STATUS_NORMAL) {
                 $this->addError($attribute, '账号状态异常');
@@ -276,7 +276,7 @@ class UserModel extends Model
         }
 
         if (!empty($data['password'])) {
-            $data['password'] = (new CryptAes())->encrypt($data['password']);
+            $data['password'] = (new CryptAes(USER_AES_KEY))->encrypt($data['password']);
         }
 
         $user = new User();

@@ -17,6 +17,13 @@ class CryptAes
     public $options;
     public $iv;
 
+    /**
+     * CryptAes constructor.
+     * @param string $key     // 密钥一定要自己设置！且复杂度够高！
+     * @param string $method  //加密方式openssl_get_cipher_methods获取可用加密
+     * @param int $options    //true返货raw数据格式，否则返回base64编码
+     * @param string $iv      //初始化向量
+     */
     public function __construct($key = 'default_knowyou_key', $method = 'AES-128-ECB', $options = 0, $iv = '')
     {
         $this->key = $key;

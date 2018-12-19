@@ -28,7 +28,7 @@ class User extends ActiveRecord
      * @param string $uid
      * @param array $config
      */
-    public function __construct($uid, array $config = [])
+    public function __construct($uid = -1, array $config = [])
     {
         parent::__construct($config);
         static::$tableName = static::getTableName($uid);
@@ -41,7 +41,10 @@ class User extends ActiveRecord
 
     private static function getTableName($uid)
     {
-        $uid = isset($uid) ? $uid : static::getUid();
+        if ($uid == -1) {
+            $uid = static::getUid();
+        }
+
         return '{{%user0' . $uid % self::TABLE_PARTITION . '}}';
     }
 

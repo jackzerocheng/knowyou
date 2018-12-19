@@ -48,6 +48,9 @@ $this->title = 'Jian Mo - 简默';
             <?=Html::error($model, 'verifyCode', ['style' => 'color:red']) ?>
         </div>
         <input type="submit" class="layui-btn login_btn" lay-filter="login" value="登录">
+    <div class="layui-form-item">
+        <p style="text-align: center;color: red"><?=Yii::$app->session->getFlash('error') ?></p>
+    </div>
     <?=Html::endForm(); ?>
 </div>
 <script src="<?=Url::to('@web/js/layui.js') ?>"></script>
