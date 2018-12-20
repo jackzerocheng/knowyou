@@ -14,7 +14,7 @@ use Yii;
 
 class CommonController extends Controller
 {
-    protected $requireLogin = false;
+    protected $requireLogin = true;
     public $uid;
 
     public function init()
