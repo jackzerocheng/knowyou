@@ -15,8 +15,8 @@
 .showMenu.layui-layout-admin .layui-side{ left:-200px; }
 .showMenu .layui-body,.showMenu .layui-footer{ left:0; }
 .layui-layout-admin .layui-main{ margin:0; }
-.logo{ color: #fff; float: left; line-height:60px; font-size:20px; padding:0 25px; text-align: center; width:150px;}
-.hideMenu{ float:left; width:20px; height:20px; margin:15px 15px 0 0; font-size:17px; text-align:center; padding:5px 5px; color:#fff; background-color:#1AA094; }
+.logo{ color: #fff; float: left; line-height:60px; font-size:20px; padding:0 25px; text-align: left; width:250px;}
+.hideMenu{ float:left; width:40px; height:30px; margin:15px 15px 0 0; font-size:17px; text-align:center; padding:5px 5px; color:#fff; background-color:#1AA094; }
 .hideMenu:hover{ color:#fff; }
 .weather{ color:#fff; float:left; margin:15px 0 0 50px;}
 .component{ float: left; width:200px; height:30px; margin-top: 15px; position: relative;}

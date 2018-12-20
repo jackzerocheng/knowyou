@@ -25,17 +25,10 @@ AppAsset::register($this);
     <link rel="icon" href="<?=Url::to('@web/img/core-img/favicon.ico') ?>">
     <?php $this->head() ?>
 </head>
-<body class="childrenBody">
+
 <?php $this->beginBody() ?>
 
 <?= $content ?>
-
-
-<footer class="footer">
-    <div class="footer">
-        <p>Copyright © <script>document.write(new Date().getFullYear());</script>.JZC All rights reserved.</p>
-    </div>
-</footer>
 
 <?php $this->endBody() ?>
 </body>

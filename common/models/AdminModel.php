@@ -23,19 +23,10 @@ class AdminModel extends Model
     public function rules()
     {
         return [
-            ['uid', 'checkParams'],
-            ['password'],
+            ['uid', 'required'],
+            ['password', 'required'],
             ['verifyCode', 'captcha', 'captchaAction' => 'login/captcha', 'message' => '验证码错误'],
         ];
-    }
-
-    public function checkParams()
-    {
-        if (empty($this->uid)) {
-            $this->addError($this->uid, '账号不能为空');
-        } elseif (empty($this->password)) {
-            $this->addError($this->password, '密码不能为空');
-        }
     }
 
     public function getOneByCondition($condition)
@@ -47,7 +38,7 @@ class AdminModel extends Model
     {
         $this->password = base64_decode($this->password);//base64解码
         $condition = [
-            'uid' => $this->uid,
+            'admin_id' => $this->uid,
             'password' => (new CryptAes(ADMIN_AES_KEY))->encrypt($this->password)
         ];
         $userInfo = (new UserAdmin())->getOneByCondition($condition);
@@ -61,6 +52,6 @@ class AdminModel extends Model
 
     public function addAdmin()
     {
-        
+
     }
 }

@@ -2,6 +2,7 @@
 namespace backend\controllers;
 
 use Yii;
+use common\models\AdminModel;
 
 /**
  * Site controller
@@ -10,7 +11,15 @@ class SiteController extends CommonController
 {
     public function actionIndex()
     {
-        return $this->renderPartial('index');
+        $adminModel = new AdminModel();
+        $userInfo = $adminModel->getOneByCondition(['admin_id' => $this->uid]);
+
+        return $this->render('index', ['user_info' => $userInfo]);
+    }
+
+    public function actionMain()
+    {
+        return $this->render('main');
     }
 
     public function actionError()
