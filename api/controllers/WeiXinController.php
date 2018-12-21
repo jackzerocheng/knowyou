@@ -17,9 +17,10 @@ class WeiXinController extends CommonController
     public function actionIndex()
     {
         $params = (new Request())->get();
+
         Yii::warning('wei_xin request:'.json_encode($params), CATEGORIES_WARN);
         $tmpArray = array(WX_TOKEN, $params['timestamp'], $params['nonce']);
-        sort($tmpArray);
+        sort($tmpArray, SORT_STRING);
         $tmpStr = implode($tmpArray);
         $tmpStr = sha1($tmpStr);
 
