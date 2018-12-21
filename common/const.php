@@ -17,3 +17,8 @@ define('CATEGORIES_CONSOLE', 'know_you_console');
 //aes家加密
 define('ADMIN_AES_KEY', 'JD9rW4Vyj6Ymzaub');
 define('USER_AES_KEY', 'o0SH5QgugPYS4Uw');
+
+//wx
+define('WX_TOKEN', 'NDj8nZxuGF7LzR1VanvuPadrLtxTC1SZ');
+define('WX_AES_KEY', 'ha2ZK33HWhbysU8r5WAfPdFsAo6lhY91AnV8YVpKFbP');
+define('WX_APP_ID', 'wxd6c2396448e5a7b1');
