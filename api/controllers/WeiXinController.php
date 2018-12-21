@@ -26,6 +26,7 @@ class WeiXinController extends CommonController
 
         if ($params['signature'] == $tmpStr) {
             echo $params['echostr'];
+            exit();
         }
 
         $this->outputJson('failed');
