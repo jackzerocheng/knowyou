@@ -15,24 +15,28 @@ use common\dao\Menu;
 class MenuModel extends Model
 {
     //菜单等级
-    const MENU_LEVEL_FIRST = 1;
-    const MENU_LEVEL_SECOND = 2;
+    const MENU_LEVEL_FIRST = 1;//父级菜单
+    const MENU_LEVEL_SECOND = 2;//二级子菜单
 
+    //菜单状态
     const MENU_STATUS_USING = 1;
     const MENU_STATUS_STOP = 2;
-
     public $menuStatusMap = [
         self::MENU_STATUS_USING => '使用中',
         self::MENU_STATUS_STOP => '下架'
     ];
 
+    const MENU_TYPE_FRONTEND = 1;//前台
+    const MENU_TYPE_BACKEND = 2;//后台
+
     /**
      * 获取完整菜单
+     * @param $type integer
      * @return array
      */
-    public function getMenuList()
+    public function getMenuList($type = 1)
     {
-        $menuList = (new Menu())->getListByCondition(['status' => self::MENU_STATUS_USING]);
+        $menuList = (new Menu())->getListByCondition(['status' => self::MENU_STATUS_USING, 'type' => $type]);
 
         if (empty($menuList)) {
             return array();

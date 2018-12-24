@@ -48,6 +48,7 @@ class LoginController extends CommonController
             $data = Yii::$app->request->post();
 
             if ($adminModel->load($data) && $adminModel->validate() && $adminModel->login()) {
+                Yii::warning('admin login;msg:'.json_encode($data), CATEGORIES_WARN);
                 return $this->redirect(['site/index']);
             }
 

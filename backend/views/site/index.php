@@ -6,7 +6,7 @@ use yii\helpers\Url;
     <!-- 顶部 -->
     <div class="layui-header header">
         <div class="layui-main">
-            <a href="#" class="logo">layui后台管理</a>
+            <a href="#" class="logo">简 默 后台管理系统</a>
 
             <a href="javascript:;" class="hideMenu icon-menu1 iconfont"></a>
 
@@ -25,14 +25,13 @@ use yii\helpers\Url;
                 </li>
                 <li class="layui-nav-item" pc>
                     <a href="javascript:;">
-                        <img src="images/face.jpg" class="layui-circle" width="35" height="35">
-                        <cite>用户名称</cite>
+                        <img src="<?=Url::to($user_info['head']) ?>" class="layui-circle" width="35" height="35">
+                        <cite><?=$user_info['username'] ?></cite>
                     </a>
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:;" data-url="page/user/userInfo.html"><i class="iconfont icon-zhanghu" data-icon="icon-zhanghu"></i><cite>个人资料</cite></a></dd>
                         <dd><a href="javascript:;" data-url="page/user/changePwd.html"><i class="iconfont icon-shezhi1" data-icon="icon-shezhi1"></i><cite>修改密码</cite></a></dd>
-                        <dd><a href="javascript:;" class="changeSkin"><i class="iconfont icon-huanfu"></i><cite>更换皮肤</cite></a></dd>
-                        <dd><a href="page/login/login.html" class="signOut"><i class="iconfont icon-loginout"></i><cite>退出</cite></a></dd>
+                        <dd><a href="<?=Url::to(['site/logout']) ?>" class="signOut"><i class="iconfont icon-loginout"></i><cite>退出</cite></a></dd>
                     </dl>
                 </li>
             </ul>
@@ -41,30 +40,49 @@ use yii\helpers\Url;
     <!-- 左侧导航 -->
     <div class="layui-side layui-bg-black">
         <div class="user-photo">
-            <a class="img" title="我的头像" ><img src="<?=Url::to('@web/img/face.jpg') ?>"></a>
-            <p>你好！<span class="userName">用户名</span>, 欢迎</p>
+            <a class="img" title="我的头像" ><img src="<?=Url::to($user_info['head']) ?>"></a>
+            <p>你好！<span class="userName"><?=$user_info['real_name'] ?></span>, 欢迎</p>
         </div>
         <br>
         <div class="navBar layui-side-scroll">
             <ul class="layui-nav layui-nav-tree">
-                <li class="layui-nav-item">
-                    <a href="#"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>后台首页</cite></a>
-                </li>
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a href="#">
-                        <i class="iconfont icon-text" data-icon="icon-text"></i>
-                        <cite>其他页面</cite>
-                        <span class="layui-nav-more"></span>
-                    </a>
-                    <dl class="layui-nav-child">
-                        <dd>
-                            <a href="#"><i class="iconfont" data-icon=""></i><cite>404</cite></a>
-                        </dd>
-                        <dd>
-                            <a href="#"><i class="iconfont" data-icon=""></i><cite>502</cite></a>
-                        </dd>
-                    </dl>
-                </li>
+                <?php
+                    if (!empty($menu_info)) {
+                        foreach ($menu_info as $_menu) {
+                            if (empty($_menu['child_menu'])) {
+                                //输出一级菜单
+                ?>
+                                <li class="layui-nav-item">
+                                    <a href="<?=Url::to($_menu['url']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite><?=$_menu['name'] ?></cite></a>
+                                </li>
+
+                <?php
+                            } else {
+                                //输出二级菜单
+                ?>
+                                <li class="layui-nav-item layui-nav-itemed">
+                                    <a href="<?=Url::to($_menu['url']) ?>">
+                                        <i class="iconfont icon-text" data-icon="icon-text"></i>
+                                        <cite><?=$_menu['name'] ?></cite>
+                                        <span class="layui-nav-more"></span>
+                                    </a>
+                                    <dl class="layui-nav-child">
+                <?php
+                                            foreach ($_menu['child_menu'] as $child_menu) {
+                                                echo "<dd>
+                                                <a href=\"".$child_menu['url']."\"><i class=\"iconfont\" data-icon=\"\">
+                                                </i><cite>".$child_menu['name']."</cite></a>
+                                                </dd>";
+                                            }
+                ?>
+                                    </dl>
+                                </li>
+                <?php
+                            }
+                        }
+                    }
+
+                ?>
             </ul>
         </div>
     </div>

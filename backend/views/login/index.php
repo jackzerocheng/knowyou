@@ -74,7 +74,6 @@ $this->title = 'Jian Mo - 简默';
         }).resize();
     })
 
-    //简单加密，被你发现了。。
     function checkform() {
         $passwd = document.getElementById('password');
         var base = new Base64();

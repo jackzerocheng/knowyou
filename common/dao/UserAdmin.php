@@ -31,6 +31,17 @@ class UserAdmin extends ActiveRecord
         return $db->asArray()->one();
     }
 
+    public function updateInfo($data, $condition)
+    {
+        $rs = Yii::$app->db->createCommand()->update(self::tableName(), $data, $condition)->execute();
+        return $rs;
+    }
+
+    public function insertInfo($data)
+    {
+
+    }
+
     /**
      * @param ActiveQuery $db
      * @param $condition

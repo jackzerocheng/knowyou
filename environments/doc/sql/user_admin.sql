@@ -13,3 +13,6 @@ created_at timestamp not null DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 PRIMARY KEY (`admin_id`),
 UNIQUE key un_un (`username`) using BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment = '管理员表';
+
+alter table knowyou_user_admin add COLUMN head varchar(200) not null default '@web/img/default_head.png' comment '头像地址';
+alter table knowyou_user_admin add COLUMN status tinyint(4) not null default 1 comment '状态1正常，2删除';

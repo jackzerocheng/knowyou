@@ -10,3 +10,5 @@ updated_at timestamp not null default '2018-10-01 00:00:00' comment '更新时�
 created_at timestamp not null default current_timestamp comment '创建时间',
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment = '菜单表';
+
+alter table knowyou_menu add column type tinyint(4) not null default 1 comment '菜单类型,1前台，2后台';
