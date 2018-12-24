@@ -11,11 +11,37 @@ namespace api\controllers;
 
 use yii\web\Request;
 use Yii;
+use common\lib\wx\WxBizMsgCrypt;
 
 class WeiXinController extends CommonController
 {
+    public $requireAccessToken = true;
+
     public function actionIndex()
     {
+        $data = (new Request())->post();
+
+        $pc = new WxBizMsgCrypt(WX_TOKEN, WX_AES_KEY, WX_APP_ID);
+        $xmlTree = new \DOMDocument();
+        $xmlTree->load($data);
+
+        $msgType = $xmlTree->getElementsByTagName('MsgType');
+        if ($msgType == 'text') {
+            $toUserName = $xmlTree->getElementsByTagName('ToUserName');
+            $fromUserName = $xmlTree->getElementsByTagName('FromUserName');
+            $createTime = $xmlTree->getElementsByTagName('CreateTime');
+            $content = $xmlTree->getElementsByTagName('Content');
+            $msgId = $xmlTree->getElementsByTagName('MsgId');
+
+            $content = $pc->decryptMsg();
+        } else {
+            $this->outputJson('failed');
+        }
+
+
+
+
+        /* 接入
         $params = (new Request())->get();
 
         Yii::warning('wei_xin request:'.json_encode($params), CATEGORIES_WARN);
@@ -30,5 +56,16 @@ class WeiXinController extends CommonController
         }
 
         $this->outputJson('failed');
+        */
+    }
+
+    public function getSignature($token, $timestamp, $nonce)
+    {
+        $tmpArray = array(WX_TOKEN, $timestamp, $nonce);
+        sort($tmpArray, SORT_STRING);
+        $tmpStr = implode($tmpArray);
+        $tmpStr = sha1($tmpStr);
+
+        return$tmpStr;
     }
 }

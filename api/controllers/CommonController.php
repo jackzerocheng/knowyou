@@ -9,16 +9,20 @@
 
 namespace api\controllers;
 
+use common\lib\wx\GetAccessToken;
 use yii\web\Controller;
 use common\lib\Config;
 use common\lib\Response;
+use Yii;
 
 class CommonController extends Controller
 {
-    public $requireLogin = true;
+    public $requireLogin = false;
+    public $requireAccessToken = false;
     public $errorCodeFile = 'apiErrorCode';
 
     public $enableCsrfValidation = false;
+    public $WxAccessToken;
 
     public function init()
     {
@@ -26,6 +30,21 @@ class CommonController extends Controller
 
         if ($this->requireLogin) {
 
+        }
+
+        if ($this->requireAccessToken) {
+            $this->WxAccessToken = Yii::$app->session->get(GetAccessToken::WX_ACCESS_TOKEN_KEY);
+
+            if (!$this->WxAccessToken) {//没session则再次请求
+                $data = (new GetAccessToken())->getAccessToken(WX_APP_ID, WX_APP_SECRET);
+                $this->WxAccessToken = $data['access_token'];
+                Yii::$app->session->set(GetAccessToken::WX_ACCESS_TOKEN_KEY, $data['access_token']);
+                Yii::$app->session->setTimeout($data['expires_in']);
+            }
+
+            if (!$this->WxAccessToken) {
+                $this->outputJson('failed');
+            }
         }
     }
 
