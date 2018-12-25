@@ -83,7 +83,7 @@ class UserModel extends Model
         } elseif ($params['password'] != $params['password_again']) {
             $this->addError('password_again', '欧尼酱，你的两次密码不相同');
             return false;
-        } elseif ($this->getCountByCondition(['username' => $params['username']]) > 0) {
+        } elseif ($this->getAllCountByCondition(['username' => $params['username']]) > 0) {
             $this->addError('username', '哎呀客官，这个用户名已经有人使用了哦~~');
             return false;
         }
@@ -306,7 +306,7 @@ class UserModel extends Model
      * @param $condition
      * @return int
      */
-    public function getCountByCondition($condition = null)
+    public function getAllCountByCondition($condition = null)
     {
         $count = User::TABLE_PARTITION;
         $number = 0;

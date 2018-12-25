@@ -29,15 +29,42 @@ class UserIndex extends ActiveRecord
         return static::$tableName;
     }
 
-    public function getMaxID()
+    public function getCountByCondition($condition)
     {
-        $rs = Yii::$app->db->createCommand('select max(id) as max_id from knowyou_user_index00')->queryOne();
-        return $rs['max_id'] ? intval($rs['max_id']) : 0;
+        $db = self::find();
+        $db = $this->handlerCondition($db, $condition);
+        return intval($db->count());
     }
 
     public function insertInfo($data)
     {
         $rs = Yii::$app->db->createCommand()->insert(static::tableName(), $data)->execute();
         return $rs;
+    }
+
+    /**
+     * @param $db ActiveQuery
+     * @param $condition
+     * @return ActiveQuery
+     */
+    public function handlerCondition($db, $condition)
+    {
+        if (!empty($condition) && is_array($condition)) {
+            foreach ($condition as $k => $v) {
+                if ($k == 'start_id') {
+                    $db = $db->andWhere("id > {$v}");
+                } elseif($k == 'max_id') {
+                    $db = $db->andWhere("id < {$v}");
+                } elseif ($k == 'start_at') {
+                    $db = $db->andWhere("created_at >= '{$v}'");
+                } elseif ($k == 'end_at') {
+                    $db = $db->andWhere("created_at < '{$v}'");
+                } else {
+                    $db = $db->andWhere([$k => $v]);
+                }
+            }
+        }
+
+        return $db;
     }
 }

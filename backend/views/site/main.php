@@ -9,8 +9,8 @@ use yii\helpers\Url;
                 <i class="layui-icon" data-icon="&#xe63a;">&#xe63a;</i>
             </div>
             <div class="panel_word newMessage">
-                <span>4</span>
-                <cite>新消息</cite>
+                <span><?=$count_number['today_message_number'] ?></span>
+                <cite>今日留言</cite>
             </div>
         </a>
     </div>
@@ -20,8 +20,8 @@ use yii\helpers\Url;
                 <i class="iconfont icon-dongtaifensishu" data-icon="icon-dongtaifensishu"></i>
             </div>
             <div class="panel_word userAll">
-                <span>26</span>
-                <cite>新增人数</cite>
+                <span><?=$count_number['today_new_user_number'] ?></span>
+                <cite>今日注册用户</cite>
             </div>
         </a>
     </div>
@@ -31,11 +31,12 @@ use yii\helpers\Url;
                 <i class="layui-icon" data-icon="&#xe613;">&#xe613;</i>
             </div>
             <div class="panel_word userAll">
-                <span>333</span>
+                <span><?=$count_number['all_user_number'] ?></span>
                 <cite>用户总数</cite>
             </div>
         </a>
     </div>
+    <!--
     <div class="panel col">
         <a href="javascript:;" data-url="page/img/images.html">
             <div class="panel_icon" style="background-color:#5FB878;">
@@ -47,14 +48,15 @@ use yii\helpers\Url;
             </div>
         </a>
     </div>
+    -->
     <div class="panel col">
         <a href="javascript:;" data-url="page/news/newsList.html">
             <div class="panel_icon" style="background-color:#F7B824;">
                 <i class="iconfont icon-wenben" data-icon="icon-wenben"></i>
             </div>
             <div class="panel_word waitNews">
-                <span>23</span>
-                <cite>待审核文章</cite>
+                <span><?=$count_number['today_article_number'] ?></span>
+                <cite>今日文章</cite>
             </div>
         </a>
     </div>
@@ -64,7 +66,7 @@ use yii\helpers\Url;
                 <i class="iconfont icon-text" data-icon="icon-text"></i>
             </div>
             <div class="panel_word allNews">
-                <span>111</span>
+                <span><?=$count_number['all_article_number'] ?></span>
                 <em>文章总数</em>
                 <cite>文章列表</cite>
             </div>

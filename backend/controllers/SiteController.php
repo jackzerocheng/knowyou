@@ -1,8 +1,10 @@
 <?php
 namespace backend\controllers;
 
+use common\models\ArticleIndexModel;
 use common\models\BackendMessageModel;
 use common\models\MenuModel;
+use common\models\UserIndexModel;
 use common\models\UserModel;
 use Yii;
 use common\models\AdminModel;
@@ -40,14 +42,17 @@ class SiteController extends CommonController
     //内嵌子页面
     public function actionMain()
     {
+        $params = ['start_at' => TODAY,'end_at' => TOMORROW];
         //聚合汇总数量
         $countNumber = [
-            'today_message' => (new BackendMessageModel())->getCountByCondition(['start_at' => TODAY,'end_at' => TOMORROW]),//今日留言
-            'today_new_user' => (new UserModel())->getCountByCondition(['start_at' => TODAY,'end_at' => TOMORROW]),//今日注册数
-            'all_user' => (new UserModel())->getCountByCondition(),//总用户量
+            'today_message_number' => (new BackendMessageModel())->getCountByCondition($params),//今日留言
+            'today_new_user_number' => (new UserIndexModel())->getUserCountNumber($params),//今日注册数
+            'all_user_number' => (new UserIndexModel())->getUserCountNumber([]),//总用户量
+            'today_article_number' => (new ArticleIndexModel())->getArticleNumberCount($params),//今日文章数
+            'all_article_number' => (new ArticleIndexModel())->getArticleNumberCount([]),//总文章数
         ];
 
-        return $this->render('main');
+        return $this->render('main', ['count_number' => $countNumber]);
     }
 
     public function actionLogout()

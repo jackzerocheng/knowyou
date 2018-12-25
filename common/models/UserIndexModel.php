@@ -20,16 +20,22 @@ class UserIndexModel extends Model
 
     /**
      * 获取当前用户计数
+     * @param $condition
      * @return int
      */
-    public function getUserCountNumber()
+    public function getUserCountNumber($condition)
     {
         $redis = Yii::$app->redis;
-        if ($redis->exists(self::USER_NUMBER_COUNT)) {
-            return $redis->get(self::USER_NUMBER_COUNT);
-        } else {
-            return (new UserIndex())->getMaxID();
+        $nowCount = $redis->get(self::USER_NUMBER_COUNT);
+        $key = intval($nowCount / self::MAX_RECORD_NUMBER);
+
+        $total = 0;
+        while ($key >= 0) {
+            $total += (new UserIndex($key))->getCountByCondition($condition);
+            $key--;
         }
+
+        return $total;
     }
 
     /**

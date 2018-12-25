@@ -30,7 +30,7 @@ class ArticleIndexModel extends Model
      */
     public function getArticleByTime($maxID = 0, $limit = 10)
     {
-        $articleCount = $this->getArticleNumberCount();//获取计数
+        $articleCount = Yii::$app->redis->get(self::ARTICLE_NUMBER_COUNT);//获取计数
         if (!$maxID) {
             $maxID = $articleCount + 1;
         }
@@ -77,14 +77,19 @@ class ArticleIndexModel extends Model
      * 获取当前文章计数  -- 或者返货第一张表的最大值
      * @return int
      */
-    public function getArticleNumberCount()
+    public function getArticleNumberCount($condition)
     {
         $redis = Yii::$app->redis;
-        if ($redis->exists(self::ARTICLE_NUMBER_COUNT)) {
-            return $redis->get(self::ARTICLE_NUMBER_COUNT);
-        } else {
-            return (new ArticleIndex())->getMaxID();
+        $nowCount = $redis->get(self::ARTICLE_NUMBER_COUNT);
+        $key = intval($nowCount / self::MAX_RECORD_NUMBER);
+
+        $total = 0;
+        while ($key >= 0) {
+            $total += (new ArticleIndex())->getCountByCondition($condition);
+            $key--;
         }
+
+        return $total;
     }
 
     /**

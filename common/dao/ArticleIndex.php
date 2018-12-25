@@ -71,6 +71,10 @@ class ArticleIndex extends ActiveRecord
                     $db = $db->andWhere("id > {$v}");
                 } elseif($k == 'max_id') {
                     $db = $db->andWhere("id < {$v}");
+                } elseif ($k == 'start_at') {
+                    $db = $db->andWhere("created_at >= '{$v}'");
+                } elseif ($k == 'end_at') {
+                    $db = $db->andWhere("created_at < '{$v}'");
                 } else {
                     $db = $db->andWhere([$k => $v]);
                 }
