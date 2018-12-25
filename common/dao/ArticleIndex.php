@@ -10,6 +10,7 @@
 
 namespace common\dao;
 
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use Yii;
 
@@ -57,6 +58,11 @@ class ArticleIndex extends ActiveRecord
         return intval($db->count());
     }
 
+    /**
+     * @param $db ActiveQuery
+     * @param $condition
+     * @return ActiveQuery
+     */
     public function handlerCondition($db, $condition)
     {
         if (!empty($condition) && is_array($condition)) {

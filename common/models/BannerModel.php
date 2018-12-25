@@ -43,9 +43,9 @@ class BannerModel extends Model
         self::STATUS_STOPPED => '下架'
     ];
 
-    public function getListByCondition($condition, $limit = 100)
+    public function getListByCondition($condition, $limit = 100, $offset = 0, $orderBy = 'created_at desc')
     {
         $banner = new Banner();
-        return $banner->getListByCondition($condition, $limit);
+        return $banner->getListByCondition($condition, $limit, $offset, $orderBy);
     }
 }

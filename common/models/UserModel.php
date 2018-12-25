@@ -280,10 +280,23 @@ class UserModel extends Model
         }
 
         $user = new User();
+
+        $transaction = Yii::$app->db->beginTransaction();
+
         if (!$user->insert(false, $data)) {
+            Yii::warning('insert user info failed;info:'.json_encode($data), CATEGORIES_WARN);
+            $transaction->rollBack();
             return false;
         }
 
+        if (!(new UserIndexModel())->insert($data['uid'])) {
+            Yii::warning('insert user info failed;info:'.json_encode($data), CATEGORIES_WARN);
+            $transaction->rollBack();
+            return false;
+        }
+
+        $transaction->commit();
+        Yii::info('user register;uid:'.$user::$uid, CATEGORIES_INFO);
         return intval($user::$uid);
     }
 

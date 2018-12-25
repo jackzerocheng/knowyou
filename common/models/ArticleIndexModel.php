@@ -109,8 +109,7 @@ class ArticleIndexModel extends Model
         $rs = (new ArticleIndex($key))->insertData($data);
 
         if (!$rs) {
-            Yii::warning("insert data into article_index failed;article_id:{$articleID}", CATEGORIES_WARN);
-            $redis->decr(self::ARTICLE_NUMBER_COUNT);//失败则减一  保证计数正确
+            Yii::error("insert data into article_index failed;article_id:{$articleID}", CATEGORIES_ERROR);
             return 0;
         }
 

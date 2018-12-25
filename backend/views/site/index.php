@@ -31,7 +31,7 @@ use yii\helpers\Url;
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:;" data-url="page/user/userInfo.html"><i class="iconfont icon-zhanghu" data-icon="icon-zhanghu"></i><cite>个人资料</cite></a></dd>
                         <dd><a href="javascript:;" data-url="page/user/changePwd.html"><i class="iconfont icon-shezhi1" data-icon="icon-shezhi1"></i><cite>修改密码</cite></a></dd>
-                        <dd><a href="<?=Url::to(['site/logout']) ?>" class="signOut"><i class="iconfont icon-loginout"></i><cite>退出</cite></a></dd>
+                        <dd><a href="<?=Url::to(['site/logout']) ?>"><i class="iconfont icon-loginout"></i><cite>退出</cite></a></dd>
                     </dl>
                 </li>
             </ul>
@@ -46,6 +46,9 @@ use yii\helpers\Url;
         <br>
         <div class="navBar layui-side-scroll">
             <ul class="layui-nav layui-nav-tree">
+                <li class="layui-nav-item">
+                    <a href="<?=Url::to(['site/index']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>后台首页</cite></a>
+                </li>
                 <?php
                     if (!empty($menu_info)) {
                         foreach ($menu_info as $_menu) {
@@ -130,13 +133,6 @@ use yii\helpers\Url;
         $ = layui.jquery;
         tab = layui.bodyTab();
 
-        //退出
-        $(".signOut").click(function(){
-            window.sessionStorage.removeItem("menu");
-            menu = [];
-            window.sessionStorage.removeItem("curmenu");
-        })
-
         //隐藏左侧导航
         $(".hideMenu").click(function(){
             $(".layui-layout-admin").toggleClass("showMenu");
@@ -178,22 +174,16 @@ use yii\helpers\Url;
                 area: '310px',
                 shade: 0.8,
                 id: 'LAY_layuipro',
-                btn: ['火速围观'],
+                btn: ['我知道了'],
                 moveType: 1,
-                content: '<div style="padding:15px 20px; text-align:justify; line-height: 22px; text-indent:2em;border-bottom:1px solid #e2e2e2;"><p>测试公告</p></div>',
+                content: '<div style="padding:15px 20px; text-align:justify; line-height: 22px; ' +
+                'text-indent:2em;border-bottom:1px solid #e2e2e2;"><p><?=$notice ?></p></div>',
                 success: function(layero){
                     var btn = layero.find('.layui-layer-btn');
                     btn.css('text-align', 'center');
                     btn.on("click",function(){
                         window.sessionStorage.setItem("showNotice","true");
                     })
-                    if($(window).width() > 432){  //如果页面宽度不足以显示顶部“系统公告”按钮，则不提示
-                        btn.on("click",function(){
-                            layer.tips('系统公告躲在了这里', '#showNotice', {
-                                tips: 3
-                            });
-                        })
-                    }
                 }
             });
         }
@@ -239,7 +229,7 @@ use yii\helpers\Url;
         }
 
         //刷新当前
-        $(".refresh").on("click",function(){  //此处添加禁止连续点击刷新一是为了降低服务器压力，另外一个就是为了防止超快点击造成chrome本身的一些js文件的报错(不过貌似这个问题还是存在，不过概率小了很多)
+        $(".refresh").on("click",function(){  //点击间隔2秒
             if($(this).hasClass("refreshThis")){
                 $(this).removeClass("refreshThis");
                 $(".clildFrame .layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload(true);

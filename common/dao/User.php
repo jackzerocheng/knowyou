@@ -103,7 +103,13 @@ class User extends ActiveRecord
     {
         if (!empty($condition) && is_array($condition)) {
             foreach ($condition as $k => $v) {
-                $db = $db->andWhere([$k => $v]);
+                if ($k == 'start_at') {
+                    $db = $db->andWhere("created_at >= '{$v}'");
+                } elseif ($k == 'end_at') {
+                    $db = $db->andWhere("created_at < '{$v}'");
+                } else {
+                    $db = $db->andWhere([$k => $v]);
+                }
             }
         }
 

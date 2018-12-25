@@ -68,7 +68,7 @@ class Config
 
         if (strpos($path, '.') !== false) {
             $temp = explode('.', $path);
-            $content = file_get_contents($basePath . $temp[0] . $suffix);
+            $content = include($basePath . $temp[0] . $suffix);
             if (is_array($content)) {
                 return $content[$temp[1]];
             }
