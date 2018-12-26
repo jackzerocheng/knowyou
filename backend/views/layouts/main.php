@@ -6,8 +6,18 @@
 use backend\assets\AppAsset;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use common\models\AdminModel;
+use common\models\MenuModel;
+use common\lib\Config;
 
 AppAsset::register($this);
+
+$uid = Yii::$app->session->get(AdminModel::ADMIN_USER_SESSION_KEY);
+$user_info = (new AdminModel())->getOneByCondition(['admin_id' => $uid]);
+
+$menuInfo = (new MenuModel())->getMenuList(MenuModel::MENU_TYPE_BACKEND);
+
+$notice = (new Config())->getEnv('backend/notice.default');
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -27,8 +37,130 @@ AppAsset::register($this);
 </head>
 
 <?php $this->beginBody() ?>
+<body class="main_body">
+<div class="layui-layout layui-layout-admin">
+    <!-- 顶部 -->
+    <div class="layui-header header">
+        <div class="layui-main">
+            <a href="#" class="logo">简 默 后台管理系统</a>
 
-<?= $content ?>
+            <a href="javascript:;" class="hideMenu icon-menu1 iconfont"></a>
+
+            <!-- 搜索 -->
+            <div class="layui-form component">
+                <select name="modules" lay-verify="required" lay-search="">
+                    <option value="">直接选择或搜索选择</option>
+                </select>
+                <i class="layui-icon">&#xe615;</i>
+            </div>
+
+            <!-- 顶部右侧菜单 -->
+            <ul class="layui-nav top_menu">
+                <li class="layui-nav-item showNotice" id="showNotice" pc>
+                    <a href="javascript:showNotice();"><i class="iconfont icon-gonggao"></i><cite>系统公告</cite></a>
+                </li>
+                <li class="layui-nav-item" pc>
+                    <a href="javascript:;">
+                        <img src="<?=Url::to($user_info['head']) ?>" class="layui-circle" width="35" height="35">
+                        <cite><?=$user_info['username'] ?></cite>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" data-url="page/user/userInfo.html"><i class="iconfont icon-zhanghu" data-icon="icon-zhanghu"></i><cite>个人资料</cite></a></dd>
+                        <dd><a href="javascript:;" data-url="page/user/changePwd.html"><i class="iconfont icon-shezhi1" data-icon="icon-shezhi1"></i><cite>修改密码</cite></a></dd>
+                        <dd><a href="<?=Url::to(['site/logout']) ?>"><i class="iconfont icon-loginout"></i><cite>退出</cite></a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- 左侧导航 -->
+    <div class="layui-side layui-bg-black">
+        <div class="user-photo">
+            <a class="img" title="我的头像" ><img src="<?=Url::to($user_info['head']) ?>"></a>
+            <p>你好！<span class="userName"><?=$user_info['real_name'] ?></span>, 欢迎</p>
+        </div>
+        <br>
+        <div class="navBar layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree">
+                <li class="layui-nav-item">
+                    <a href="<?=Url::to(['site/index']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>后台首页</cite></a>
+                </li>
+                <?php
+                if (!empty($menu_info)) {
+                    foreach ($menu_info as $_menu) {
+                        if (empty($_menu['child_menu'])) {
+                            //输出一级菜单
+                            ?>
+                            <li class="layui-nav-item">
+                                <a href="<?=Url::to($_menu['url']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite><?=$_menu['name'] ?></cite></a>
+                            </li>
+
+                            <?php
+                        } else {
+                            //输出二级菜单
+                            ?>
+                            <li class="layui-nav-item layui-nav-itemed">
+                                <a href="<?=Url::to($_menu['url']) ?>">
+                                    <i class="iconfont icon-text" data-icon="icon-text"></i>
+                                    <cite><?=$_menu['name'] ?></cite>
+                                    <span class="layui-nav-more"></span>
+                                </a>
+                                <dl class="layui-nav-child">
+                                    <?php
+                                    foreach ($_menu['child_menu'] as $child_menu) {
+                                        echo "<dd>
+                                                <a href=\"".$child_menu['url']."\"><i class=\"iconfont\" data-icon=\"\">
+                                                </i><cite>".$child_menu['name']."</cite></a>
+                                                </dd>";
+                                    }
+                                    ?>
+                                </dl>
+                            </li>
+                            <?php
+                        }
+                    }
+                }
+
+                ?>
+            </ul>
+        </div>
+    </div>
+    <!-- 右侧内容 -->
+    <?= $content ?>
+
+
+    <!-- 底部 -->
+<div class="layui-footer footer">
+    <p>Copyright © <script>document.write(new Date().getFullYear());</script>.JZC All rights reserved.</p>
+</div>
+<!-- 移动导航 -->
+<div class="site-tree-mobile layui-hide"><i class="layui-icon">&#xe602;</i></div>
+<div class="site-mobile-shade"></div>
+
+    <script>
+        //公告层
+        function showNotice(){
+            layer.open({
+                type: 1,
+                title: "系统公告",
+                closeBtn: false,
+                area: '310px',
+                shade: 0.8,
+                id: 'LAY_layuipro',
+                btn: ['我知道了'],
+                moveType: 1,
+                content: '<div style="padding:15px 20px; text-align:justify; line-height: 22px; ' +
+                'text-indent:2em;border-bottom:1px solid #e2e2e2;"><p><?=$notice ?></p></div>',
+                success: function(layero){
+                    var btn = layero.find('.layui-layer-btn');
+                    btn.css('text-align', 'center');
+                    btn.on("click",function(){
+                        window.sessionStorage.setItem("showNotice","true");
+                    })
+                }
+            });
+        }
+    </script>
 
 <?php $this->endBody() ?>
 </body>

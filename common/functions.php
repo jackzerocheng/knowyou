@@ -55,7 +55,7 @@ function getMillisecond()
  * 按照某一索引值对二维数组排序
  * @param $arr
  * @param $index
- * @param $asc
+ * @param $asc   //默认升序
  * @return array
  */
 function quickSortToArray($arr, $index, $asc = true)

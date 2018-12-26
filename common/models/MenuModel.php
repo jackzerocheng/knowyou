@@ -15,15 +15,19 @@ use common\dao\Menu;
 class MenuModel extends Model
 {
     //菜单等级
-    const MENU_LEVEL_FIRST = 1;//父级菜单
+    const MENU_LEVEL_FIRST = 1;//一级菜单
     const MENU_LEVEL_SECOND = 2;//二级子菜单
+    public $menuLevelMap = [
+        self::MENU_LEVEL_FIRST => '一级菜单',
+        self::MENU_LEVEL_SECOND => '二级菜单'
+    ];
 
     //菜单状态
     const MENU_STATUS_USING = 1;
     const MENU_STATUS_STOP = 2;
     public $menuStatusMap = [
-        self::MENU_STATUS_USING => '使用中',
-        self::MENU_STATUS_STOP => '下架'
+        self::MENU_STATUS_USING => '展示中',
+        self::MENU_STATUS_STOP => '下架中'
     ];
 
     const MENU_TYPE_FRONTEND = 1;//前台
@@ -31,6 +35,7 @@ class MenuModel extends Model
 
     /**
      * 获取完整菜单
+     * 权重越小越靠前
      * @param $type integer
      * @return array
      */
@@ -45,6 +50,7 @@ class MenuModel extends Model
         /**
          * 拆分一级菜单和二级菜单
          */
+        $menu_first = array();
         foreach ($menuList as $_menu) {
             if ($_menu['level'] == self::MENU_LEVEL_FIRST) {
                 $menu_first[] = $_menu;
@@ -53,7 +59,7 @@ class MenuModel extends Model
             }
         }
 
-        $menu_first = quickSortToArray($menu_first, 'weight');
+        $menu_first = quickSortToArray($menu_first, 'weight', true);
 
         if (!empty($menu_second)) {
             $menu_second = quickSortToArray($menu_second, 'weight');
