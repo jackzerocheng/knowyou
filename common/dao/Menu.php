@@ -21,6 +21,18 @@ class Menu extends ActiveRecord
     }
 
     /**
+     * @param $condition
+     * @return array
+     */
+    public function getOneByCondition($condition)
+    {
+        $db = self::find();
+        $db = self::handlerCondition($db, $condition);
+
+        return $db->asArray()->one();
+    }
+
+    /**
      * 按条件获取菜单列表
      * @param $condition
      * @return mixed

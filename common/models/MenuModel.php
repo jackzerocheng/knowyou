@@ -85,6 +85,15 @@ class MenuModel extends Model
     }
 
     /**
+     * @param $condition
+     * @return array
+     */
+    public function getOneByCondition($condition)
+    {
+        return (new Menu())->getOneByCondition($condition);
+    }
+
+    /**
      * 添加菜单
      * @param array $data
      * @return int

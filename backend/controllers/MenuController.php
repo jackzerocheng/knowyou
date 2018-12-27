@@ -93,6 +93,13 @@ class MenuController extends CommonController
 
     public function actionEdit()
     {
+        $id = Yii::$app->request->get('id');
+        if (!$id) {
+            Yii::info("illegal enter to edit menu page without id;", CATEGORIES_INFO);
+            return $this->redirect(['site/error']);
+        }
+
+        $menuInfo = (new MenuModel())->getOneByCondition(['id' => $id]);
         return $this->renderPartial('edit');
     }
 }

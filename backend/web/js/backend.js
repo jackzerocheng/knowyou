@@ -179,7 +179,8 @@ layui.config({
 
     //菜单编辑
     $("body").on("click",".menu_edit",function(){  //编辑
-        var menu_id = $(this).attr("data-id");
+        var _this = $(this);
+        var menu_id = _this.attr("data-id");
         var rs = layui.layer.open({
             title : "编辑菜单",
             type : 2,
@@ -193,7 +194,6 @@ layui.config({
                 },500)
             }
         })
-
     })
 
     //编辑
