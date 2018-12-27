@@ -77,68 +77,6 @@ layui.config({
         tab.tabMove();
     }
 
-    //刷新当前
-    $(".refresh").on("click",function(){  //点击间隔2秒
-        if($(this).hasClass("refreshThis")){
-            $(this).removeClass("refreshThis");
-            $(".clildFrame .layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload(true);
-            setTimeout(function(){
-                $(".refresh").addClass("refreshThis");
-            },2000)
-        }else{
-            layer.msg("您点击的速度超过了服务器的响应速度，还是等两秒再刷新吧！");
-        }
-    })
-
-    //关闭其他
-    $(".closePageOther").on("click",function(){
-        if($("#top_tabs li").length>2 && $("#top_tabs li.layui-this cite").text()!="后台首页"){
-            var menu = JSON.parse(window.sessionStorage.getItem("menu"));
-            $("#top_tabs li").each(function(){
-                if($(this).attr("lay-id") != '' && !$(this).hasClass("layui-this")){
-                    element.tabDelete("bodyTab",$(this).attr("lay-id")).init();
-                    //此处将当前窗口重新获取放入session，避免一个个删除来回循环造成的不必要工作量
-                    for(var i=0;i<menu.length;i++){
-                        if($("#top_tabs li.layui-this cite").text() == menu[i].title){
-                            menu.splice(0,menu.length,menu[i]);
-                            window.sessionStorage.setItem("menu",JSON.stringify(menu));
-                        }
-                    }
-                }
-            })
-        }else if($("#top_tabs li.layui-this cite").text()=="后台首页" && $("#top_tabs li").length>1){
-            $("#top_tabs li").each(function(){
-                if($(this).attr("lay-id") != '' && !$(this).hasClass("layui-this")){
-                    element.tabDelete("bodyTab",$(this).attr("lay-id")).init();
-                    window.sessionStorage.removeItem("menu");
-                    menu = [];
-                    window.sessionStorage.removeItem("curmenu");
-                }
-            })
-        }else{
-            layer.msg("没有可以关闭的窗口了@_@");
-        }
-        //渲染顶部窗口
-        tab.tabMove();
-    })
-    //关闭全部
-    $(".closePageAll").on("click",function(){
-        if($("#top_tabs li").length > 1){
-            $("#top_tabs li").each(function(){
-                if($(this).attr("lay-id") != ''){
-                    element.tabDelete("bodyTab",$(this).attr("lay-id")).init();
-                    window.sessionStorage.removeItem("menu");
-                    menu = [];
-                    window.sessionStorage.removeItem("curmenu");
-                }
-            })
-        }else{
-            layer.msg("没有可以关闭的窗口了@_@");
-        }
-        //渲染顶部窗口
-        tab.tabMove();
-    })
-
     //打开新窗口
     function addTab(_this){
         tab.tabAdd(_this);
@@ -232,10 +170,33 @@ layui.config({
 
     //是否展示
     form.on('switch(isShow)', function(data){
+        var index = layer.msg('修改中，请稍候',{icon: 16,time:false,shade:0.8});
+        setTimeout(function(){
+            layer.close(index);
+            layer.msg("展示状态修改成功！");
+        },2000);
+    })
+
+    //菜单编辑
+    $("body").on("click",".menu_edit",function(){  //编辑
+        var menu_id = $(this).attr("data-id");
+        var rs = layui.layer.open({
+            title : "编辑菜单",
+            type : 2,
+            content : "index.php?r=menu%2Fedit&id=" + menu_id,
+            area : ['80%', '60%'],
+            success : function(layero, index){
+                setTimeout(function(){
+                    layui.layer.tips('点击此处返回菜单列表', '.layui-layer-setwin .layui-layer-close', {
+                        tips: 3
+                    });
+                },500)
+            }
+        })
 
     })
 
-    //操作
+    //编辑
     $("body").on("click",".news_edit",function(){  //编辑
         layer.alert('您点击了文章编辑按钮，由于是纯静态页面，所以暂时不存在编辑内容，后期会添加，敬请谅解。。。',{icon:6, title:'文章编辑'});
     })

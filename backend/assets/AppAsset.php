@@ -12,7 +12,7 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/layui.css',
+        'layui/css/layui.css',
         'css/font_tnyc.css',
         'css/main.css',
         'css/images.css',
@@ -21,7 +21,7 @@ class AppAsset extends AssetBundle
         'css/user.css'
     ];
     public $js = [
-        'js/layui.js',
+        'layui/layui.js',
         'js/backend.js'
     ];
     public $depends = [

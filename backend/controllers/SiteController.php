@@ -42,9 +42,9 @@ class SiteController extends CommonController
     {
         $exception = Yii::$app->errorHandler->exception;
         if ($exception !== null) {
-            return $this->renderPartial('error');
+            return $this->render('error');
         }
 
-        return true;
+        return $this->render('error');
     }
 }

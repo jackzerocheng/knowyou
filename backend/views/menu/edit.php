@@ -26,53 +26,53 @@ use yii\helpers\Url;
         </div>
     </div>
     <div class="layui-form-item">
-            <label class="layui-form-label">菜单级别</label>
-            <div class="layui-input-block">
-                <select name="level" class="menuLevel" lay-filter="level">
-                    <?php
-                    if (!empty($level_map)) {
-                        foreach ($level_map as $k => $v) {
-                            if ($k ==   $content['level']) {
-                                echo "<option value=\"{$k}\" selected>{$v}</option>";
-                            } else {
-                                echo "<option value=\"{$k}\">{$v}</option>";
-                            }
+        <label class="layui-form-label">菜单级别</label>
+        <div class="layui-input-block">
+            <select name="level" class="menuLevel" lay-filter="level">
+                <?php
+                if (!empty($level_map)) {
+                    foreach ($level_map as $k => $v) {
+                        if ($k ==   $content['level']) {
+                            echo "<option value=\"{$k}\" selected>{$v}</option>";
+                        } else {
+                            echo "<option value=\"{$k}\">{$v}</option>";
                         }
                     }
-                    ?>
-                </select>
-            </div>
+                }
+                ?>
+            </select>
+        </div>
     </div>
     <div class="layui-form-item">
-            <label class="layui-form-label">父级菜单</label>
-            <div class="layui-input-block">
-                <select name="parent_id" lay-verify="parent_id" class="parentMenu">
-                    <option value="0">无</option>
-                    <?php
-                    if (!empty($parent_menu)) {
-                        foreach ($parent_menu as $k => $v) {
-                            if ($v['id'] == $content['parent_id']) {
-                                echo "<option value=\"{$v['id']}\" selected>{$v['name']}</option>";
-                            } else {
-                                echo "<option value=\"{$v['id']}\">{$v['name']}</option>";
-                            }
+        <label class="layui-form-label">父级菜单</label>
+        <div class="layui-input-block">
+            <select name="parent_id" lay-verify="parent_id" class="parentMenu">
+                <option value="0">无</option>
+                <?php
+                if (!empty($parent_menu)) {
+                    foreach ($parent_menu as $k => $v) {
+                        if ($v['id'] == $content['parent_id']) {
+                            echo "<option value=\"{$v['id']}\" selected>{$v['name']}</option>";
+                        } else {
+                            echo "<option value=\"{$v['id']}\">{$v['name']}</option>";
                         }
                     }
-                    ?>
-                </select>
-            </div>
+                }
+                ?>
+            </select>
+        </div>
     </div>
     <div class="layui-form-item">
-            <label class="layui-form-label">访问链接</label>
-            <div class="layui-input-block">
-                <input type="text" name="url" class="layui-input" lay-verify="required" placeholder="请输入完整链接" value="<?=$content['url']?:'' ?>">
-            </div>
+        <label class="layui-form-label">访问链接</label>
+        <div class="layui-input-block">
+            <input type="text" name="url" class="layui-input" lay-verify="required" placeholder="请输入完整链接" value="<?=$content['url']?:'' ?>">
+        </div>
     </div>
     <div class="layui-form-item">
-            <label class="layui-form-label">菜单权重</label>
-            <div class="layui-input-block">
-                <input type="text" name="weight" class="layui-input newsName" lay-verify="required" value="<?=$content['weight']?:'' ?>" placeholder="请输入权重，越小越靠前,不能为负值">
-            </div>
+        <label class="layui-form-label">菜单权重</label>
+        <div class="layui-input-block">
+            <input type="text" name="weight" class="layui-input newsName" lay-verify="required" value="<?=$content['weight']?:'' ?>" placeholder="请输入权重，越小越靠前,不能为负值">
+        </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">

@@ -51,9 +51,10 @@ return [
         'session' => [
             'timeout' => 7200,
         ],
+        /*
         'errorHandler' => [
             'errorAction' => 'site/error',
-        ]
+        ]*/
         //URL配置
         /*
         'urlManager' => [

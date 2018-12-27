@@ -9,7 +9,9 @@
 
 namespace common\dao;
 
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use Yii;
 
 class Menu extends ActiveRecord
 {
@@ -31,6 +33,17 @@ class Menu extends ActiveRecord
         return $db->asArray()->all();
     }
 
+    public function insertInfo($data)
+    {
+        $rs = Yii::$app->db->createCommand()->insert(static::tableName(), $data)->execute();
+        return $rs;
+    }
+
+    /**
+     * @param $db ActiveQuery
+     * @param $condition
+     * @return ActiveQuery
+     */
     public function handlerCondition($db, $condition)
     {
         if (!empty($condition) && is_array($condition)) {

@@ -41,7 +41,7 @@ class MenuModel extends Model
      */
     public function getMenuList($type = 1)
     {
-        $menuList = (new Menu())->getListByCondition(['status' => self::MENU_STATUS_USING, 'type' => $type]);
+        $menuList = $this->getListByCondition(['status' => self::MENU_STATUS_USING, 'type' => $type]);
 
         if (empty($menuList)) {
             return array();
@@ -73,5 +73,24 @@ class MenuModel extends Model
         }
 
         return $menu_first;
+    }
+
+    /**
+     * @param $condition
+     * @return mixed
+     */
+    public function getListByCondition($condition)
+    {
+        return (new Menu())->getListByCondition($condition);
+    }
+
+    /**
+     * 添加菜单
+     * @param array $data
+     * @return int
+     */
+    public function insert(array $data)
+    {
+        return (new Menu())->insertInfo($data);
     }
 }

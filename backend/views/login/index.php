@@ -53,7 +53,7 @@ $this->title = 'Jian Mo - 简默';
     </div>
     <?=Html::endForm(); ?>
 </div>
-<script src="<?=Url::to('@web/js/layui.js') ?>"></script>
+<script src="<?=Url::to('@web/layui/layui.js') ?>"></script>
 <!-- 后者依赖前者 -->
 <script>
     layui.config({

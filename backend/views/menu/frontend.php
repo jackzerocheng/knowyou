@@ -67,8 +67,8 @@ use yii\helpers\Url;
                                 <td><?=$menu['weight'] ?></td>
                                 <td style="color: red;"><?=$status_map[$menu['status']] ?></td>
                                 <td>
-                                    <a class="layui-btn layui-btn-mini news_edit"><i class="iconfont icon-edit"></i> 编辑</a>
-                                    <a class="layui-btn layui-btn-danger layui-btn-mini news_del" data-id="'+data[i].newsId+'"><i class="layui-icon">&#xe640;</i> 删除</a>
+                                    <a class="layui-btn layui-btn-mini menu_edit" data-id="<?=$menu['id'] ?>"><i class="iconfont icon-edit"></i> 编辑</a>
+                                    <a class="layui-btn layui-btn-danger layui-btn-mini" href="<?=Url::to(['menu/delete',$menu['id']]) ?>"><i class="layui-icon">&#xe640;</i> 删除</a>
                                 </td>
                             </tr>
                         <?php
@@ -86,8 +86,8 @@ use yii\helpers\Url;
                                         <td><?=$child_menu['weight'] ?></td>
                                         <td style="color: red;"><?=$status_map[$child_menu['status']] ?></td>
                                         <td>
-                                            <a class="layui-btn layui-btn-mini news_edit"><i class="iconfont icon-edit"></i> 编辑</a>
-                                            <a class="layui-btn layui-btn-danger layui-btn-mini news_del" data-id="'+data[i].newsId+'"><i class="layui-icon">&#xe640;</i> 删除</a>
+                                            <a class="layui-btn layui-btn-mini menu_edit" data-id="<?=$menu['id'] ?>"><i class="iconfont icon-edit"></i> 编辑</a>
+                                            <a class="layui-btn layui-btn-danger layui-btn-mini" href="<?=Url::to(['menu/delete',$menu['id']]) ?>"><i class="layui-icon">&#xe640;</i> 删除</a>
                                         </td>
                                     </tr>
                         <?php
@@ -95,7 +95,7 @@ use yii\helpers\Url;
                             }
                             }
                         } else {
-                            echo "<tr><td colspan=\"8\">暂无数据</td></tr>";
+                            echo "<tr><td colspan=\"9\">暂无数据</td></tr>";
                         }
 
                         ?>
@@ -108,4 +108,3 @@ use yii\helpers\Url;
         </div>
     </div>
 </div>
-<script src="<?=Url::to('@web/js/layui.js') ?>"></script>
