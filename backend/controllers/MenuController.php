@@ -19,7 +19,7 @@ class MenuController extends CommonController
     {
         //前台菜单
         $menuModel = new MenuModel();
-        $frontendMenuList = $menuModel->getMenuList($menuModel::MENU_TYPE_FRONTEND);
+        $frontendMenuList = $menuModel->getMenuList($menuModel::MENU_TYPE_FRONTEND, true);
 
         $data = [
             'menu_list' => $frontendMenuList,
@@ -34,7 +34,7 @@ class MenuController extends CommonController
     {
         //前台菜单
         $menuModel = new MenuModel();
-        $backendMenuList = $menuModel->getMenuList($menuModel::MENU_TYPE_BACKEND);
+        $backendMenuList = $menuModel->getMenuList($menuModel::MENU_TYPE_BACKEND, true);
 
         $data = [
             'menu_list' => $backendMenuList,

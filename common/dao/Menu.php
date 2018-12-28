@@ -47,16 +47,23 @@ class Menu extends ActiveRecord
 
     public function insertInfo($data)
     {
+        $data['created_at'] = $data['created_at'] ? : NOW_DATE;
         $rs = Yii::$app->db->createCommand()->insert(static::tableName(), $data)->execute();
         return $rs;
     }
 
     public function updateInfo($data, $condition)
     {
+        $data['updated_at'] = $data['updated_at'] ? : NOW_DATE;
         $rs = Yii::$app->db->createCommand()->update(static::tableName(), $data, $condition)->execute();
         return $rs;
     }
 
+    /**
+     * 禁用
+     * @param $condition
+     * @return int
+     */
     public function deleteInfo($condition)
     {
         $rs = Yii::$app->db->createCommand()->delete(static::tableName(), $condition)->execute();

@@ -18,7 +18,7 @@ use yii\helpers\Url;
 </head>
 <body class="childrenBody">
 <form class="layui-form" method="post" action="<?=Url::to(['menu/update']) ?>">
-    <input type="hidden" name="type" value="<?=$menu_info['id'] ?>">
+    <input type="hidden" name="id" value="<?=$menu_info['id'] ?>">
     <div class="layui-form-item">
         <label class="layui-form-label">菜单名称</label>
         <div class="layui-input-block">

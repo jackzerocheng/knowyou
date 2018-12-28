@@ -26,6 +26,7 @@ class MenuModel extends Model
     //菜单状态
     const MENU_STATUS_USING = 1;
     const MENU_STATUS_STOP = 2;
+    const MENU_STATUS_DELETED = 3;//删除
     public $menuStatusMap = [
         self::MENU_STATUS_USING => '展示中',
         self::MENU_STATUS_STOP => '下架中'
@@ -38,11 +39,16 @@ class MenuModel extends Model
      * 获取完整菜单
      * 权重越小越靠前
      * @param $type integer
+     * @param $all
      * @return array
      */
-    public function getMenuList($type = 1)
+    public function getMenuList($type = 1, $all = false)
     {
-        $menuList = $this->getListByCondition(['status' => self::MENU_STATUS_USING, 'type' => $type]);
+        $params = ['type' => $type];
+        if (!$all) {
+            $params['status'] = self::MENU_STATUS_USING;
+        }
+        $menuList = $this->getListByCondition($params);
 
         if (empty($menuList)) {
             return array();
