@@ -96,6 +96,9 @@ layui.config({
                             tips: 3
                         });
                     },500)
+                },
+                end : function () {
+                    location.reload();
                 }
             })
             //layui.layer.full(front);
@@ -113,11 +116,19 @@ layui.config({
                             tips: 3
                         });
                     },500)
+                },
+                end : function () {
+                    location.reload();
                 }
             })
             //layui.layer.full(backend);
         })
     }).resize();
+
+    //弹层提交完后自动close
+    $(".close-layer").click(function () {
+        layer.closeAll();
+    })
 
     //批量删除
     $(".batchDel").click(function(){
@@ -192,6 +203,9 @@ layui.config({
                         tips: 3
                     });
                 },500)
+            },
+            end : function () {
+                location.reload();
             }
         })
     })

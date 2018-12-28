@@ -51,6 +51,18 @@ class Menu extends ActiveRecord
         return $rs;
     }
 
+    public function updateInfo($data, $condition)
+    {
+        $rs = Yii::$app->db->createCommand()->update(static::tableName(), $data, $condition)->execute();
+        return $rs;
+    }
+
+    public function deleteInfo($condition)
+    {
+        $rs = Yii::$app->db->createCommand()->delete(static::tableName(), $condition)->execute();
+        return $rs;
+    }
+
     /**
      * @param $db ActiveQuery
      * @param $condition

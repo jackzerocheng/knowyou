@@ -11,6 +11,7 @@ namespace common\models;
 
 use yii\base\Model;
 use common\dao\Menu;
+use Yii;
 
 class MenuModel extends Model
 {
@@ -101,5 +102,52 @@ class MenuModel extends Model
     public function insert(array $data)
     {
         return (new Menu())->insertInfo($data);
+    }
+
+    /**
+     * 更新
+     * @param array $data
+     * @param $condition
+     * @return int
+     */
+    public function update(array $data, $condition)
+    {
+        return (new Menu())->updateInfo($data, $condition);
+    }
+
+    /**
+     * 删除
+     * @param $condition
+     * @return bool|int
+     */
+    public function delete($condition)
+    {
+        if (empty($condition)) {//禁止无条件删除
+            return false;
+        }
+
+        return (new Menu())->deleteInfo($condition);
+    }
+
+    /**
+     * 检查插入/更新菜单时的数据正确性
+     * @param array $data
+     * @return bool
+     */
+    public function checkData(array $data)
+    {
+        if (empty($data)) {
+            Yii::$app->session->setFlash('message', '提交数据为空');
+            return false;
+        } elseif (($data['level'] == self::MENU_LEVEL_FIRST && $data['parent_id'] != 0)
+            || ($data['level'] == self::MENU_LEVEL_SECOND && $data['parent_id'] == 0)) {//菜单级别和父级菜单关系判断
+            Yii::$app->session->setFlash('message', '一级菜单不能有父级菜单，二级菜单必须有父级菜单');
+            return false;
+        } elseif (intval($data['weight']) < 0) {
+            Yii::$app->session->setFlash('message', '权重不能为负值');
+            return false;
+        }
+
+        return true;
     }
 }

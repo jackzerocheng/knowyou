@@ -17,12 +17,12 @@ use yii\helpers\Url;
     <link rel="stylesheet" href="<?=Url::to('@web/layui/css/layui.css') ?>" media="all" />
 </head>
 <body class="childrenBody">
-<form class="layui-form" method="post" action="<?=Url::to(['menu/add']) ?>">
-    <input type="hidden" name="type" value="<?=$type ?>">
+<form class="layui-form" method="post" action="<?=Url::to(['menu/update']) ?>">
+    <input type="hidden" name="type" value="<?=$menu_info['id'] ?>">
     <div class="layui-form-item">
         <label class="layui-form-label">菜单名称</label>
         <div class="layui-input-block">
-            <input type="text" name="name" class="layui-input" lay-verify="required" placeholder="请输入菜单名称" value="<?=$content['name']?:'' ?>">
+            <input type="text" name="name" class="layui-input" lay-verify="required" value="<?=$menu_info['name']?:'' ?>" placeholder="请输入菜单名称">
         </div>
     </div>
     <div class="layui-form-item">
@@ -32,7 +32,7 @@ use yii\helpers\Url;
                 <?php
                 if (!empty($level_map)) {
                     foreach ($level_map as $k => $v) {
-                        if ($k ==   $content['level']) {
+                        if ($k ==   $menu_info['level']) {
                             echo "<option value=\"{$k}\" selected>{$v}</option>";
                         } else {
                             echo "<option value=\"{$k}\">{$v}</option>";
@@ -49,9 +49,9 @@ use yii\helpers\Url;
             <select name="parent_id" lay-verify="parent_id" class="parentMenu">
                 <option value="0">无</option>
                 <?php
-                if (!empty($parent_menu)) {
-                    foreach ($parent_menu as $k => $v) {
-                        if ($v['id'] == $content['parent_id']) {
+                if (!empty($parent_list)) {
+                    foreach ($parent_list as $k => $v) {
+                        if ($v['id'] == $menu_info['parent_id']) {
                             echo "<option value=\"{$v['id']}\" selected>{$v['name']}</option>";
                         } else {
                             echo "<option value=\"{$v['id']}\">{$v['name']}</option>";
@@ -65,13 +65,29 @@ use yii\helpers\Url;
     <div class="layui-form-item">
         <label class="layui-form-label">访问链接</label>
         <div class="layui-input-block">
-            <input type="text" name="url" class="layui-input" lay-verify="required" placeholder="请输入完整链接" value="<?=$content['url']?:'' ?>">
+            <input type="text" name="url" class="layui-input" lay-verify="required" placeholder="请输入完整链接" value="<?=$menu_info['url']?:'' ?>">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜单状态</label>
+        <div class="layui-input-block">
+            <?php
+            if (!empty($status_map)) {
+                foreach ($status_map as $k => $v) {
+                    if ($k == $menu_info['status']) {
+                        echo "<input type='radio' name='status' value='{$k}' title='{$v}' checked>";
+                    } else {
+                        echo "<input type='radio' name='status' value='{$k}' title='{$v}'>";
+                    }
+                }
+            }
+            ?>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">菜单权重</label>
         <div class="layui-input-block">
-            <input type="text" name="weight" class="layui-input newsName" lay-verify="required" value="<?=$content['weight']?:'' ?>" placeholder="请输入权重，越小越靠前,不能为负值">
+            <input type="text" name="weight" class="layui-input newsName" lay-verify="required" value="<?=$menu_info['weight']?:'' ?>" placeholder="请输入权重，越小越靠前,不能为负值">
         </div>
     </div>
     <div class="layui-form-item">
@@ -81,33 +97,12 @@ use yii\helpers\Url;
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit="" lay-filter="addNews">立即提交</button>
+            <button class="layui-btn close-layer" lay-submit="" lay-filter="addNews">立即提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
 </form>
 <script type="text/javascript" src="<?=Url::to('@web/layui/layui.js') ?>"></script>
-<script>
-    layui.config({
-        base : "js/"
-    }).use(['form','layer','jquery'],function(){
-        var form = layui.form(),
-            layer = parent.layer === undefined ? layui.layer : parent.layer,
-            laypage = layui.laypage,
-            $ = layui.jquery;
-
-        $(".menuLevel").change(function(){
-            alert(111);
-            var selected = $(".menuLevel").val();
-            alert(selected);
-            if (selected == "1") {//一级菜单
-                $(".parentMenu").val('0');
-                $(".parentMenu").disable();
-            } else {
-                $(".parentMenu").enable();
-            }
-        })
-    })
-</script>
+<script type="text/javascript" src="<?=Url::to('@web/js/backend.js') ?>"></script>
 </body>
 </html>

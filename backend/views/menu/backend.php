@@ -20,6 +20,9 @@ use yii\helpers\Url;
                     <div class="layui-inline">
                         <a class="layui-btn layui-btn-normal backendMenu_add">添加菜单</a>
                     </div>
+                    <div class="layui-inline">
+                        <p style="color:red"><?=Yii::$app->session->getFlash('mesaage') ?></p>
+                    </div>
                 </blockquote>
                 <div class="layui-form news_list">
                     <table class="layui-table">
@@ -64,7 +67,11 @@ use yii\helpers\Url;
                                     <td style="color: red;"><?=$status_map[$menu['status']] ?></td>
                                     <td>
                                         <a class="layui-btn layui-btn-mini menu_edit" data-id="<?=$menu['id'] ?>"><i class="iconfont icon-edit"></i> 编辑</a>
-                                        <a class="layui-btn layui-btn-danger layui-btn-mini" href="<?=Url::to(['menu/delete',$menu['id']]) ?>"><i class="layui-icon">&#xe640;</i> 删除</a>
+                                        <?php
+                                        if ($menu['status'] != 1) {
+                                        echo "<a class=\"layui-btn layui-btn-danger layui-btn-mini\" href=\"".Url::to(['menu/delete',$menu['id']]) ."\"><i class=\"layui-icon\">&#xe640;</i> 删除</a>";
+                                        }
+                                        ?>
                                     </td>
                                 </tr>
                                 <?php
@@ -83,7 +90,11 @@ use yii\helpers\Url;
                                             <td style="color: red;"><?=$status_map[$child_menu['status']] ?></td>
                                             <td>
                                                 <a class="layui-btn layui-btn-mini menu_edit" data-id="<?=$menu['id'] ?>"><i class="iconfont icon-edit"></i> 编辑</a>
-                                                <a class="layui-btn layui-btn-danger layui-btn-mini" href="<?=Url::to(['menu/delete',$menu['id']]) ?>"><i class="layui-icon">&#xe640;</i> 删除</a>
+                                                <?php
+                                                if ($menu['status'] != 1) {
+                                                    echo "<a class=\"layui-btn layui-btn-danger layui-btn-mini\" href=\"".Url::to(['menu/delete',$menu['id']]) ."\"><i class=\"layui-icon\">&#xe640;</i> 删除</a>";
+                                                }
+                                                ?>
                                             </td>
                                         </tr>
                                         <?php
