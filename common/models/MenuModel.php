@@ -145,14 +145,14 @@ class MenuModel extends Model
     public function checkData(array $data)
     {
         if (empty($data)) {
-            Yii::$app->session->setFlash('message', '提交数据为空');
+            Yii::$app->session->setFlash('edit_message', '提交数据为空');
             return false;
         } elseif (($data['level'] == self::MENU_LEVEL_FIRST && $data['parent_id'] != 0)
             || ($data['level'] == self::MENU_LEVEL_SECOND && $data['parent_id'] == 0)) {//菜单级别和父级菜单关系判断
-            Yii::$app->session->setFlash('message', '一级菜单不能有父级菜单，二级菜单必须有父级菜单');
+            Yii::$app->session->setFlash('edit_message', '一级菜单不能有父级菜单，二级菜单必须有父级菜单');
             return false;
         } elseif (intval($data['weight']) < 0) {
-            Yii::$app->session->setFlash('message', '权重不能为负值');
+            Yii::$app->session->setFlash('edit_message', '权重不能为负值');
             return false;
         }
 

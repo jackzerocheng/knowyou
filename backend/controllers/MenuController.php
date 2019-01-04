@@ -78,7 +78,13 @@ class MenuController extends CommonController
                 Yii::$app->session->setFlash('message', '添加菜单成功');
                 return true;
             }
-            Yii::$app->session->setFlash('message', '菜单添加失败');
+
+            if ($data['type'] == $menuModel::MENU_TYPE_FRONTEND) {
+                $key = 'front_message';
+            } elseif ($data['type'] == $menuModel::MENU_TYPE_BACKEND) {
+                $key = 'backend_message';
+            }
+            Yii::$app->session->setFlash($key, '菜单添加失败');
             Yii::warning("insert data into menu failed!data:".json_encode($data), CATEGORIES_WARN);
             return false;
         }
@@ -122,7 +128,13 @@ class MenuController extends CommonController
                 Yii::$app->session->setFlash('message', '更新菜单成功');
                 return true;
             }
-            Yii::$app->session->setFlash('message', '菜单更新失败');
+
+            if ($data['type'] == $menuModel::MENU_TYPE_FRONTEND) {
+                $key = 'front_message';
+            } elseif ($data['type'] == $menuModel::MENU_TYPE_BACKEND) {
+                $key = 'backend_message';
+            }
+            Yii::$app->session->setFlash($key, '菜单更新失败');
             Yii::warning('update menu info failed;data:'.json_encode($data), CATEGORIES_WARN);
             return false;
         }
@@ -135,7 +147,7 @@ class MenuController extends CommonController
     {
         $id = Yii::$app->request->get('id');
         if (empty($id)) {
-            Yii::$app->session->setFlash('message', '异常操作删除菜单');
+            Yii::$app->session->setFlash('error_message', '异常操作删除菜单');
             return $this->redirect(['site/error']);
         }
 
@@ -143,12 +155,14 @@ class MenuController extends CommonController
         $menuInfo = $menuModel->getOneByCondition(['id' => $id]);
         if ($menuInfo['type'] == $menuModel::MENU_TYPE_FRONTEND) {
             $path = 'menu/index';
+            $key = 'front_message';
         } elseif ($menuInfo['type'] == $menuModel::MENU_TYPE_BACKEND) {
             $path = 'menu/backend';
+            $key = 'backend_message';
         }
 
         if ($menuInfo['status'] == $menuModel::MENU_STATUS_USING) {
-            Yii::$app->session->setFlash('message', '无法删除展示中的菜单');
+            Yii::$app->session->setFlash($key, '无法删除展示中的菜单');
             return $this->redirect([$path]);
         }
 
@@ -156,12 +170,12 @@ class MenuController extends CommonController
         $rs = $menuModel->update(['status' => $menuModel::MENU_STATUS_DELETED], ['id' => $id]);
         if (!$rs) {
             Yii::warning('delete menu info failed!id:'.$id, CATEGORIES_WARN);
-            Yii::$app->session->setFlash('message', '删除菜单失败');
+            Yii::$app->session->setFlash($key, '删除菜单失败');
             return $this->redirect([$path]);
         }
 
         Yii::info('delete menu info success;id:'.$id.';uid:'.$this->uid, CATEGORIES_INFO);
-        Yii::$app->session->setFlash('message', '删除菜单成功');
+        Yii::$app->session->setFlash($key, '删除菜单成功');
         return $this->redirect([$path]);
     }
 }

@@ -92,7 +92,7 @@ use yii\helpers\Url;
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <p style="color:red"><?=Yii::$app->session->getFlash('message') ?></p>
+            <p style="color:red"><?=Yii::$app->session->getFlash('edit_message') ?></p>
         </div>
     </div>
     <div class="layui-form-item">

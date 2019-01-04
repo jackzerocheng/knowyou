@@ -25,7 +25,10 @@ use yii\helpers\Url;
                         <a class="layui-btn layui-btn-normal frontendMenu_add">添加菜单</a>
                     </div>
                     <div class="layui-inline">
-                        <p style="color:red"><?=Yii::$app->session->getFlash('message') ?></p>
+                        <div class="layui-form-mid layui-word-aux">添加菜单前请确认菜单路径存在</div>
+                    </div>
+                    <div class="layui-inline">
+                        <p style="color:red"><?=Yii::$app->session->getFlash('front_message') ?></p>
                     </div>
                 </blockquote>
                 <div class="layui-form news_list">
@@ -93,12 +96,12 @@ use yii\helpers\Url;
                                         <td><?=$child_menu['weight'] ?></td>
                                         <td style="color: red;"><?=$status_map[$child_menu['status']] ?></td>
                                         <td>
-                                            <a class="layui-btn layui-btn-mini menu_edit" data-id="<?=$menu['id'] ?>"><i class="iconfont icon-edit"></i> 编辑</a>
+                                            <a class="layui-btn layui-btn-mini menu_edit" data-id="<?=$child_menu['id'] ?>"><i class="iconfont icon-edit"></i> 编辑</a>
                                             <?php
                                             if ($child_menu['status'] == 1) {
                                                 //echo "<a class=\"layui-btn layui-btn-danger layui-btn-mini\" href=\"#\"><i class=\"layui-icon\">&#xe640;</i> 删除</a>";
                                             } else {
-                                                echo "<a class=\"layui-btn layui-btn-danger layui-btn-mini\" href=\"".Url::to(['menu/delete','id' => $menu['id']]) ."\"><i class=\"layui-icon\">&#xe640;</i> 删除</a>";
+                                                echo "<a class=\"layui-btn layui-btn-danger layui-btn-mini\" href=\"".Url::to(['menu/delete','id' => $child_menu['id']]) ."\"><i class=\"layui-icon\">&#xe640;</i> 删除</a>";
                                             }
                                             ?>
 
