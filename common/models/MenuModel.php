@@ -45,8 +45,10 @@ class MenuModel extends Model
     public function getMenuList($type = 1, $all = false)
     {
         $params = ['type' => $type];
-        if (!$all) {
+        if (!$all) {//只获取展示中数据
             $params['status'] = self::MENU_STATUS_USING;
+        } else {//获取除删除外的数据
+            $params['except_status'] = self::MENU_STATUS_DELETED;
         }
         $menuList = $this->getListByCondition($params);
 

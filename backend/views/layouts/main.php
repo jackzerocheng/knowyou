@@ -15,7 +15,7 @@ AppAsset::register($this);
 $uid = Yii::$app->session->get(AdminModel::ADMIN_USER_SESSION_KEY);
 $user_info = (new AdminModel())->getOneByCondition(['admin_id' => $uid]);
 
-$menuInfo = (new MenuModel())->getMenuList(MenuModel::MENU_TYPE_BACKEND);
+$menu_info = (new MenuModel())->getMenuList(MenuModel::MENU_TYPE_BACKEND);
 
 $notice = (new Config())->getEnv('backend/notice.default');
 ?>

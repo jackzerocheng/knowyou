@@ -73,7 +73,7 @@ use yii\helpers\Url;
                                     <a class="layui-btn layui-btn-mini menu_edit" data-id="<?=$menu['id'] ?>"><i class="iconfont icon-edit"></i> 编辑</a>
                                     <?php
                                     if ($menu['status'] != 1) {
-                                        echo "<a class=\"layui-btn layui-btn-danger layui-btn-mini\" href=\"".Url::to(['menu/delete',$menu['id']]) ."\"><i class=\"layui-icon\">&#xe640;</i> 删除</a>";
+                                        echo "<a class=\"layui-btn layui-btn-danger layui-btn-mini\" href=\"".Url::to(['menu/delete','id' => $menu['id']]) ."\"><i class=\"layui-icon\">&#xe640;</i> 删除</a>";
                                     }
                                     ?>
                                 </td>
@@ -98,7 +98,7 @@ use yii\helpers\Url;
                                             if ($child_menu['status'] == 1) {
                                                 //echo "<a class=\"layui-btn layui-btn-danger layui-btn-mini\" href=\"#\"><i class=\"layui-icon\">&#xe640;</i> 删除</a>";
                                             } else {
-                                                echo "<a class=\"layui-btn layui-btn-danger layui-btn-mini\" href=\"".Url::to(['menu/delete',$menu['id']]) ."\"><i class=\"layui-icon\">&#xe640;</i> 删除</a>";
+                                                echo "<a class=\"layui-btn layui-btn-danger layui-btn-mini\" href=\"".Url::to(['menu/delete','id' => $menu['id']]) ."\"><i class=\"layui-icon\">&#xe640;</i> 删除</a>";
                                             }
                                             ?>
 

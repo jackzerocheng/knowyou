@@ -79,7 +79,11 @@ class Menu extends ActiveRecord
     {
         if (!empty($condition) && is_array($condition)) {
             foreach ($condition as $k => $v) {
-                $db = $db->andWhere([$k => $v]);
+                if ($k == 'except_status') {
+                    $db = $db->andWhere("status != {$v}");
+                } else {
+                    $db = $db->andWhere([$k => $v]);
+                }
             }
         }
 

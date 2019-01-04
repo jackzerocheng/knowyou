@@ -32,6 +32,8 @@ class MenuController extends CommonController
 
     public function actionBackend()
     {
+        //TODO 权限控制
+
         //前台菜单
         $menuModel = new MenuModel();
         $backendMenuList = $menuModel->getMenuList($menuModel::MENU_TYPE_BACKEND, true);
@@ -150,7 +152,8 @@ class MenuController extends CommonController
             return $this->redirect([$path]);
         }
 
-        $rs = $menuModel->delete(['id' => $id]);
+        //$rs = $menuModel->delete(['id' => $id]);
+        $rs = $menuModel->update(['status' => $menuModel::MENU_STATUS_DELETED], ['id' => $id]);
         if (!$rs) {
             Yii::warning('delete menu info failed!id:'.$id, CATEGORIES_WARN);
             Yii::$app->session->setFlash('message', '删除菜单失败');
