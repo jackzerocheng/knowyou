@@ -27,14 +27,14 @@ class ArticleController extends CommonController
         $articleModel = new ArticleModel();
         $id = (new Request())->get('id');
         if (empty($id)) {
-            Yii::$app->session->setFlash('message', '对不起，你访问的页面不存在哦');
-            return $this->redirect(['site/index']);
+            Yii::$app->session->setFlash('front_error_message', '对不起，你访问的页面不存在哦');
+            return $this->redirect(['site/error']);
         }
 
         $articleInfo = $articleModel->getOneByCondition($id, ['id' => $id]);
         if (empty($articleInfo)) {
-            Yii::$app->session->setFlash('message', '主人，我没找到你想要的！');
-            return $this->redirect(['site/index']);
+            Yii::$app->session->setFlash('front_error_message', '主人，我没找到你想要的！');
+            return $this->redirect(['site/error']);
         }
         $readNumber = $articleModel->getReadNumber($id);
 

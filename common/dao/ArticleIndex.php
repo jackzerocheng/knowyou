@@ -59,6 +59,22 @@ class ArticleIndex extends ActiveRecord
     }
 
     /**
+     * @param $condition
+     * @param string $orderBy
+     * @param int $limit
+     * @param $offset
+     * @return mixed
+     */
+    public function getListByCondition($condition, $limit = 1000, $offset = 0, $orderBy = 'created_at desc')
+    {
+        $db = self::find()->from(self::$tableName);
+        $db = $this->handlerCondition($db, $condition);
+
+        $rs = $db->offset($offset)->limit($limit)->orderBy($orderBy)->asArray()->all();
+        return $rs;
+    }
+
+    /**
      * @param $db ActiveQuery
      * @param $condition
      * @return ActiveQuery

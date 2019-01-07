@@ -15,10 +15,20 @@ use Yii;
 
 class ArticleModel extends Model
 {
-    const ARTICLE_STATUS_NORMAL = 1;//正常
-    const ARTICLE_STATUS_FORBIDDEN = 2;//封禁，无法查看
-    const ARTICLE_STATUS_UNCOMMENT = 3;//无法评论
-    const ARTICLE_STATUS_DELETED = 4;//删除
+    const ARTICLE_STATUS_UNVERIFIED = 1;//待审核
+    const ARTICLE_STATUS_NORMAL = 2;//正常
+    const ARTICLE_STATUS_PRIVATE = 3;//隐私
+    const ARTICLE_STATUS_UNCOMMENT = 4;//无法评论
+    const ARTICLE_STATUS_DELETED = 5;//删除
+    const ARTICLE_STATUS_NOT_PASS = 6;//审核未通过
+    public $articleStatusMap = [
+        self::ARTICLE_STATUS_UNVERIFIED => '待审核',
+        self::ARTICLE_STATUS_NORMAL => '正常',
+        self::ARTICLE_STATUS_PRIVATE => '隐私',
+        self::ARTICLE_STATUS_UNCOMMENT => '无法评论',
+        self::ARTICLE_STATUS_DELETED => '删除',
+        self::ARTICLE_STATUS_NOT_PASS => '审核未通过'
+    ];
 
     const REDIS_ARTICLE_READ_NUMBER = 'know_you_article_read_number_';//文章阅读数 hash 有效期三天
     const REDIS_EXPIRE_TIME = 259200;//三天

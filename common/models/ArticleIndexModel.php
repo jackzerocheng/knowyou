@@ -23,6 +23,7 @@ class ArticleIndexModel extends Model
     /**
      * 按时间倒序获取文章！！！
      * 每次固定取N条
+     * 无法做分页。最多只能获取上一页或下一页
      * 依照MAXID来定位
      * @param int $maxID
      * @param int $limit
@@ -74,22 +75,93 @@ class ArticleIndexModel extends Model
     }
 
     /**
-     * 获取当前文章计数  -- 或者返货第一张表的最大值
+     * 批量查询获得文章列表
+     * 时间倒序
+     * 分页总数基于所有index表之和
+     * @param null $condition
+     * @param int $limit
+     * @param int $offset
+     * @return array
+     */
+    public function getListByCondition($condition = null, $limit = 10, $offset = 0)
+    {
+        $tableNumber = $this->getTableNumberArray($condition);
+        $total = 0;//所遍历的记录总数
+        $pass = 0;//前面表的数据量
+        foreach ($tableNumber as $k => $v) {
+            $total += $v;
+
+            if ($total > $offset) {
+                $finalOffset = $offset - $pass;
+                $finalKey = $k;
+                if (($total < ($offset + $limit)) && $k > 0)  {//当前表数据不够当页列表
+                    $lessNumber = $offset + $limit - $total;//不足的需要去下张表取
+                }
+                break;
+            }
+
+            $pass += $v;
+        }
+
+        if (!isset($finalOffset) || !isset($finalKey)) {
+            Yii::warning("no article message available", CATEGORIES_WARN);
+            return [];
+        }
+
+        $indexList = (new ArticleIndex($finalKey))->getListByCondition($condition, $limit, $finalOffset);
+        if ($lessNumber) {
+            $temp = (new ArticleIndex($finalKey -1))->getListByCondition($condition, $lessNumber, 0);
+            $indexList = array_merge($indexList, $temp);
+        }
+
+        $articleList = array();
+        if (!empty($indexList)) {
+            foreach ($indexList as $index) {
+                $articleList[] = (new ArticleModel())->getOneByCondition($index['article_id'], ['id' => $index['article_id']]);
+            }
+        }
+
+        return $articleList;
+    }
+
+    /**
+     * 获取所有文章总数
+     * 循环获取
+     * @param $condition
      * @return int
      */
     public function getArticleNumberCount($condition)
     {
-        $redis = Yii::$app->redis;
-        $nowCount = $redis->get(self::ARTICLE_NUMBER_COUNT);
-        $key = intval($nowCount / self::MAX_RECORD_NUMBER);
+        $tableNumber = $this->getTableNumberArray($condition);
 
         $total = 0;
-        while ($key >= 0) {
-            $total += (new ArticleIndex())->getCountByCondition($condition);
-            $key--;
+        if (!empty($tableNumber)) {
+            foreach ($tableNumber as $k => $v) {
+                $total += $v;
+            }
         }
 
         return $total;
+    }
+
+    /**
+     * 获取索引表计数数组
+     * 从后往前排列
+     * @param $condition
+     * @return array
+     */
+    public function getTableNumberArray($condition)
+    {
+        $nowCount = Yii::$app->redis->get(self::ARTICLE_NUMBER_COUNT);
+        $key = intval($nowCount / self::MAX_RECORD_NUMBER);
+
+        $rs = array();
+        while ($key >= 0) {
+            $rs[$key] = (new ArticleIndex($key))->getCountByCondition($condition);
+            $key--;
+        }
+
+        return $rs;
     }
 
     /**
