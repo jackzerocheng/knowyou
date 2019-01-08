@@ -13,6 +13,7 @@ use common\models\MenuModel;
 use common\models\ArticleIndexModel;
 use yii\web\Cookie;
 use Yii;
+use common\lib\CryptAes;
 
 class TestController extends CommonController
 {
@@ -20,18 +21,6 @@ class TestController extends CommonController
 
     public function actionIndex()
     {
-        $data = (new ArticleIndexModel())->getArticleByTime(5, 10);
-        //var_dump($data);
-
-        /*
-        $cookie = new Cookie(['name' => 'test', 'value' => 123]);
-        Yii::$app->response->cookies->add($cookie);
-        */
-
-        $cookies = Yii::$app->request->cookies;
-        $c = $cookies->getValue('test');
-        var_dump($c);
-
-
+        var_dump((new CryptAes(USER_AES_KEY))->encrypt('123456'));
     }
 }

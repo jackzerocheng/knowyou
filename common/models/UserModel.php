@@ -53,13 +53,16 @@ class UserModel extends Model
 
     public function validateLogin($attribute, $params)
     {
+        //base64解密
+        $this->password = base64_decode($this->password);
+
         if (!preg_match('/^\w{2,30}$/', $this->$attribute)) {
             $this->addError($attribute, '账号长度不正确');
         } elseif(strlen($this->password) < 6 || strlen($this->password) > 20) {
             $this->addError('password', '密码长度不正确');
         } elseif (!empty($this->uid)) {
             $userModel = new User($this->uid);
-            $user = $userModel::find()->where(['uid' => $this->attributes])->asArray()->one();
+            $user = $userModel::find()->where(['uid' => $this->uid])->asArray()->one();
             if (!$user) {
                 $this->addError($attribute, '账号不存在');
             } elseif ((new CryptAes(USER_AES_KEY))->encrypt($this->password) != $user['password']) {

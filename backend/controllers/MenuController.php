@@ -47,7 +47,7 @@ class MenuController extends CommonController
         return $this->render('backend', $data);
     }
 
-    //添加页 + insert操作
+    //添加页
     public function actionAdd()
     {
         $menuModel = new MenuModel();
@@ -70,20 +70,22 @@ class MenuController extends CommonController
     {
         $menuModel = new MenuModel();
         $data = Yii::$app->request->post();
+        if ($data['type'] == $menuModel::MENU_TYPE_FRONTEND) {
+            $key = 'front_message';
+        } elseif ($data['type'] == $menuModel::MENU_TYPE_BACKEND) {
+            $key = 'backend_message';
+        }
+
         $checked = $menuModel->checkData($data);//检查数据，出错会设置flash提示
         if ($checked) {
             $rs = $menuModel->insert($data);
             if ($rs) {
                 Yii::info('add menu;data:'.json_encode($data).';uid:'.$this->uid, CATEGORIES_INFO);
-                Yii::$app->session->setFlash('message', '添加菜单成功');
+                Yii::$app->session->setFlash($key, '添加菜单成功');
                 return true;
             }
 
-            if ($data['type'] == $menuModel::MENU_TYPE_FRONTEND) {
-                $key = 'front_message';
-            } elseif ($data['type'] == $menuModel::MENU_TYPE_BACKEND) {
-                $key = 'backend_message';
-            }
+
             Yii::$app->session->setFlash($key, '菜单添加失败');
             Yii::warning("insert data into menu failed!data:".json_encode($data), CATEGORIES_WARN);
             return false;
@@ -120,20 +122,22 @@ class MenuController extends CommonController
     {
         $menuModel = new MenuModel();
         $data = Yii::$app->request->post();
+        if ($data['type'] == $menuModel::MENU_TYPE_FRONTEND) {
+            $key = 'front_message';
+        } elseif ($data['type'] == $menuModel::MENU_TYPE_BACKEND) {
+            $key = 'backend_message';
+        }
+
         $checked = $menuModel->checkData($data);
         if ($checked) {
             $rs = $menuModel->update($data, ['id' => $data['id']]);
             if ($rs) {
                 Yii::info('update menu;data:'.json_encode($data).';uid:'.$this->uid, CATEGORIES_INFO);
-                Yii::$app->session->setFlash('message', '更新菜单成功');
+                Yii::$app->session->setFlash($key, '更新菜单成功');
                 return true;
             }
 
-            if ($data['type'] == $menuModel::MENU_TYPE_FRONTEND) {
-                $key = 'front_message';
-            } elseif ($data['type'] == $menuModel::MENU_TYPE_BACKEND) {
-                $key = 'backend_message';
-            }
+
             Yii::$app->session->setFlash($key, '菜单更新失败');
             Yii::warning('update menu info failed;data:'.json_encode($data), CATEGORIES_WARN);
             return false;

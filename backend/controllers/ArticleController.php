@@ -53,4 +53,10 @@ class ArticleController extends CommonController
 
         return $this->render('list', $data);
     }
+
+    //文章审核
+    public function actionVerify()
+    {
+
+    }
 }

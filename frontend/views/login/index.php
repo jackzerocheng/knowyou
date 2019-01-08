@@ -76,7 +76,6 @@
 </div>
 <!-- //content -->
 <script>
-    //嘘，这个秘密被你发现了
     function checkForm() {
         var passwd = document.getElementById('passwd');
         var base = new Base64();
