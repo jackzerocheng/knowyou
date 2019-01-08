@@ -1,14 +1,12 @@
 # knowyou
 # 简 · 默
+`仅用于个人学习开源，禁止任何未经允许的商业用途`
 
------
-> `仅用于个人学习开源，禁止任何未经允许的商业用途`
+## 项目参数
 
->  **分布式后端项目**
+>  **分布式Web项目**（微博社区）
 
-> **类微博社区**
-
-> 框架：yii2
+> 基础框架：yii2
 
 > 语言：PHP7+
 
@@ -18,21 +16,38 @@
 
 > 操作系统：centos7.5
 
-> 缓存：Redis
+> 缓存组件：Redis
 
 > 开发周期：每周更新
 
 ---
 
+## 系统截图
+
+![首页](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E9%A6%96%E9%A1%B5.png)
+![后台列表页](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E5%90%8E%E5%8F%B0%E5%88%97%E8%A1%A8%E9%A1%B5.png)
+![登录页](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E7%99%BB%E5%BD%95%E9%A1%B5.png)
+![文章列表](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E6%96%87%E7%AB%A0%E5%88%97%E8%A1%A8.png)
+![添加菜单](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E6%B7%BB%E5%8A%A0%E8%8F%9C%E5%8D%95.png)
 
 
+## 主要模块
+
+- frontend
+- 前台展示模块，主要包括网站首页展示，文章展示，论坛等等网站主体功能
+- 类似微博社区
+
+* backend 
+* 后台管理，进行站点管理
+* CMS
+* 后台采用layui
+* 链接：https://www.layui.com/doc/
 
 
-----
-* backend   后台管理
-* frontend  前台展示
-* api       请求接口
-----
+- api
+- 三方接口请求模块
+
+## 所用插件
 * Ueditor：引用富文本编辑器
 * 文档地址：http://fex.baidu.com/ueditor/#server-php
 
@@ -42,7 +57,8 @@
 * AES加密算法
 * RSA加密算法
 
----
+
+## 基础知识
 * 手动执行脚本方式：/项目根目录/yii /console下控制器名/方法名
 * 如 php /www/yii2/yii /test/index
 * 多个单词的controller用-划分
@@ -50,9 +66,7 @@
 ---
 * 定时任务配置：crontab
 
-----
-> 文章索引表，用于按时间顺序存储文章
-> 水平分表
+
 
 ----
 **关于环境配置**
@@ -63,8 +77,7 @@
 > 于入口文件index.php定义
 
 ----
-* 后台采用layui
-* 链接：https://www.layui.com/doc/
+
 
 -----
 * yii操作数据库
