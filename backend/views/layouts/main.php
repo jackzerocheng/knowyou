@@ -89,7 +89,7 @@ $notice = (new Config())->getEnv('backend/notice.default');
                 if (!empty($menu_info)) {
                     foreach ($menu_info as $_menu) {
                         if (empty($_menu['child_menu'])) {
-                            //输出一级菜单
+                            //没有子菜单的情况下输出一级菜单
                             ?>
                             <li class="layui-nav-item">
                                 <a href="<?=Url::to($_menu['url']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite><?=$_menu['name'] ?></cite></a>
@@ -100,13 +100,14 @@ $notice = (new Config())->getEnv('backend/notice.default');
                             //输出二级菜单
                             ?>
                             <li class="layui-nav-item layui-nav-itemed">
-                                <a href="<?=Url::to($_menu['url']) ?>">
+                                <a>
                                     <i class="iconfont icon-text" data-icon="icon-text"></i>
                                     <cite><?=$_menu['name'] ?></cite>
                                     <span class="layui-nav-more"></span>
                                 </a>
                                 <dl class="layui-nav-child">
                                     <?php
+                                    //子菜单
                                     foreach ($_menu['child_menu'] as $child_menu) {
                                         echo "<dd>
                                                 <a href=\"".$child_menu['url']."\"><i class=\"iconfont\" data-icon=\"\">

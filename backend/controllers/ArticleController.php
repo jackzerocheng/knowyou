@@ -9,7 +9,6 @@
 
 namespace backend\controllers;
 
-use common\dao\ArticleIndex;
 use common\models\ArticleIndexModel;
 use common\models\ArticleModel;
 use common\models\TagModel;
