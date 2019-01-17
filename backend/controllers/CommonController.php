@@ -22,8 +22,6 @@ class CommonController extends Controller
 
     public function init()
     {
-        parent::init();
-
         if ($this->requireLogin) {
             $this->requireLogin();
         }
@@ -33,7 +31,7 @@ class CommonController extends Controller
 
     public function requireLogin()
     {
-        if (!$this->uid = Yii::$app->session->get(AdminModel::ADMIN_USER_SESSION_KEY)) {
+        if (!$this->uid = (new AdminModel())->getSession()) {
             Yii::$app->session->setFlash('error', '登录后再访问');
             return Yii::$app->response->redirect(['login/index']);
         }

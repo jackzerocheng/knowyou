@@ -78,4 +78,9 @@ class AdminModel extends Model
     {
         return (new UserAdmin())->updateInfo($data, $condition);
     }
+
+    public function getSession()
+    {
+        return Yii::$app->session->get(self::ADMIN_USER_SESSION_KEY);
+    }
 }

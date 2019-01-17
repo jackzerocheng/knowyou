@@ -5,5 +5,4 @@ created_at timestamp not null default current_timestamp,
 status tinyint(4) not null default 1 comment '文章状态',
 PRIMARY key (`id`),
 unique key (`article_id`),
-index search_by_id (`article_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment = '文章索引表';

@@ -19,8 +19,6 @@ class LoginController extends CommonController
 
     public function init()
     {
-        parent::init();
-
         if ($this->uid) {
             return Yii::$app->response->redirect(['site/index']);
         }
