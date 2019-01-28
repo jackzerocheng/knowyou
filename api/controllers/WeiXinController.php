@@ -19,80 +19,132 @@ class WeiXinController extends CommonController
 
     public function actionIndex()
     {
-        /*
-         * 接入
-         */
-        /*
         $params = (new Request())->get();
-        if (empty($params) || empty($params['timestamp']) || empty($params['nonce']) || empty($params['signature'])) {
-            $this->outputJson('params_error');
+        Yii::warning('wei_xin get_params:'.json_encode($params), CATEGORIES_WARN);
+        if (isset($params['echostr'])) {//公众号接入时的验证
+            $this->valid($params);
+            exit();
         }
-
-        Yii::warning('wei_xin request:'.json_encode($params), CATEGORIES_WARN);
-        $tmpStr = $this->getSignature(WX_TOKEN, $params['timestamp'], $params['nonce']);
-        if ($params['signature'] == $tmpStr) {
-            echo $params['echostr'];
-        } else {
-            $this->outputJson('failed');
-        }
-        */
 
         /*
-         * 消息处理
+         * 接收消息并处理
          */
-        $params = (new Request())->get();
-        Yii::warning('wei_xin request:'.json_encode($params), CATEGORIES_WARN);
-        if (empty($params)
-            || empty($params['signature'])
-            || empty($params['timestamp'])
-            || empty($params['nonce'])
-            || empty($params['msg_signature'])
-        ) {
-           $this->outputJson('params_error');
-        }
-
-        $data = (new Request())->post();//获取加密消息
-        Yii::warning('解密前'.$data, CATEGORIES_WARN);
+        $data = file_get_contents("php://input");
+        Yii::warning('wei_xin post_data:'.$data, CATEGORIES_WARN);
         if (empty($data)) {
-            $this->outputJson('msg_content_null');
+            $this->outputJson('failed');
         }
 
+        libxml_disable_entity_loader(true);
+        $content = json_decode(json_encode(simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+
+        //消息解密 - 采用明文模式则不需要解密
+        $msg = '';
         $pc = new WxBizMsgCrypt(WX_TOKEN, WX_AES_KEY, WX_APP_ID);
-        $content = '';
-        //消息解密
-        $rs = $pc->decryptMsg($params['signature'], $params['timestamp'], $params['nonce'], $data, $content);
+        $rs = $pc->decryptMsg($params['signature'], $params['timestamp'], $params['nonce'], $content['Encrypt'], $msg);
         if ($rs != 0) {
-            $this->outputJson('failed');
-        }
-        Yii::warning('解密后:'.$content, CATEGORIES_WARN);
-        exit();
-
-
-        $xmlTree = new \DOMDocument();
-        $xmlTree->load($data);
-
-        $msgType = $xmlTree->getElementsByTagName('MsgType');
-        if ($msgType == 'text') {
-            $toUserName = $xmlTree->getElementsByTagName('ToUserName');
-            $fromUserName = $xmlTree->getElementsByTagName('FromUserName');
-            $createTime = $xmlTree->getElementsByTagName('CreateTime');
-            $content = $xmlTree->getElementsByTagName('Content');
-            $msgId = $xmlTree->getElementsByTagName('MsgId');
-
-            $content = $pc->decryptMsg();
+            $replyMsg = '消息处理失败';
         } else {
-            $this->outputJson('failed');
+            $replyMsg = '';
         }
 
+        //消息加密
+        $encryptMsg = '';
+        $pc->encryptMsg($replyMsg, $params['timestamp'], $params['nonce'], $encryptMsg);
+
+        $this->sendMsg($content, $encryptMsg);
     }
 
-    public function getSignature($token, $timestamp, $nonce)
+    /**
+     * 接入验证
+     * signature 微信加密签名
+     * timestamp 时间戳
+     * nonce 随机数
+     * echostr 随机字符串
+     * @param array $params
+     * @return bool
+     */
+    public function valid(array $params)
     {
-        $tmpArray = array($token, $timestamp, $nonce);
+        if (
+            empty($params)
+            || empty($params['timestamp'])
+            || empty($params['nonce'])
+            || empty($params['signature'])
+            || empty(['echostr'])
+        ) {
+           return false;
+        }
+
+        $tmpArray = array(WX_TOKEN, $params['timestamp'], $params['nonce']);
         sort($tmpArray, SORT_STRING);
         $tmpStr = implode($tmpArray);
         $tmpStr = sha1($tmpStr);
+        if ($params['signature'] == $tmpStr) {
+            echo $params['echostr'];//输出随机字符串
+            return true;
+        }
 
-        return $tmpStr;
+        return false;
+    }
+
+    /**
+     * 发送消息给公众号
+     * @param array $data
+     * @param string $msg
+     * @return bool
+     */
+    public function sendMsg($data = array(), $msg = '')
+    {
+        $format = "<xml>
+<ToUserName><![CDATA[%s]]></ToUserName>
+<FromUserName><![CDATA[%s]]></FromUserName>
+<CreateTime>%s</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[%s]]></Content>
+</xml>";
+
+        $result = sprintf($format, $data['ToUserName'], $data['FromUserName'], time(), $msg);
+        echo $result;
+        return true;
+    }
+
+    /**
+     * 价值一个亿的AI核心代码
+     * @param string $msg
+     * @return mixed|string
+     */
+    public function dealMsg($msg = '')
+    {
+        $key = [',','.','?','，','。','？', '吗','嘛','吧','的'];
+
+        if (!empty($msg)) {
+            if (in_array(mb_substr($msg, -1),$key)) {
+                $msg = mb_substr($msg, 0, -1);
+            }
+
+            if (strpos($msg, '我') !== false && strpos($msg, '你') !== false) {
+                $content = '';
+                $len = mb_strlen($msg);
+                for ($i = 0; $i < $len; $i++) {
+                    $tmp = mb_substr($msg, $i, 1);
+                    if ($tmp == '我') {
+                        $tmp = '你';
+                    } elseif ($tmp == '你') {
+                        $tmp = '我';
+                    }
+
+                    $content = $content . $tmp;
+                }
+
+                return $content;
+            } elseif (strpos($msg, '我') !== false) {
+                $msg = str_replace('我', '你', $msg);
+            } elseif (strpos($msg, '你') !== false) {
+                $msg = str_replace('你', '我', $msg);
+            }
+        }
+
+        return $msg;
     }
 }
