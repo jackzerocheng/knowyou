@@ -24,6 +24,10 @@ return array(
         'code' => 100003,
         'msg'  => '获取token失败'
     ),
+    'msg_content_null' => array(
+        'code' => 100004,
+        'msg'  => '消息内容为空'
+    ),
     'login_failed' => array(
         'code' => 200001,
         'msg'  => '登录失败'

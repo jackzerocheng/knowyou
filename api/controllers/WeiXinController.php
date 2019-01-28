@@ -19,8 +19,14 @@ class WeiXinController extends CommonController
 
     public function actionIndex()
     {
-        //请求验证
+        /*
+         * 接入
+         */
+        /*
         $params = (new Request())->get();
+        if (empty($params) || empty($params['timestamp']) || empty($params['nonce']) || empty($params['signature'])) {
+            $this->outputJson('params_error');
+        }
 
         Yii::warning('wei_xin request:'.json_encode($params), CATEGORIES_WARN);
         $tmpStr = $this->getSignature(WX_TOKEN, $params['timestamp'], $params['nonce']);
@@ -29,11 +35,28 @@ class WeiXinController extends CommonController
         } else {
             $this->outputJson('failed');
         }
+        */
 
-        $this->outputJson('failed');
+        /*
+         * 消息处理
+         */
+        $params = (new Request())->get();
+        Yii::warning('wei_xin request:'.json_encode($params), CATEGORIES_WARN);
+        if (empty($params)
+            || empty($params['signature'])
+            || empty($params['timestamp'])
+            || empty($params['nonce'])
+            || empty($params['msg_signature'])
+        ) {
+           $this->outputJson('params_error');
+        }
 
         $data = (new Request())->post();//获取加密消息
         Yii::warning('解密前'.$data, CATEGORIES_WARN);
+        if (empty($data)) {
+            $this->outputJson('msg_content_null');
+        }
+
         $pc = new WxBizMsgCrypt(WX_TOKEN, WX_AES_KEY, WX_APP_ID);
         $content = '';
         //消息解密
