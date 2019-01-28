@@ -19,9 +19,32 @@ class WeiXinController extends CommonController
 
     public function actionIndex()
     {
-        $data = (new Request())->post();
+        //请求验证
+        $params = (new Request())->get();
 
+        Yii::warning('wei_xin request:'.json_encode($params), CATEGORIES_WARN);
+        $tmpStr = $this->getSignature(WX_TOKEN, $params['timestamp'], $params['nonce']);
+        if ($params['signature'] == $tmpStr) {
+            echo $params['echostr'];
+        } else {
+            $this->outputJson('failed');
+        }
+
+        $this->outputJson('failed');
+
+        $data = (new Request())->post();//获取加密消息
+        Yii::warning('解密前'.$data, CATEGORIES_WARN);
         $pc = new WxBizMsgCrypt(WX_TOKEN, WX_AES_KEY, WX_APP_ID);
+        $content = '';
+        //消息解密
+        $rs = $pc->decryptMsg($params['signature'], $params['timestamp'], $params['nonce'], $data, $content);
+        if ($rs != 0) {
+            $this->outputJson('failed');
+        }
+        Yii::warning('解密后:'.$content, CATEGORIES_WARN);
+        exit();
+
+
         $xmlTree = new \DOMDocument();
         $xmlTree->load($data);
 
@@ -38,34 +61,15 @@ class WeiXinController extends CommonController
             $this->outputJson('failed');
         }
 
-
-
-
-        /* 接入
-        $params = (new Request())->get();
-
-        Yii::warning('wei_xin request:'.json_encode($params), CATEGORIES_WARN);
-        $tmpArray = array(WX_TOKEN, $params['timestamp'], $params['nonce']);
-        sort($tmpArray, SORT_STRING);
-        $tmpStr = implode($tmpArray);
-        $tmpStr = sha1($tmpStr);
-
-        if ($params['signature'] == $tmpStr) {
-            echo $params['echostr'];
-            exit();
-        }
-
-        $this->outputJson('failed');
-        */
     }
 
     public function getSignature($token, $timestamp, $nonce)
     {
-        $tmpArray = array(WX_TOKEN, $timestamp, $nonce);
+        $tmpArray = array($token, $timestamp, $nonce);
         sort($tmpArray, SORT_STRING);
         $tmpStr = implode($tmpArray);
         $tmpStr = sha1($tmpStr);
 
-        return$tmpStr;
+        return $tmpStr;
     }
 }

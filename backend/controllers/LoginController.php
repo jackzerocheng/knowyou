@@ -30,7 +30,7 @@ class LoginController extends CommonController
     {
         return [
             'captcha' => [
-                'class' => 'yii\captcha\captchaAction',
+                'class' => 'yii\captcha\CaptchaAction',
                 'maxLength' => 4,
                 'minLength' => 4,
                 'width' => 80,

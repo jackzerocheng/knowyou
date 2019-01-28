@@ -1,6 +1,6 @@
 <?php
 /**
- * Message:
+ * Message: 测试Controller
  * User: jzc
  * Date: 2018/10/25
  * Time: 5:44 PM
@@ -14,6 +14,7 @@ use common\models\ArticleIndexModel;
 use yii\web\Cookie;
 use Yii;
 use common\lib\CryptAes;
+use common\lib\RandomString;
 
 class TestController extends CommonController
 {
@@ -21,6 +22,6 @@ class TestController extends CommonController
 
     public function actionIndex()
     {
-        var_dump((new CryptAes(USER_AES_KEY))->encrypt('123456'));
+        echo (new RandomString())->outputRandomString(16);
     }
 }

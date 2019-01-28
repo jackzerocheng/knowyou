@@ -49,8 +49,9 @@ class AdminModel extends Model
         $this->password = base64_decode($this->password);//base64解码
         $condition = [
             'admin_id' => $this->uid,
-            'password' => (new CryptAes(ADMIN_AES_KEY))->encrypt($this->password)
+            'password' => $pwd = (new CryptAes(ADMIN_AES_KEY))->encrypt($this->password)
         ];
+        Yii::info('login_check;real_password:'.$this->password.';encrypt_password:'.$pwd, CATEGORIES_INFO);
 
         $userInfo = (new UserAdmin())->getOneByCondition($condition);
         if (empty($userInfo)) {

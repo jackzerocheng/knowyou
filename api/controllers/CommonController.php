@@ -28,23 +28,24 @@ class CommonController extends Controller
     {
         parent::init();
 
-        if ($this->requireLogin) {
+        if ($this->requireLogin) {//登录态token校验
 
         }
 
-        if ($this->requireAccessToken) {
+        if ($this->requireAccessToken) {//微信access_token获取
             $this->WxAccessToken = Yii::$app->session->get(GetAccessToken::WX_ACCESS_TOKEN_KEY);
 
             if (!$this->WxAccessToken) {//没session则再次请求
                 $data = (new GetAccessToken())->getAccessToken(WX_APP_ID, WX_APP_SECRET);
+                if (!$data) {
+                    $this->outputJson('get_access_token_failed');
+                }
+
                 $this->WxAccessToken = $data['access_token'];
                 Yii::$app->session->set(GetAccessToken::WX_ACCESS_TOKEN_KEY, $data['access_token']);
                 Yii::$app->session->setTimeout($data['expires_in']);
             }
 
-            if (!$this->WxAccessToken) {
-                $this->outputJson('failed');
-            }
         }
     }
 

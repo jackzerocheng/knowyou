@@ -31,20 +31,21 @@ class GetAccessToken
     {
         $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={$appID}&secret={$secret}";
 
-        $response = (new Client())->get($url);
         Yii::warning("call wei_xin access_token", CATEGORIES_INFO);
 
         try {
-            $content = $response->getBody()->getContents();
+            $response = (new Client())->get($url);
         } catch (RequestException $e) {
             Yii::error("cannot request to api.weixin.qq.com!", CATEGORIES_ERROR);
-            throw new Exception();
+            return false;
         }
 
+        $content = $response->getBody()->getContents();
+        Yii::warning('request content:'.$content, CATEGORIES_WARN);
         $jsonContent = \GuzzleHttp\json_decode($content, true);
         if (isset($jsonContent['errcode'])) {
             Yii::error("get access token error;msg:".$content, CATEGORIES_ERROR);
-            throw new Exception();
+            return false;
         }
 
         return $jsonContent;

@@ -20,6 +20,10 @@ return array(
         'code' => 100002,
         'msg'  => '参数错误'
     ),
+    'get_access_token_failed' => array(
+        'code' => 100003,
+        'msg'  => '获取token失败'
+    ),
     'login_failed' => array(
         'code' => 200001,
         'msg'  => '登录失败'
