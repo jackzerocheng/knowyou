@@ -56,6 +56,7 @@ class WeiXinController extends CommonController
         }
         */
 
+        $content['Content'] = $this->dealMsg($content['Content']);
         $resMsg = $this->transferMsg($content, $content['Content']);//组合xml消息体
         Yii::warning('回复消息xml:'.$resMsg, CATEGORIES_WARN);
 
@@ -130,6 +131,14 @@ class WeiXinController extends CommonController
      */
     public function dealMsg($msg = '')
     {
+        if (strpos($msg, '<![CDATA[') !== false) {
+            $msg = substr($msg, 9);
+        }
+
+        if (strpos($msg, ']]>') !== false) {
+            $msg = substr($msg, 0, -3);
+        }
+
         $key = [',','.','?','，','。','？', '吗','嘛','吧','的'];
 
         if (!empty($msg)) {
