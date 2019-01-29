@@ -56,7 +56,7 @@ class WeiXinController extends CommonController
         }
         */
 
-        $resMsg = $this->transferMsg($content, $content['content']);//组合xml消息体
+        $resMsg = $this->transferMsg($content, $content['Content']);//组合xml消息体
         Yii::warning('回复消息xml:'.$resMsg, CATEGORIES_WARN);
 
         //消息加密
@@ -119,7 +119,7 @@ class WeiXinController extends CommonController
 <Content><![CDATA[%s]]></Content>
 </xml>";
 
-        $result = sprintf($format, $data['ToUserName'], $data['FromUserName'], time(), $msg);
+        $result = sprintf($format, $data['FromUserName'], $data['ToUserName'], time(), $msg);
         return $result;
     }
 
