@@ -15,7 +15,7 @@ use common\lib\wx\WxBizMsgCrypt;
 
 class WeiXinController extends CommonController
 {
-    public $requireAccessToken = true;
+    public $requireAccessToken = false;
 
     public function actionIndex()
     {
@@ -37,13 +37,14 @@ class WeiXinController extends CommonController
             exit();
         }
 
-        libxml_disable_entity_loader(true);
-        $content = json_decode(json_encode(simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+        //处理xml结构
+        //libxml_disable_entity_loader(true);
+        //$content = json_decode(json_encode(simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
 
         //消息解密 - 采用明文模式则不需要解密
         $msg = '';
         $pc = new WxBizMsgCrypt(WX_TOKEN, WX_AES_KEY, WX_APP_ID);
-        $rs = $pc->decryptMsg($params['signature'], $params['timestamp'], $params['nonce'], $content['Encrypt'], $msg);
+        $rs = $pc->decryptMsg($params['msg_signature'], $params['timestamp'], $params['nonce'], $data, $msg);
         Yii::warning('接收消息解密内容：'.$msg, CATEGORIES_WARN);
         if ($rs != 0) {
             echo '';
@@ -52,7 +53,7 @@ class WeiXinController extends CommonController
             $replyMsg = $this->dealMsg($msg);
         }
 
-        $resMsg = $this->transferMsg($content, $replyMsg);//获取xml结构体
+        $resMsg = $this->transferMsg($msg, $replyMsg);//组合xml消息体
         Yii::warning('回复消息xml:'.$resMsg, CATEGORIES_WARN);
 
         //消息加密
