@@ -102,7 +102,7 @@ class WxBizMsgCrypt
         $pc = new Prpcrypt($this->encodingAesKey);
 
         //提取密文
-        $xmlparse = new XMLParse;
+        $xmlparse = new Xmlparse();
         $array = $xmlparse->extract($postData);
         $ret = $array[0];
 
