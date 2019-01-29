@@ -22,17 +22,19 @@ class WeiXinController extends CommonController
         $params = (new Request())->get();
         Yii::warning('wei_xin get_params:'.json_encode($params), CATEGORIES_WARN);
         if (isset($params['echostr'])) {//公众号接入时的验证
-            $this->valid($params);
+            echo $this->valid($params);
             exit();
         }
 
         /*
          * 接收消息并处理
+         * 处理失败后直接回复空字符串或者content为success
          */
         $data = file_get_contents("php://input");
         Yii::warning('wei_xin post_data:'.$data, CATEGORIES_WARN);
         if (empty($data)) {
-            $this->outputJson('failed');
+            echo '';
+            exit();
         }
 
         libxml_disable_entity_loader(true);
@@ -42,17 +44,25 @@ class WeiXinController extends CommonController
         $msg = '';
         $pc = new WxBizMsgCrypt(WX_TOKEN, WX_AES_KEY, WX_APP_ID);
         $rs = $pc->decryptMsg($params['signature'], $params['timestamp'], $params['nonce'], $content['Encrypt'], $msg);
+        Yii::warning('接收消息解密内容：'.$msg, CATEGORIES_WARN);
         if ($rs != 0) {
-            $replyMsg = '消息处理失败';
+            echo '';
+            exit();
         } else {
-            $replyMsg = '';
+            $replyMsg = $this->dealMsg($msg);
         }
 
-        //消息加密
-        $encryptMsg = '';
-        $pc->encryptMsg($replyMsg, $params['timestamp'], $params['nonce'], $encryptMsg);
+        $resMsg = $this->transferMsg($content, $replyMsg);//获取xml结构体
+        Yii::warning('回复消息xml:'.$resMsg, CATEGORIES_WARN);
 
-        $this->sendMsg($content, $encryptMsg);
+        //消息加密
+        $time = time();
+        $nonce = '123456';
+        $pc->encryptMsg($replyMsg, $time, $nonce, $resMsg);
+        $encryptResMsg = "<xml><Encrypt><![CDATA[{$resMsg}]></Encrypt><TimeStamp>{$time}</TimeStamp><Nonce>{$nonce}</Nonce></xml>";
+        Yii::warning('加密后的回复消息xml:'.$encryptResMsg, CATEGORIES_WARN);
+
+        echo $encryptResMsg;
     }
 
     /**
@@ -62,7 +72,7 @@ class WeiXinController extends CommonController
      * nonce 随机数
      * echostr 随机字符串
      * @param array $params
-     * @return bool
+     * @return string
      */
     public function valid(array $params)
     {
@@ -73,7 +83,7 @@ class WeiXinController extends CommonController
             || empty($params['signature'])
             || empty(['echostr'])
         ) {
-           return false;
+           return '';
         }
 
         $tmpArray = array(WX_TOKEN, $params['timestamp'], $params['nonce']);
@@ -81,20 +91,19 @@ class WeiXinController extends CommonController
         $tmpStr = implode($tmpArray);
         $tmpStr = sha1($tmpStr);
         if ($params['signature'] == $tmpStr) {
-            echo $params['echostr'];//输出随机字符串
-            return true;
+            return $params['echostr'];//输出随机字符串
         }
 
-        return false;
+        return '';
     }
 
     /**
-     * 发送消息给公众号
+     * 生成回复消息的xml格式
      * @param array $data
      * @param string $msg
      * @return bool
      */
-    public function sendMsg($data = array(), $msg = '')
+    public function transferMsg($data = array(), $msg = '')
     {
         $format = "<xml>
 <ToUserName><![CDATA[%s]]></ToUserName>
@@ -105,8 +114,7 @@ class WeiXinController extends CommonController
 </xml>";
 
         $result = sprintf($format, $data['ToUserName'], $data['FromUserName'], time(), $msg);
-        echo $result;
-        return true;
+        return $result;
     }
 
     /**
