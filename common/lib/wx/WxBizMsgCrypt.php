@@ -62,7 +62,7 @@ class WxBizMsgCrypt
         $encrypt = $array[1];
 
         //生成安全签名
-        $sha1 = new SHA1;
+        $sha1 = new Sha1();
         $array = $sha1->getSHA1($this->token, $timeStamp, $nonce, $encrypt);
         $ret = $array[0];
         if ($ret != 0) {
@@ -71,7 +71,7 @@ class WxBizMsgCrypt
         $signature = $array[1];
 
         //生成发送的xml
-        $xmlparse = new XMLParse;
+        $xmlparse = new Xmlparse();
         $encryptMsg = $xmlparse->generate($encrypt, $signature, $timeStamp, $nonce);
         return ErrorCode::$OK;
     }
@@ -118,7 +118,7 @@ class WxBizMsgCrypt
         $touser_name = $array[2];
 
         //验证安全签名
-        $sha1 = new SHA1;
+        $sha1 = new Sha1();
         $array = $sha1->getSHA1($this->token, $timestamp, $nonce, $encrypt);
         $ret = $array[0];
 

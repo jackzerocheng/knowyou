@@ -42,7 +42,7 @@ class Prpcrypt
             $module = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
             $iv = substr($this->key, 0, 16);
             //使用自定义的填充方式对明文进行补位填充
-            $pkc_encoder = new PKCS7Encoder;
+            $pkc_encoder = new Pkcs7Encoder();
             $text = $pkc_encoder->encode($text);
             mcrypt_generic_init($module, $this->key, $iv);
             //加密
@@ -85,7 +85,7 @@ class Prpcrypt
 
         try {
             //去除补位字符
-            $pkc_encoder = new PKCS7Encoder;
+            $pkc_encoder = new Pkcs7Encoder();
             $result = $pkc_encoder->decode($decrypted);
             //去除16位随机字符串,网络字节序和AppId
             if (strlen($result) < 16)
