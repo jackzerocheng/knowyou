@@ -66,9 +66,8 @@ class Prpcrypt
      */
     public function decrypt($encrypted, $appid)
     {
-
         try {
-            //使用BASE64对需要解密的字符串进行解码
+             //使用BASE64对需要解密的字符串进行解码
             $ciphertext_dec = base64_decode($encrypted);
             $module = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
             $iv = substr($this->key, 0, 16);
@@ -78,6 +77,7 @@ class Prpcrypt
             $decrypted = mdecrypt_generic($module, $ciphertext_dec);
             mcrypt_generic_deinit($module);
             mcrypt_module_close($module);
+
         } catch (Exception $e) {
             return array(ErrorCode::$DecryptAESError, null);
         }

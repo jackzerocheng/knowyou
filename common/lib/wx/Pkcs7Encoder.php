@@ -9,8 +9,6 @@
 
 namespace common\lib\wx;
 
-use yii\base\Exception;
-
 
 /**
  * PKCS7Encoder class

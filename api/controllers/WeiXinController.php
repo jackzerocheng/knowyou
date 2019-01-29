@@ -22,6 +22,7 @@ class WeiXinController extends CommonController
         $params = (new Request())->get();
         Yii::warning('wei_xin get_params:'.json_encode($params), CATEGORIES_WARN);
         if (isset($params['echostr'])) {//公众号接入时的验证
+            Yii::warning('update config', CATEGORIES_WARN);
             echo $this->valid($params);
             exit();
         }
@@ -38,10 +39,11 @@ class WeiXinController extends CommonController
         }
 
         //处理xml结构
-        //libxml_disable_entity_loader(true);
-        //$content = json_decode(json_encode(simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+        libxml_disable_entity_loader(true);
+        $content = json_decode(json_encode(simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
 
         //消息解密 - 采用明文模式则不需要解密
+        /*
         $msg = '';
         $pc = new WxBizMsgCrypt(WX_TOKEN, WX_AES_KEY, WX_APP_ID);
         $rs = $pc->decryptMsg($params['msg_signature'], $params['timestamp'], $params['nonce'], $data, $msg);
@@ -52,18 +54,21 @@ class WeiXinController extends CommonController
         } else {
             $replyMsg = $this->dealMsg($msg);
         }
+        */
 
-        $resMsg = $this->transferMsg($msg, $replyMsg);//组合xml消息体
+        $resMsg = $this->transferMsg($content, $content['content']);//组合xml消息体
         Yii::warning('回复消息xml:'.$resMsg, CATEGORIES_WARN);
 
         //消息加密
+        /*
         $time = time();
         $nonce = '123456';
         $pc->encryptMsg($replyMsg, $time, $nonce, $resMsg);
         $encryptResMsg = "<xml><Encrypt><![CDATA[{$resMsg}]></Encrypt><TimeStamp>{$time}</TimeStamp><Nonce>{$nonce}</Nonce></xml>";
         Yii::warning('加密后的回复消息xml:'.$encryptResMsg, CATEGORIES_WARN);
+        */
 
-        echo $encryptResMsg;
+        echo $resMsg;
     }
 
     /**
