@@ -9,6 +9,7 @@
 
 namespace api\controllers;
 
+use common\models\WX\WxRulesModel;
 use yii\web\Request;
 use Yii;
 use common\lib\wx\WxBizMsgCrypt;
@@ -72,11 +73,14 @@ class WeiXinController extends CommonController
         }
         */
 
-
-        if (in_array($keys[0], $recordModel->usableType)) {
-            $content['Content'] = $this->dealMsg($content['Content']);
-        } else {
-            $content['Content'] = '小主对不起，暂时无法支持该类消息哦';
+        //消息类型处理
+        switch ($keys[0]) {
+            case $recordModel::MSG_TYPE_TEXT :
+                $content['Content'] = $this->dealTextMsg($content['Content']);
+                break;
+            default :
+                $content['Content'] = '小主对不起，暂时无法支持该类消息哦';
+                break;
         }
 
         $resMsg = $this->transferMsg($content, $content['Content']);//组合xml消息体
@@ -169,13 +173,28 @@ class WeiXinController extends CommonController
      * @param string $msg
      * @return mixed|string
      */
-    public function dealMsg($msg = '')
+    public function dealTextMsg($msg = '')
     {
         $msg = $this->getRealValue($msg);
 
-        $key = [',','.','?','，','。','？', '吗','嘛','吧','的','呀'];
+        /*
+         * 规则替换
+         */
+        $keyWords = (new WxRulesModel())->getRuleKeys(['status' => WxRulesModel::STATUS_OPEN, 'type' => WxRulesModel::TYPE_KEY_WORD]);
+        $illegalWord = (new WxRulesModel())->getRuleKeys(['status' => WxRulesModel::STATUS_OPEN, 'type' => WxRulesModel::TYPE_ILLEGAL_WORD]);
+        if (!empty($keyWords)) {//关键字回复
+            if (isset($ruleKeys[$msg])) {
+                return $ruleKeys[$msg];
+            }
+        }
 
-        if (!empty($msg)) {
+        if (!empty($illegalWord)) {//敏感词替换
+            
+        }
+
+        $key = [',','.','?','，','。','？', '吗','嘛','吧','的','呀','啊'];
+
+        if (!empty($msg) && strlen($msg) > 1) {
             if (in_array(mb_substr($msg, -1),$key)) {
                 $msg = mb_substr($msg, 0, -1);
             }

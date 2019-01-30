@@ -31,11 +31,6 @@ class WxRecordModel extends Model
         self::MSG_TYPE_LINK => 'link'
     ];
 
-    //目前支持的消息类型
-    public $usableType = [
-        self::MSG_TYPE_TEXT
-    ];
-
     public function insert($data)
     {
         return (new WxRecord())->insertData($data);
