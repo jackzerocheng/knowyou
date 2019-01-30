@@ -44,14 +44,16 @@ class WeiXinController extends CommonController
         $content = json_decode(json_encode(simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
 
         //样本记录数据库
+        $recordModel = new WxRecordModel();
+        $keys = getArrayKey($recordModel->typeMap, $content['MsgType']);//查找类型对应键值
         $data = [
             'mgs_id' => $content['MsgId'],
-            'msg_type' => $content['MsgType'],
+            'msg_type' => $keys[0],
             'to_user_name' => $content['ToUserName'],
             'from_user_name' => $content['FromUserName'],
             'content' => $content['Content'],
         ];
-        $recordModel = new WxRecordModel();
+
         if (!$recordModel->insert($data)) {
             Yii::error('wx insert record failed;data:'.json_encode($data),CATEGORIES_ERROR);
         }
@@ -70,7 +72,7 @@ class WeiXinController extends CommonController
         }
         */
 
-        $keys = getArrayKey($recordModel->typeMap, $content['MsgType']);//查找类型对应键值
+
         if (in_array($content['MsgType'], $keys[0])) {
             $content['Content'] = $this->dealMsg($content['Content']);
         } else {
