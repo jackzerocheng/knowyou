@@ -26,7 +26,7 @@ class WxRecord extends ActiveRecord
 
     public function insertData(array $data)
     {
-        $data['created_at'] = $data['created_at'] ?: NOW_DATE;
+        $data['created_at'] = !empty($data['created_at']) ? $data['created_at'] : NOW_DATE;
 
         $rs = self::getDb()->createCommand()->insert(self::tableName(), $data)->execute();
         return $rs;

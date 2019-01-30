@@ -33,7 +33,7 @@ class WxRecordModel extends Model
 
     //目前支持的消息类型
     public $usableType = [
-
+        self::MSG_TYPE_TEXT
     ];
 
     public function insert($data)

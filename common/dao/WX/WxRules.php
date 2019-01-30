@@ -26,7 +26,7 @@ class WxRules extends ActiveRecord
 
     public function insertData(array $data)
     {
-        $data['created_at'] = $data['created_at'] ?: NOW_DATE;
+        $data['created_at'] = empty($data['created_at']) ? NOW_DATE : $data['created_at'];
 
         $rs = Yii::$app->db->createCommand()->insert(self::tableName(), $data)->execute();
         return $rs;

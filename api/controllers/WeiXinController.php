@@ -47,7 +47,7 @@ class WeiXinController extends CommonController
         $recordModel = new WxRecordModel();
         $keys = getArrayKey($recordModel->typeMap, $this->getRealValue($content['MsgType']));//查找类型对应键值
         $data = [
-            'mgs_id' => $this->getRealValue($content['MsgId']),
+            'msg_id' => $this->getRealValue($content['MsgId']),
             'msg_type' => $keys[0],
             'to_user_name' => $this->getRealValue($content['ToUserName']),
             'from_user_name' => $this->getRealValue($content['FromUserName']),
