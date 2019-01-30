@@ -28,7 +28,7 @@ class WxRecord extends ActiveRecord
     {
         $data['created_at'] = $data['created_at'] ?: NOW_DATE;
 
-        $rs = Yii::$app->db->createCommand()->insert(self::tableName(), $data)->execute();
+        $rs = self::getDb()->createCommand()->insert(self::tableName(), $data)->execute();
         return $rs;
     }
 }

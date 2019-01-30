@@ -45,13 +45,13 @@ class WeiXinController extends CommonController
 
         //样本记录数据库
         $recordModel = new WxRecordModel();
-        $keys = getArrayKey($recordModel->typeMap, $content['MsgType']);//查找类型对应键值
+        $keys = getArrayKey($recordModel->typeMap, $this->getRealValue($content['MsgType']));//查找类型对应键值
         $data = [
-            'mgs_id' => $content['MsgId'],
+            'mgs_id' => $this->getRealValue($content['MsgId']),
             'msg_type' => $keys[0],
-            'to_user_name' => $content['ToUserName'],
-            'from_user_name' => $content['FromUserName'],
-            'content' => $content['Content'],
+            'to_user_name' => $this->getRealValue($content['ToUserName']),
+            'from_user_name' => $this->getRealValue($content['FromUserName']),
+            'content' => $this->getRealValue($content['Content']),
         ];
 
         if (!$recordModel->insert($data)) {
@@ -73,7 +73,7 @@ class WeiXinController extends CommonController
         */
 
 
-        if (in_array($content['MsgType'], $keys[0])) {
+        if (in_array($keys[0], $recordModel->usableType)) {
             $content['Content'] = $this->dealMsg($content['Content']);
         } else {
             $content['Content'] = '小主对不起，暂时无法支持该类消息哦';
@@ -147,19 +147,31 @@ class WeiXinController extends CommonController
     }
 
     /**
+     * 去除微信的外包层
+     * @param $str
+     * @return mixed
+     */
+    public function getRealValue($str)
+    {
+        if (strpos($str, '<![CDATA[') !== false) {
+            $msg = substr($str, 9);
+        }
+
+        if (strpos($str, ']]>') !== false) {
+            $msg = substr($str, 0, -3);
+        }
+
+        return $str;
+    }
+
+    /**
      * 价值一个亿的AI核心代码
      * @param string $msg
      * @return mixed|string
      */
     public function dealMsg($msg = '')
     {
-        if (strpos($msg, '<![CDATA[') !== false) {
-            $msg = substr($msg, 9);
-        }
-
-        if (strpos($msg, ']]>') !== false) {
-            $msg = substr($msg, 0, -3);
-        }
+        $msg = $this->getRealValue($msg);
 
         $key = [',','.','?','，','。','？', '吗','嘛','吧','的','呀'];
 
