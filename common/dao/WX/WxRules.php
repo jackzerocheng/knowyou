@@ -14,9 +14,14 @@ use yii\db\ActiveRecord;
 
 class WxRules extends ActiveRecord
 {
+    public static function getDb()
+    {
+        return Yii::$app->get('db_wx');
+    }
+
     public static function tableName()
     {
-        return '{{wx_rules}}';
+        return 'wx_rules';
     }
 
     public function insertData(array $data)

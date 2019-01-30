@@ -15,6 +15,7 @@ use yii\web\Cookie;
 use Yii;
 use common\lib\CryptAes;
 use common\lib\RandomString;
+use common\models\WX\WxRulesModel;
 
 class TestController extends CommonController
 {
@@ -23,5 +24,8 @@ class TestController extends CommonController
     public function actionIndex()
     {
         echo (new RandomString())->outputRandomString(16);
+
+        $a = (new WxRulesModel())->getListByCondition([]);
+        var_dump($a);
     }
 }

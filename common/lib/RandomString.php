@@ -54,7 +54,7 @@ class RandomString
         $strLen = strlen($finalString);
 
         while ($count > 0) {
-            $rs .= $finalString[mt_rand(0, $strLen)];
+            $rs .= $finalString[mt_rand(0, $strLen - 1)];
             $count--;
         }
 
