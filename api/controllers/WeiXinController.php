@@ -12,6 +12,7 @@ namespace api\controllers;
 use yii\web\Request;
 use Yii;
 use common\lib\wx\WxBizMsgCrypt;
+use common\models\WX\WxRecordModel;
 
 class WeiXinController extends CommonController
 {
@@ -42,6 +43,19 @@ class WeiXinController extends CommonController
         libxml_disable_entity_loader(true);
         $content = json_decode(json_encode(simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
 
+        //样本记录数据库
+        $data = [
+            'mgs_id' => $content['MsgId'],
+            'msg_type' => $content['MsgType'],
+            'to_user_name' => $content['ToUserName'],
+            'from_user_name' => $content['FromUserName'],
+            'content' => $content['Content'],
+        ];
+        $recordModel = new WxRecordModel();
+        if (!$recordModel->insert($data)) {
+            Yii::error('wx insert record failed;data:'.json_encode($data),CATEGORIES_ERROR);
+        }
+
         //消息解密 - 采用明文模式则不需要解密
         /*
         $msg = '';
@@ -56,7 +70,13 @@ class WeiXinController extends CommonController
         }
         */
 
-        $content['Content'] = $this->dealMsg($content['Content']);
+        $keys = getArrayKey($recordModel->typeMap, $content['MsgType']);//查找类型对应键值
+        if (in_array($content['MsgType'], $keys[0])) {
+            $content['Content'] = $this->dealMsg($content['Content']);
+        } else {
+            $content['Content'] = '小主对不起，暂时无法支持该类消息哦';
+        }
+
         $resMsg = $this->transferMsg($content, $content['Content']);//组合xml消息体
         Yii::warning('回复消息xml:'.$resMsg, CATEGORIES_WARN);
 
@@ -139,7 +159,7 @@ class WeiXinController extends CommonController
             $msg = substr($msg, 0, -3);
         }
 
-        $key = [',','.','?','，','。','？', '吗','嘛','吧','的'];
+        $key = [',','.','?','，','。','？', '吗','嘛','吧','的','呀'];
 
         if (!empty($msg)) {
             if (in_array(mb_substr($msg, -1),$key)) {

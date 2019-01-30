@@ -87,6 +87,27 @@ function quickSortToArray($arr, $index, $asc = true)
     return array_merge($arr_left, array($key), $arr_right);
 }
 
+/**
+ * 获取数组中对应值的键
+ * 考虑可能存在重复值，返回数组，若是唯一值取array[0]
+ * @param array $array
+ * @param $value
+ * @return array
+ */
+function getArrayKey(array $array, $value)
+{
+    $rs = array();
+    if (!empty($array) && is_array($array)) {
+        foreach ($array as $k => $v) {
+            if ($v == $value) {
+                $rs[] = $k;
+            }
+        }
+    }
+
+    return $rs;
+}
+
 function getEnvParam($key, $default = '')
 {
     if (getenv($key)) {
