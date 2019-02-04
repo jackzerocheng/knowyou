@@ -158,11 +158,11 @@ class WeiXinController extends CommonController
     public function getRealValue($str)
     {
         if (strpos($str, '<![CDATA[') !== false) {
-            $msg = substr($str, 9);
+            $str = substr($str, 9);
         }
 
         if (strpos($str, ']]>') !== false) {
-            $msg = substr($str, 0, -3);
+            $str = substr($str, 0, -3);
         }
 
         return $str;
@@ -189,7 +189,7 @@ class WeiXinController extends CommonController
         }
 
         if (!empty($illegalWord)) {//敏感词替换
-            
+
         }
 
         $key = [',','.','?','，','。','？', '吗','嘛','吧','的','呀','啊'];
