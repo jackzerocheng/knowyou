@@ -193,7 +193,7 @@ class WeiXinController extends CommonController
         //长字符串下大量敏感词会消耗大量计算时间
         if (!empty($illegalWord)) {//敏感词替换
             foreach ($illegalWord as $_key => $value) {
-                if (strpos($msg, $_key) !== false) {
+                if (mb_strpos($msg, $_key) !== false) {
                     $msg = str_replace($_key, $value, $msg);
                 }
             }
