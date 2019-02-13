@@ -246,13 +246,12 @@ class WeiXinController extends CommonController
     public function welcomeBySub(array $userInfo)
     {
         $wxUserModel = new WxUserModel();
-        $key = getArrayKey($wxUserModel->eventMap, $this->getRealValue($userInfo['Event']));
         $data = [
             'to_user_name' => $this->getRealValue($userInfo['ToUserName']),
             'from_user_name' => $this->getRealValue($userInfo['FromUserName']),
             'create_time' => $this->getRealValue($userInfo['CreateTime']),
             'msg_type' => $this->getRealValue($userInfo['MsgType']),
-            'event' => $key[0]
+            'event' => $this->getRealValue($userInfo['Event'])
         ];
         if (!$wxUserModel->insert($data)) {
             Yii::error('insert wx user failed!data:'.json_encode($data), CATEGORIES_ERROR);
