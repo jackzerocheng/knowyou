@@ -51,7 +51,7 @@ class WeiXinController extends CommonController
          */
         if (isset($content['Event'])) {
             Yii::warning('New Subscribe', CATEGORIES_WARN);
-            echo $this->welcomeBySub($content);
+            echo $this->transferMsg($content, $this->welcomeBySub($content));
             exit();
         }
 
