@@ -11,6 +11,7 @@ namespace api\controllers;
 
 use common\lib\StringHelper;
 use common\models\WX\WxRulesModel;
+use common\models\WX\WxUserModel;
 use yii\web\Request;
 use Yii;
 use common\lib\wx\WxBizMsgCrypt;
@@ -44,6 +45,15 @@ class WeiXinController extends CommonController
         //处理xml结构
         libxml_disable_entity_loader(true);
         $content = json_decode(json_encode(simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+
+        /*
+         * 订阅消息/取消订阅
+         */
+        if (isset($content['Event'])) {
+            Yii::warning('New Subscribe', CATEGORIES_WARN);
+            echo $this->welcomeBySub($content);
+            exit();
+        }
 
         //样本记录数据库
         $recordModel = new WxRecordModel();
@@ -231,5 +241,24 @@ class WeiXinController extends CommonController
         }
 
         return $msg;
+    }
+
+    public function welcomeBySub(array $userInfo)
+    {
+        $wxUserModel = new WxUserModel();
+        $key = getArrayKey($wxUserModel->eventMap, $this->getRealValue($userInfo['Event']));
+        $data = [
+            'to_user_name' => $this->getRealValue($userInfo['ToUserName']),
+            'from_user_name' => $this->getRealValue($userInfo['FromUserName']),
+            'create_time' => $this->getRealValue($userInfo['CreateTime']),
+            'msg_type' => $this->getRealValue($userInfo['MsgType']),
+            'event' => $key[0]
+        ];
+        if (!$wxUserModel->insert($data)) {
+            Yii::error('insert wx user failed!data:'.json_encode($data), CATEGORIES_ERROR);
+        }
+
+        return "感谢关注本公众号！留言请发送#我要留言#留言内容，例如#我要留言#需要一份Java资料；
+        关键字回复请发送$关键字$;需要帮助请发送@帮助@；其他留言则由智能客服处理。感谢支持~~";
     }
 }
