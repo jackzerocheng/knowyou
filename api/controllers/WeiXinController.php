@@ -9,6 +9,7 @@
 
 namespace api\controllers;
 
+use common\lib\StringHelper;
 use common\models\WX\WxRulesModel;
 use yii\web\Request;
 use Yii;
@@ -182,18 +183,26 @@ class WeiXinController extends CommonController
          */
         $keyWords = (new WxRulesModel())->getRuleKeys(['status' => WxRulesModel::STATUS_OPEN, 'type' => WxRulesModel::TYPE_KEY_WORD]);
         $illegalWord = (new WxRulesModel())->getRuleKeys(['status' => WxRulesModel::STATUS_OPEN, 'type' => WxRulesModel::TYPE_ILLEGAL_WORD]);
+
         if (!empty($keyWords)) {//关键字回复
-            if (isset($ruleKeys[$msg])) {
-                return $ruleKeys[$msg];
+            if (isset($keyWords[$msg])) {
+                return $keyWords[$msg];
             }
         }
 
+        //长字符串下大量敏感词会消耗大量计算时间
         if (!empty($illegalWord)) {//敏感词替换
-
+            foreach ($illegalWord as $_key => $value) {
+                if (strpos($msg, $_key) !== false) {
+                    $msg = str_replace($_key, $value, $msg);
+                }
+            }
         }
 
+        /*
+         * 简单逻辑替换
+         */
         $key = [',','.','?','，','。','？', '吗','嘛','吧','的','呀','啊'];
-
         if (!empty($msg) && strlen($msg) > 1) {
             if (in_array(mb_substr($msg, -1),$key)) {
                 $msg = mb_substr($msg, 0, -1);

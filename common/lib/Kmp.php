@@ -1,6 +1,8 @@
 <?php
 /**
  * Message: KMP算法
+ * PHP中strpos/mb_strpos函数实际上也提供了相同的功能
+ * Java中indexOf
  * User: jzc
  * Date: 2019/1/30
  * Time: 4:33 PM
@@ -43,6 +45,13 @@ class Kmp
         return $next;
     }
 
+    /**
+     * 输入主串和匹配串，返回所匹配的第一个位置
+     * 或者返回-1代表未找到
+     * @param $ts //主串
+     * @param $ps //待匹配串
+     * @return int
+     */
     public static function KMP($ts, $ps)
     {
         if (empty($ts) || empty($ps)) {
@@ -56,7 +65,15 @@ class Kmp
             if ($j == -1 || $ts[$i] == $ps[$j]) {//按顺序比对，j=-1说明在匹配串头部，后移目标串指针
                 $j++;
                 $i++;
+            } else {
+                $j = $next[$j];//不匹配，那么就跳转重新匹配
             }
+        }
+
+        if ($j == strlen($ps) - 1) {//匹配到匹配串
+            return $i - $j;
+        } else {//未能匹配到
+            return -1;
         }
     }
 }
