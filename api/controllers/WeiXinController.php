@@ -257,7 +257,7 @@ class WeiXinController extends CommonController
             Yii::error('insert wx user failed!data:'.json_encode($data), CATEGORIES_ERROR);
         }
 
-        return "感谢关注本公众号！留言请发送#我要留言#留言内容，例如#我要留言#需要一份Java资料；
-        关键字回复请发送$关键字$;需要帮助请发送@帮助@；其他留言则由智能客服处理。感谢支持~~";
+        return '感谢关注本公众号！留言请发送#我要留言#留言内容，例如#我要留言#需要一份Java资料；
+        关键字回复请发送$关键字$;需要帮助请发送@帮助@；其他留言则由智能客服处理。感谢支持~~';
     }
 }
