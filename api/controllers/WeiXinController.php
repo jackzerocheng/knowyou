@@ -203,12 +203,12 @@ class WeiXinController extends CommonController
          * 简单逻辑替换
          */
         $key = [',','.','?','，','。','？', '吗','嘛','吧','的','呀','啊'];
-        if (!empty($msg) && strlen($msg) > 1) {
+        if (!empty($msg) && mb_strlen($msg) > 1) {
             if (in_array(mb_substr($msg, -1),$key)) {
                 $msg = mb_substr($msg, 0, -1);
             }
 
-            if (strpos($msg, '我') !== false && strpos($msg, '你') !== false) {
+            if (mb_strpos($msg, '我') !== false && mb_strpos($msg, '你') !== false) {
                 $content = '';
                 $len = mb_strlen($msg);
                 for ($i = 0; $i < $len; $i++) {
@@ -223,9 +223,9 @@ class WeiXinController extends CommonController
                 }
 
                 return $content;
-            } elseif (strpos($msg, '我') !== false) {
+            } elseif (mb_strpos($msg, '我') !== false) {
                 $msg = str_replace('我', '你', $msg);
-            } elseif (strpos($msg, '你') !== false) {
+            } elseif (mb_strpos($msg, '你') !== false) {
                 $msg = str_replace('你', '我', $msg);
             }
         }
