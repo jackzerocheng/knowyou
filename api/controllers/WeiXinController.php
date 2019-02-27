@@ -20,8 +20,7 @@ use common\models\WX\WxRecordModel;
 class WeiXinController extends CommonController
 {
     public $requireAccessToken = false;
-
-    const HELP_REPLY_WORD = "感谢关注本公众号！留言请发送#我要留言#留言内容，例如#我要留言#需要一份Java资料;\n关键字回复请发送$关键字$;\n需要帮助请发送@帮助@；\n其他留言则由智能客服处理。感谢支持~~\n";
+    public $helpStr = "感谢关注本公众号！留言请发送#我要留言#留言内容，例如#我要留言#需要一份Java资料;\n关键字回复请发送$关键字$;\n需要帮助请发送@帮助@；\n其他留言则由智能客服处理。感谢支持~~\n";
 
     public function actionIndex()
     {
@@ -206,7 +205,7 @@ class WeiXinController extends CommonController
 
              return '';
          } elseif ($msg == '@帮助@') {
-             return self::HELP_REPLY_WORD;
+             return $this->helpStr;
          } else {
              $keyWords = (new WxRulesModel())->getRuleKeys(['status' => WxRulesModel::STATUS_OPEN,
                  'type' => WxRulesModel::TYPE_KEY_WORD]);
@@ -275,6 +274,6 @@ class WeiXinController extends CommonController
         }
         Yii::warning('new user;name:'.$userInfo['FromUserName'], CATEGORIES_WARN);
 
-        return self::HELP_REPLY_WORD;
+        return $this->helpStr;
     }
 }
