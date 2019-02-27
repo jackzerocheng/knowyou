@@ -85,44 +85,22 @@ $notice = (new Config())->getEnv('backend/notice.default');
                 <li class="layui-nav-item">
                     <a href="<?=Url::to(['site/index']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>后台首页</cite></a>
                 </li>
-                <?php
-                if (!empty($menu_info)) {
-                    foreach ($menu_info as $_menu) {
-                        if (empty($_menu['child_menu'])) {
-                            //没有子菜单的情况下输出一级菜单
-                            ?>
-                            <li class="layui-nav-item">
-                                <a href="<?=Url::to($_menu['url']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite><?=$_menu['name'] ?></cite></a>
-                            </li>
-
-                            <?php
-                        } else {
-                            //输出二级菜单
-                            ?>
-                            <li class="layui-nav-item layui-nav-itemed">
-                                <a>
-                                    <i class="iconfont icon-text" data-icon="icon-text"></i>
-                                    <cite><?=$_menu['name'] ?></cite>
-                                    <span class="layui-nav-more"></span>
-                                </a>
-                                <dl class="layui-nav-child">
-                                    <?php
-                                    //子菜单
-                                    foreach ($_menu['child_menu'] as $child_menu) {
-                                        echo "<dd>
-                                                <a href=\"".$child_menu['url']."\"><i class=\"iconfont\" data-icon=\"\">
-                                                </i><cite>".$child_menu['name']."</cite></a>
-                                                </dd>";
-                                    }
-                                    ?>
-                                </dl>
-                            </li>
-                            <?php
-                        }
-                    }
-                }
-
-                ?>
+                <!-- 不要循环输出了 -->
+                <li class="layui-nav-item">
+                    <a href="<?=Url::to(['menu/index']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>菜单管理</cite></a>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a>
+                        <i class="iconfont icon-text" data-icon="icon-text"></i>
+                        <cite>name</cite>
+                        <span class="layui-nav-more"></span>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="<?=Url::to(['']) ?>"><i class="iconfont" data-icon=""></i><cite>name</cite></a>
+                        </dd>
+                    </dl>
+                </li>
             </ul>
         </div>
     </div>
