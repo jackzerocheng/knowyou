@@ -89,6 +89,9 @@ class WeiXinController extends CommonController
             case $recordModel::MSG_TYPE_TEXT :
                 $content['Content'] = $this->dealTextMsg($content['Content']);
                 break;
+            case $recordModel::MSG_TYPE_IMAGE :
+                $content['Content'] = '图片很美丽，但你更美丽哦~';
+                break;
             default :
                 $content['Content'] = '小主对不起，暂时无法支持该类消息哦';
                 break;
@@ -125,7 +128,7 @@ class WeiXinController extends CommonController
             || empty($params['timestamp'])
             || empty($params['nonce'])
             || empty($params['signature'])
-            || empty(['echostr'])
+            || empty($params['echostr'])
         ) {
            return '';
         }
@@ -188,59 +191,72 @@ class WeiXinController extends CommonController
     {
         $msg = $this->getRealValue($msg);
 
-        /*
-         * 规则替换
-         */
-        $keyWords = (new WxRulesModel())->getRuleKeys(['status' => WxRulesModel::STATUS_OPEN, 'type' => WxRulesModel::TYPE_KEY_WORD]);
-        $illegalWord = (new WxRulesModel())->getRuleKeys(['status' => WxRulesModel::STATUS_OPEN, 'type' => WxRulesModel::TYPE_ILLEGAL_WORD]);
+         if (mb_substr($msg, 0, 6) == '#我要留言#') {//留言处理
+             return '暂未开发该模块。。。Sorry，有问题QQ1304713342联系';
+         } elseif (mb_substr($msg, 0, 1) == '$' && mb_substr($msg, -1, 1) == '$') {//关键字
+             $keyWords = (new WxRulesModel())->getRuleKeys(['status' => WxRulesModel::STATUS_OPEN,
+                 'type' => WxRulesModel::TYPE_KEY_WORD]);
+             $input = mb_substr($msg, 1);
+             $input = mb_substr($input, 0, -1);
+             if (isset($keyWords[$input])) {
+                 return $keyWords[$input];
+             }
 
-        if (!empty($keyWords)) {//关键字回复
-            if (isset($keyWords[$msg])) {
-                return $keyWords[$msg];
-            }
-        }
+             return '';
+         } elseif ($msg == '@帮助@') {
+             return '感谢关注本公众号！留言请发送#我要留言#留言内容，例如#我要留言#需要一份Java资料；
+        关键字回复请发送$关键字$;需要帮助请发送@帮助@；其他留言则由智能客服处理。感谢支持~~';
+         } else {
+             $keyWords = (new WxRulesModel())->getRuleKeys(['status' => WxRulesModel::STATUS_OPEN,
+                 'type' => WxRulesModel::TYPE_KEY_WORD]);
+             if (isset($keyWords[$msg])) {
+                 return $keyWords[$msg];
+             }
 
-        //长字符串下大量敏感词会消耗大量计算时间
-        if (!empty($illegalWord)) {//敏感词替换
-            foreach ($illegalWord as $_key => $value) {
-                if (mb_strpos($msg, $_key) !== false) {
-                    $msg = str_replace($_key, $value, $msg);
-                }
-            }
-        }
+             $illegalWord = (new WxRulesModel())->getRuleKeys(['status' => WxRulesModel::STATUS_OPEN,
+                 'type' => WxRulesModel::TYPE_ILLEGAL_WORD]);
+             //长字符串下大量敏感词会消耗大量计算时间
+             if (!empty($illegalWord)) {//敏感词替换
+                 foreach ($illegalWord as $_key => $value) {
+                     if (mb_strpos($msg, $_key) !== false) {
+                         $msg = str_replace($_key, $value, $msg);
+                     }
+                 }
+             }
 
-        /*
-         * 简单逻辑替换
-         */
-        $key = [',','.','?','，','。','？', '吗','嘛','吧','的','呀','啊'];
-        if (!empty($msg) && mb_strlen($msg) > 1) {
-            if (in_array(mb_substr($msg, -1),$key)) {
-                $msg = mb_substr($msg, 0, -1);
-            }
+             /*
+             * 简单逻辑替换
+             */
+             $key = [',','.','?','，','。','？', '吗','嘛','吧','的','呀','啊'];
+             if (!empty($msg) && mb_strlen($msg) > 1) {
+                 if (in_array(mb_substr($msg, -1),$key)) {
+                     $msg = mb_substr($msg, 0, -1);
+                 }
 
-            if (mb_strpos($msg, '我') !== false && mb_strpos($msg, '你') !== false) {
-                $content = '';
-                $len = mb_strlen($msg);
-                for ($i = 0; $i < $len; $i++) {
-                    $tmp = mb_substr($msg, $i, 1);
-                    if ($tmp == '我') {
-                        $tmp = '你';
-                    } elseif ($tmp == '你') {
-                        $tmp = '我';
-                    }
+                 if (mb_strpos($msg, '我') !== false && mb_strpos($msg, '你') !== false) {
+                     $content = '';
+                     $len = mb_strlen($msg);
+                     for ($i = 0; $i < $len; $i++) {
+                         $tmp = mb_substr($msg, $i, 1);
+                         if ($tmp == '我') {
+                             $tmp = '你';
+                         } elseif ($tmp == '你') {
+                             $tmp = '我';
+                         }
 
-                    $content = $content . $tmp;
-                }
+                         $content = $content . $tmp;
+                     }
 
-                return $content;
-            } elseif (mb_strpos($msg, '我') !== false) {
-                $msg = str_replace('我', '你', $msg);
-            } elseif (mb_strpos($msg, '你') !== false) {
-                $msg = str_replace('你', '我', $msg);
-            }
-        }
+                     return $content;
+                 } elseif (mb_strpos($msg, '我') !== false) {
+                     $msg = str_replace('我', '你', $msg);
+                 } elseif (mb_strpos($msg, '你') !== false) {
+                     $msg = str_replace('你', '我', $msg);
+                 }
+             }
 
-        return $msg;
+             return $msg;
+         }
     }
 
     public function welcomeBySub(array $userInfo)
@@ -256,6 +272,7 @@ class WeiXinController extends CommonController
         if (!$wxUserModel->insert($data)) {
             Yii::error('insert wx user failed!data:'.json_encode($data), CATEGORIES_ERROR);
         }
+        Yii::warning('new user;name:'.$userInfo['FromUserName'], CATEGORIES_WARN);
 
         return '感谢关注本公众号！留言请发送#我要留言#留言内容，例如#我要留言#需要一份Java资料；
         关键字回复请发送$关键字$;需要帮助请发送@帮助@；其他留言则由智能客服处理。感谢支持~~';

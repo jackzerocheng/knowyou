@@ -1,6 +1,6 @@
 <?php
 /**
- * Message:
+ * Message: 公众号接收消息记录
  * User: jzc
  * Date: 2019/1/29
  * Time: 6:56 PM
