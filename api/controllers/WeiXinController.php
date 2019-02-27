@@ -20,7 +20,8 @@ use common\models\WX\WxRecordModel;
 class WeiXinController extends CommonController
 {
     public $requireAccessToken = false;
-    public $helpStr = "感谢关注本公众号！留言请发送#我要留言#留言内容，例如#我要留言#需要一份Java资料;\n关键字回复请发送$关键字$;\n需要帮助请发送@帮助@；\n其他留言则由智能客服处理。感谢支持~~\n";
+    public $helpStr = '感谢关注本公众号！留言请发送#我要留言#留言内容，例如#我要留言#需要一份Java资料;'
+    ."\n".'关键字回复请发送$关键字$;'."\n".'需要帮助请发送@帮助@；'."\n".'其他留言则由智能客服处理。感谢支持~~';
 
     public function actionIndex()
     {
