@@ -35,4 +35,14 @@ class WxRecordModel extends Model
     {
         return (new WxRecord())->insertData($data);
     }
+
+    public function getListByCondition($condition, $limit, $offset)
+    {
+        return (new WxRecord())->getListByCondition($condition, $limit, $offset);
+    }
+
+    public function getCountByCondition($condition)
+    {
+        return (new WxRecord())->getCountByCondition($condition);
+    }
 }

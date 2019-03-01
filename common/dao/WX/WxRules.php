@@ -32,6 +32,12 @@ class WxRules extends ActiveRecord
         return $rs;
     }
 
+    public function updateData(array $data)
+    {
+        $rs = self::getDb()->createCommand()->update(self::tableName(), $data)->execute();
+        return $rs;
+    }
+
     public function getOneByCondition($condition)
     {
         $db = self::find();
@@ -40,12 +46,32 @@ class WxRules extends ActiveRecord
         return $db->asArray()->one();
     }
 
-    public function getListByCondition($condition, $orderBy = 'created_at desc')
+    /**
+     * @param $condition
+     * @param string $orderBy
+     * @param int $limit
+     * @param $offset
+     * @return mixed
+     */
+    public function getListByCondition($condition, $limit = 1000, $offset = 0, $orderBy = 'created_at desc')
     {
-        $db = self::find();
-        $db = self::handlerCondition($db, $condition);
+        $db = self::find()->from(self::tableName());
+        $db = $this->handlerCondition($db, $condition);
 
-        return $db->orderBy($orderBy)->asArray()->all();
+        $rs = $db->offset($offset)->limit($limit)->orderBy($orderBy)->asArray()->all();
+        return $rs;
+    }
+
+    /**
+     * @param $condition
+     * @return int
+     */
+    public function getCountByCondition($condition)
+    {
+        $db = self::find()->from(self::tableName());
+        $db = $this->handlerCondition($db, $condition);
+
+        return intval($db->count());
     }
 
     public function handlerCondition($db, $condition)

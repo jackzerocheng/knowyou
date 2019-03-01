@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use yii\widgets\LinkPager;
 ?>
 
 <div class="layui-body layui-form">
@@ -86,6 +87,9 @@ use yii\helpers\Url;
                         ?>
                         </tbody>
                     </table>
+                </div>
+                <div>
+                    <?=LinkPager::widget(['pagination' => $pages]) ?>
                 </div>
                 <div id="page"></div>
             </div>

@@ -15,7 +15,7 @@ AppAsset::register($this);
 $uid = Yii::$app->session->get(AdminModel::ADMIN_USER_SESSION_KEY);
 $user_info = (new AdminModel())->getOneByCondition(['admin_id' => $uid]);
 
-$menu_info = (new MenuModel())->getMenuList(MenuModel::MENU_TYPE_BACKEND);
+//$menu_info = (new MenuModel())->getMenuList(MenuModel::MENU_TYPE_BACKEND);
 
 $notice = (new Config())->getEnv('backend/notice.default');
 ?>
@@ -92,12 +92,36 @@ $notice = (new Config())->getEnv('backend/notice.default');
                 <li class="layui-nav-item layui-nav-itemed">
                     <a>
                         <i class="iconfont icon-text" data-icon="icon-text"></i>
-                        <cite>name</cite>
+                        <cite>公众号管理</cite>
                         <span class="layui-nav-more"></span>
                     </a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="<?=Url::to(['']) ?>"><i class="iconfont" data-icon=""></i><cite>name</cite></a>
+                            <a href="<?=Url::to(['wx/index']) ?>"><i class="iconfont" data-icon=""></i><cite>留言管理</cite></a>
+                        </dd>
+                        <dd>
+                            <a href="<?=Url::to(['wx/user']) ?>"><i class="iconfont" data-icon=""></i><cite>用户管理</cite></a>
+                        </dd>
+                        <dd>
+                            <a href="<?=Url::to(['wx/rules']) ?>"><i class="iconfont" data-icon=""></i><cite>规则管理</cite></a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a>
+                        <i class="iconfont icon-text" data-icon="icon-text"></i>
+                        <cite>文章管理</cite>
+                        <span class="layui-nav-more"></span>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="<?=Url::to(['wx/index']) ?>"><i class="iconfont" data-icon=""></i><cite>留言管理</cite></a>
+                        </dd>
+                        <dd>
+                            <a href="<?=Url::to(['wx/user']) ?>"><i class="iconfont" data-icon=""></i><cite>用户管理</cite></a>
+                        </dd>
+                        <dd>
+                            <a href="<?=Url::to(['wx/rules']) ?>"><i class="iconfont" data-icon=""></i><cite>规则管理</cite></a>
                         </dd>
                     </dl>
                 </li>
