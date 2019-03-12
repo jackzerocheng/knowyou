@@ -22,6 +22,16 @@
 
 ---
 
+## 前言
+```html
+<div>部分文件涉及数据敏感性，需要手动添加</div>
+<ul>
+<li>knowoyu/common/const.php -- 包含系统基本常量参数,如密钥，时间戳等</li>
+<li>DB、REDIS、COOKIE等配置都写在了本地文件knowyou/common/config/main-local.php</li>
+</ul>
+
+```
+
 ## 系统截图
 
 ![首页](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E9%A6%96%E9%A1%B5.png)
@@ -30,6 +40,9 @@
 ![文章列表](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E6%96%87%E7%AB%A0%E5%88%97%E8%A1%A8.png)
 ![添加菜单](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E6%B7%BB%E5%8A%A0%E8%8F%9C%E5%8D%95.png)
 
+
+## 微信模块
+![微信对话](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E5%BE%AE%E4%BF%A1%E5%AF%B9%E8%AF%9D.png)
 
 ## 主要模块
 
