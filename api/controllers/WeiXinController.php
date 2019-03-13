@@ -91,7 +91,7 @@ class WeiXinController extends CommonController
             'to_user_name' => $content['ToUserName'],
             'from_user_name' => $content['FromUserName'],
             'content' => $content['Content'],
-            'event' => $content['Event'],//事件
+            'event' => isset($content['Event']) ? $content['Event'] : '',//事件
             'created_at' => NOW_DATE
         ];
         if (!$recordModel->insert($data)) {
