@@ -17,7 +17,7 @@ use Yii;
 class WxController extends CommonController
 {
     /*
-     * 公众号留言列表页   -- 分页展示
+     * 公众号消息记录列表页   -- 分页展示
      */
     public function actionIndex()
     {

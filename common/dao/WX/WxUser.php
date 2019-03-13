@@ -32,6 +32,14 @@ class WxUser extends ActiveRecord
         return $rs;
     }
 
+    public function updateData(array $info, $condition)
+    {
+        $info['updated_at'] = empty($info['updated_at']) ? NOW_DATE : $info['updated_at'];
+
+        $rs = self::getDb()->createCommand()->update(self::tableName(), $info, $condition)->execute();
+        return $rs;
+    }
+
     public function getOneByCondition($condition)
     {
         $db = self::find();

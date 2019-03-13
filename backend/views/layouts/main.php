@@ -89,6 +89,9 @@ $notice = (new Config())->getEnv('backend/notice.default');
                 <li class="layui-nav-item">
                     <a href="<?=Url::to(['menu/index']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>菜单管理</cite></a>
                 </li>
+                <li class="layui-nav-item">
+                    <a href="<?=Url::to(['suggest/index']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>留言管理</cite></a>
+                </li>
                 <li class="layui-nav-item layui-nav-itemed">
                     <a>
                         <i class="iconfont icon-text" data-icon="icon-text"></i>
@@ -97,7 +100,7 @@ $notice = (new Config())->getEnv('backend/notice.default');
                     </a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="<?=Url::to(['wx/index']) ?>"><i class="iconfont" data-icon=""></i><cite>留言管理</cite></a>
+                            <a href="<?=Url::to(['wx/index']) ?>"><i class="iconfont" data-icon=""></i><cite>消息管理</cite></a>
                         </dd>
                         <dd>
                             <a href="<?=Url::to(['wx/user']) ?>"><i class="iconfont" data-icon=""></i><cite>用户管理</cite></a>

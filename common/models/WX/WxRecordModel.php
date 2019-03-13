@@ -21,6 +21,7 @@ class WxRecordModel extends Model
     const MSG_TYPE_SHORT_VIDEO = 5;//小视频
     const MSG_TYPE_LOCATION = 6;//地理位置
     const MSG_TYPE_LINK = 7;//链接消息
+    const MSG_TYPE_EVENT = 8;//事件
     public $typeMap = [
         self::MSG_TYPE_TEXT => 'text',
         self::MSG_TYPE_IMAGE => 'image',
@@ -28,7 +29,8 @@ class WxRecordModel extends Model
         self::MSG_TYPE_VIDEO => 'video',
         self::MSG_TYPE_SHORT_VIDEO => 'shortvideo',
         self::MSG_TYPE_LOCATION => 'location',
-        self::MSG_TYPE_LINK => 'link'
+        self::MSG_TYPE_LINK => 'link',
+        self::MSG_TYPE_EVENT => 'event'
     ];
 
     public function insert($data)

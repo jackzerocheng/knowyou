@@ -49,6 +49,7 @@ return [
             'class' => 'yii\caching\FileCache',
         ],
         'session' => [
+            'class' => 'yii\web\Session',
             'timeout' => 7200,
         ],
         /*

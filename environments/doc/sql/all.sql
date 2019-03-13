@@ -155,8 +155,9 @@ create table knowyou_suggest (
 id int(11) AUTO_INCREMENT comment '消息ID',
 uid int(11) not null default 0 comment '留言用户ID',
 content varchar(300) not null default '' comment '留言内容',
-created_at timestamp not null default current_timestamp comment '创建时间',
 status tinyint(4) not null default 1 comment '1未回复，2已回复，3删除',
+type tinyint(4) not null default 0 comment '留言类型，0未知',
+created_at timestamp not null default current_timestamp comment '创建时间',
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment = '留言表';
 
@@ -372,6 +373,11 @@ created_at timestamp not null default current_timestamp,
 unique key un_type (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment = '标签表';
 
+/*
+微信相关
+ */
+
+use wx;
 
 create table wx_record (
 id int(11) AUTO_INCREMENT comment '记录ID',
@@ -400,12 +406,10 @@ create table wx_rules (
 
 create table wx_user (
   id int(11) AUTO_INCREMENT comment '',
-  to_user_name varchar(50) not null default '' comment '开发者微信号',
-  from_user_name varchar(50) not null default '' comment '发送方账号openID',
-  create_time int(11) not null default 0 comment '消息创建时间',
-  msg_type varchar(10) not null default '' comment '消息类型',
-  event varchar(20) not null default '' comment '事件',
+  open_id varchar(50) not null default '' comment '发送方账号openID',
   status tinyint(4) not null default 1 comment '状态，1订阅者，2已取消',
-  created_at timestamp not null default current_timestamp comment '',
-  PRIMARY KEY (`id`)
+  created_at timestamp not null default current_timestamp comment '创建时间',
+  updated_at timestamp not null default current_timestamp comment '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uni_openid` (`open_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment = '微信用户表';

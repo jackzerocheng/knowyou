@@ -10,6 +10,7 @@
 namespace api\controllers;
 
 use common\lib\StringHelper;
+use common\models\SuggestModel;
 use common\models\WX\WxRulesModel;
 use common\models\WX\WxUserModel;
 use yii\web\Request;
@@ -48,28 +49,56 @@ class WeiXinController extends CommonController
         libxml_disable_entity_loader(true);
         $content = json_decode(json_encode(simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
 
-        /*
-         * 订阅消息/取消订阅
-         */
-        if (isset($content['Event'])) {
-            Yii::warning('New Subscribe', CATEGORIES_WARN);
-            echo $this->transferMsg($content, $this->welcomeBySub($content));
-            exit();
+        //处理数据
+        foreach ($content as $k => $v) {
+            $content[$k] = $this->getRealValue($v);
+        }
+
+        //检查是否已存储用户信息
+        $wxUserModel = new WxUserModel();
+        $userInfo = $wxUserModel->getOneByCondition(['open_id' => $content['FromUserName']]);
+        $status = $wxUserModel::EVENT_SUBSCRIBE;
+        if (isset($content['Event']) && $content['Event'] == 'unsubscribe') {//判断是否是取消订阅
+            $status = $wxUserModel::EVENT_UNSUBSCRIBE;
+        }
+        if (empty($userInfo)) {
+            $insertInfo = [
+                'open_id' => $content['FromUserName'],
+                'status' => $status,
+                'created_at' => $content['CreateTime']
+            ];
+            $wxUserModel->insert($insertInfo);
+        } elseif ($userInfo['status'] != $status) {
+            $updateInfo = [
+                'status' => $status,
+                'updated_at' => $content['CreateTime']
+            ];
+            $wxUserModel->update($updateInfo, ['id' => $userInfo['id']]);
         }
 
         //样本记录数据库
         $recordModel = new WxRecordModel();
-        $keys = getArrayKey($recordModel->typeMap, $this->getRealValue($content['MsgType']));//查找类型对应键值
+        $keys = getArrayKey($recordModel->typeMap, $content['MsgType']);//查找类型对应键值
         $data = [
-            'msg_id' => $this->getRealValue($content['MsgId']),
+            'msg_id' => $content['MsgId'],
             'msg_type' => $keys[0],
-            'to_user_name' => $this->getRealValue($content['ToUserName']),
-            'from_user_name' => $this->getRealValue($content['FromUserName']),
-            'content' => $this->getRealValue($content['Content']),
+            'to_user_name' => $content['ToUserName'],
+            'from_user_name' => $content['FromUserName'],
+            'content' => $content['Content'],
+            'event' => $content['Event'],//事件
+            'created_at' => $content['CreateTime']
         ];
-
         if (!$recordModel->insert($data)) {
             Yii::error('wx insert record failed;data:'.json_encode($data),CATEGORIES_ERROR);
+        }
+
+        /*
+         * 事件推送 -- 订阅消息/取消订阅
+         */
+        if (isset($content['Event'])) {
+            Yii::warning('New Event;'.$content['Event'], CATEGORIES_WARN);
+            echo $this->transferMsg($content, $this->helpStr);
+            exit();
         }
 
         //消息解密 - 采用明文模式则不需要解密
@@ -89,7 +118,7 @@ class WeiXinController extends CommonController
         //消息类型处理
         switch ($keys[0]) {
             case $recordModel::MSG_TYPE_TEXT :
-                $content['Content'] = $this->dealTextMsg($content['Content']);
+                $content['Content'] = $this->dealTextMsg($content['Content'], $userInfo['id']);
                 break;
             case $recordModel::MSG_TYPE_IMAGE :
                 $content['Content'] = '图片很美丽，但你更美丽哦~';
@@ -187,94 +216,96 @@ class WeiXinController extends CommonController
     /**
      * 价值一个亿的AI核心代码
      * @param string $msg
+     * @param $uid //微信用户表ID
      * @return mixed|string
      */
-    public function dealTextMsg($msg = '')
+    public function dealTextMsg($msg = '', $uid = 0)
     {
         $msg = $this->getRealValue($msg);
+        $finalStr = '';
 
-         if (mb_substr($msg, 0, 6) == '#我要留言#') {//留言处理
-             return '暂未开发该模块。。。Sorry，有问题QQ1304713342联系';
-         } elseif (mb_substr($msg, 0, 1) == '$' && mb_substr($msg, -1, 1) == '$' && mb_strlen($msg) > 2) {//关键字
-             $keyWords = (new WxRulesModel())->getRuleKeys(['status' => WxRulesModel::STATUS_OPEN,
-                 'type' => WxRulesModel::TYPE_KEY_WORD]);
-             $input = mb_substr($msg, 1);
-             $input = mb_substr($input, 0, -1);
-             if (isset($keyWords[$input])) {
-                 return $keyWords[$input];
-             }
+        switch ($msg) {
+            //留言
+            case mb_substr($msg, 0, 6) == '#我要留言#' && mb_strlen($msg) > 6 :
+                $msg = mb_substr($msg, 6);
+                $suggestModel = new SuggestModel();
+                $insertInfo = [
+                    'uid' => $uid,
+                    'content' => $msg,
+                    'status' => $suggestModel::STATUS_NOT_REPLY,
+                    'type' => $suggestModel::TYPE_WX
+                ];
+                $suggestModel->insert($insertInfo);
+                $finalStr = '您的留言已收到，感谢反馈！';
+                break;
+            //关键字
+            case mb_substr($msg, 0, 1) == '$' && mb_substr($msg, -1, 1) == '$' && mb_strlen($msg) > 2 :
+                $keyWords = (new WxRulesModel())->getRuleKeys(['status' => WxRulesModel::STATUS_OPEN,
+                    'type' => WxRulesModel::TYPE_KEY_WORD]);
+                $input = mb_substr($msg, 1);
+                $input = mb_substr($input, 0, -1);
+                if (isset($keyWords[$input])) {
+                    $finalStr = $keyWords[$input];
+                }
+                break;
+            //帮助
+            case $msg == '@帮助@' :
+                $finalStr = $this->helpStr;
+                break;
+            //默认，人工智障
+            default :
+                $keyWords = (new WxRulesModel())->getRuleKeys(['status' => WxRulesModel::STATUS_OPEN,
+                    'type' => WxRulesModel::TYPE_KEY_WORD]);
+                if (isset($keyWords[$msg])) {
+                    $finalStr = $keyWords[$msg];
+                    break;
+                }
 
-             return '';
-         } elseif ($msg == '@帮助@') {
-             return $this->helpStr;
-         } else {
-             $keyWords = (new WxRulesModel())->getRuleKeys(['status' => WxRulesModel::STATUS_OPEN,
-                 'type' => WxRulesModel::TYPE_KEY_WORD]);
-             if (isset($keyWords[$msg])) {
-                 return $keyWords[$msg];
-             }
+                $illegalWord = (new WxRulesModel())->getRuleKeys(['status' => WxRulesModel::STATUS_OPEN,
+                    'type' => WxRulesModel::TYPE_ILLEGAL_WORD]);
+                //长字符串下大量敏感词会消耗大量计算时间
+                if (!empty($illegalWord)) {//敏感词替换
+                    foreach ($illegalWord as $_key => $value) {
+                        if (mb_strpos($msg, $_key) !== false) {
+                            $msg = str_replace($_key, $value, $msg);
+                        }
+                    }
+                }
 
-             $illegalWord = (new WxRulesModel())->getRuleKeys(['status' => WxRulesModel::STATUS_OPEN,
-                 'type' => WxRulesModel::TYPE_ILLEGAL_WORD]);
-             //长字符串下大量敏感词会消耗大量计算时间
-             if (!empty($illegalWord)) {//敏感词替换
-                 foreach ($illegalWord as $_key => $value) {
-                     if (mb_strpos($msg, $_key) !== false) {
-                         $msg = str_replace($_key, $value, $msg);
-                     }
-                 }
-             }
+                /*
+                * 简单逻辑替换
+                */
+                $key = [',','.','?','，','。','？', '吗','嘛','吧','的','呀','啊'];
+                if (!empty($msg) && mb_strlen($msg) > 1) {
+                    if (in_array(mb_substr($msg, -1),$key)) {
+                        $msg = mb_substr($msg, 0, -1);
+                    }
 
-             /*
-             * 简单逻辑替换
-             */
-             $key = [',','.','?','，','。','？', '吗','嘛','吧','的','呀','啊'];
-             if (!empty($msg) && mb_strlen($msg) > 1) {
-                 if (in_array(mb_substr($msg, -1),$key)) {
-                     $msg = mb_substr($msg, 0, -1);
-                 }
+                    if (mb_strpos($msg, '我') !== false && mb_strpos($msg, '你') !== false) {
+                        $content = '';
+                        $len = mb_strlen($msg);
+                        for ($i = 0; $i < $len; $i++) {
+                            $tmp = mb_substr($msg, $i, 1);
+                            if ($tmp == '我') {
+                                $tmp = '你';
+                            } elseif ($tmp == '你') {
+                                $tmp = '我';
+                            }
 
-                 if (mb_strpos($msg, '我') !== false && mb_strpos($msg, '你') !== false) {
-                     $content = '';
-                     $len = mb_strlen($msg);
-                     for ($i = 0; $i < $len; $i++) {
-                         $tmp = mb_substr($msg, $i, 1);
-                         if ($tmp == '我') {
-                             $tmp = '你';
-                         } elseif ($tmp == '你') {
-                             $tmp = '我';
-                         }
+                            $content = $content . $tmp;
+                        }
 
-                         $content = $content . $tmp;
-                     }
-
-                     return $content;
-                 } elseif (mb_strpos($msg, '我') !== false) {
-                     $msg = str_replace('我', '你', $msg);
-                 } elseif (mb_strpos($msg, '你') !== false) {
-                     $msg = str_replace('你', '我', $msg);
-                 }
-             }
-
-             return $msg;
-         }
-    }
-
-    public function welcomeBySub(array $userInfo)
-    {
-        $wxUserModel = new WxUserModel();
-        $data = [
-            'to_user_name' => $this->getRealValue($userInfo['ToUserName']),
-            'from_user_name' => $this->getRealValue($userInfo['FromUserName']),
-            'create_time' => $this->getRealValue($userInfo['CreateTime']),
-            'msg_type' => $this->getRealValue($userInfo['MsgType']),
-            'event' => $this->getRealValue($userInfo['Event'])
-        ];
-        if (!$wxUserModel->insert($data)) {
-            Yii::error('insert wx user failed!data:'.json_encode($data), CATEGORIES_ERROR);
+                        $msg = $content;
+                    } elseif (mb_strpos($msg, '我') !== false) {
+                        $msg = str_replace('我', '你', $msg);
+                    } elseif (mb_strpos($msg, '你') !== false) {
+                        $msg = str_replace('你', '我', $msg);
+                    }
+                }
+                $finalStr = $msg;
+                break;
         }
-        Yii::warning('new user;name:'.$userInfo['FromUserName'], CATEGORIES_WARN);
 
-        return $this->helpStr;
+        return $finalStr;
     }
 }

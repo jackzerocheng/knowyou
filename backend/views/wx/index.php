@@ -36,6 +36,7 @@ use yii\widgets\LinkPager;
                             <th>消息类型</th>
                             <th>发送人</th>
                             <th>消息内容</th>
+                            <th>事件</th>
                             <th>发送时间</th>
                             <th>操作</th>
                         </tr>
@@ -53,6 +54,7 @@ use yii\widgets\LinkPager;
                                     <td><?=$type_map[$_record['msg_type']] ?></td>
                                     <td><?=$_record['from_user_name'] ?></td>
                                     <td><?=$_record['content'] ?></td>
+                                    <td><?=$_record['event'] ?></td>
                                     <td><?=$_record['created_at'] ?></td>
                                     <td>
                                         <a class="layui-btn layui-btn-mini news_edit" href="#"><i class="layui-icon">&#xe618;</i>通过</a>
