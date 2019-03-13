@@ -27,6 +27,11 @@ class WeiXinController extends CommonController
     public function actionIndex()
     {
         $params = (new Request())->get();
+        if (empty($params)) {
+            echo 'fail';
+            exit();
+        }
+
         Yii::warning('wei_xin get_params:'.json_encode($params), CATEGORIES_WARN);
         if (isset($params['echostr'])) {//公众号接入时的验证
             Yii::warning('update config', CATEGORIES_WARN);
@@ -61,17 +66,18 @@ class WeiXinController extends CommonController
         if (isset($content['Event']) && $content['Event'] == 'unsubscribe') {//判断是否是取消订阅
             $status = $wxUserModel::EVENT_UNSUBSCRIBE;
         }
+
         if (empty($userInfo)) {
             $insertInfo = [
                 'open_id' => $content['FromUserName'],
                 'status' => $status,
-                'created_at' => $content['CreateTime']
+                'created_at' => NOW_DATE
             ];
             $wxUserModel->insert($insertInfo);
         } elseif ($userInfo['status'] != $status) {
             $updateInfo = [
                 'status' => $status,
-                'updated_at' => $content['CreateTime']
+                'updated_at' => NOW_DATE
             ];
             $wxUserModel->update($updateInfo, ['id' => $userInfo['id']]);
         }
@@ -86,7 +92,7 @@ class WeiXinController extends CommonController
             'from_user_name' => $content['FromUserName'],
             'content' => $content['Content'],
             'event' => $content['Event'],//事件
-            'created_at' => $content['CreateTime']
+            'created_at' => NOW_DATE
         ];
         if (!$recordModel->insert($data)) {
             Yii::error('wx insert record failed;data:'.json_encode($data),CATEGORIES_ERROR);
