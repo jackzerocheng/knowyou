@@ -70,7 +70,7 @@ class Kmp
             }
         }
 
-        if ($j == strlen($ps) - 1) {//匹配到匹配串
+        if ($j == mb_strlen($ps)) {//匹配到匹配串
             return $i - $j;
         } else {//未能匹配到
             return -1;

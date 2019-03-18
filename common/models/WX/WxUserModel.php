@@ -1,6 +1,6 @@
 <?php
 /**
- * Message:
+ * Message: 微信用户数据
  * User: jzc
  * Date: 2019/2/13
  * Time: 1:56 PM
@@ -47,5 +47,22 @@ class WxUserModel extends Model
     public function getOneByCondition($condition)
     {
         return (new WxUser())->getOneByCondition($condition);
+    }
+
+    public function getCountByCondition($condition)
+    {
+        return (new WxUser())->getCountByCondition($condition);
+    }
+
+    public function getListByCondition($condition, $limit, $offset)
+    {
+        $list = (new WxUser())->getListByCondition($condition, $limit, $offset);
+        if (!empty($list)) {
+            foreach ($list as $k => $v) {
+                $list[$k]['status_msg'] = $this->eventMap[$v['status']];
+            }
+        }
+
+        return $list;
     }
 }

@@ -11,6 +11,7 @@ namespace backend\controllers;
 
 use common\models\WX\WxRecordModel;
 use common\models\WX\WxRulesModel;
+use common\models\WX\WxUserModel;
 use yii\data\Pagination;
 use Yii;
 
@@ -26,7 +27,10 @@ class WxController extends CommonController
         //分页组件
         $count = $recordModel->getCountByCondition([]);
         $page = new Pagination(['totalCount' => $count, 'pageSize' => '10']);
-        $recordList = $recordModel->getListByCondition([], $page->limit, $page->offset);
+        $recordList = array();
+        if ($count > 0) {
+            $recordList = $recordModel->getListByCondition([], $page->limit, $page->offset);
+        }
 
         return $this->render('index', ['data' => $recordList, 'pages' => $page, 'type_map' => $recordModel->typeMap]);
     }
@@ -36,14 +40,17 @@ class WxController extends CommonController
      */
     public function actionUser()
     {
-        $rulesModel = new WxRulesModel();
+        $wxUserModel = new WxUserModel();
 
-        //分页组件
-        $count = $rulesModel->getCountByCondition([]);
+        //分页
+        $count = $wxUserModel->getCountByCondition([]);
         $page = new Pagination(['totalCount' => $count, 'pageSize' => '10']);
-        $rulesList = $rulesModel->getListByCondition([], $page->limit, $page->offset);
+        $userList = array();
+        if ($count > 0) {
+            $userList = $wxUserModel->getListByCondition([], $page->limit, $page->offset);
+        }
 
-        return $this->render('rule', ['data' => $rulesList, 'pages' => $page]);
+        return $this->render('user', ['data' => $userList, 'pages' => $page]);
     }
 
     /*
@@ -56,7 +63,10 @@ class WxController extends CommonController
         //分页组件
         $count = $rulesModel->getCountByCondition([]);
         $page = new Pagination(['totalCount' => $count, 'pageSize' => '10']);
-        $rulesList = $rulesModel->getListByCondition([], $page->limit, $page->offset);
+        $rulesList = array();
+        if ($count > 0) {
+            $rulesList = $rulesModel->getListByCondition([], $page->limit, $page->offset);
+        }
 
         return $this->render('rule', ['data' => $rulesList, 'pages' => $page]);
     }

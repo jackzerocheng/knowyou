@@ -25,6 +25,11 @@ class SuggestModel extends Model
     const STATUS_NOT_REPLY = 1;//未回复
     const STATUS_REPLIED = 2;//已回复
     const STATUS_DELETED = 3;//已删除
+    public $statusMap = [
+        self::STATUS_NOT_REPLY => '未回复',
+        self::STATUS_REPLIED => '已回复',
+        self::STATUS_DELETED => '已删除'
+    ];
 
     public function insert($data)
     {
@@ -40,6 +45,18 @@ class SuggestModel extends Model
     {
         $list = (new Suggest())->getListByCondition($condition, $limit, $offset);
 
+        if (!empty($list)) {
+            foreach ($list as $k => $v) {
+                $list[$k]['status_msg'] = $this->statusMap[$v['status']];
+                $list[$k]['type_msg'] = $this->typeMap[$v['type']];
+            }
+        }
+
         return $list;
+    }
+
+    public function getCountByCondition($condition)
+    {
+        return (new Suggest())->getCountByCondition($condition);
     }
 }

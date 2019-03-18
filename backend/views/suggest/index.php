@@ -6,7 +6,7 @@ use yii\widgets\LinkPager;
 <div class="layui-body layui-form">
     <div class="layui-tab marg0" lay-filter="bodyTab" id="top_tabs_box">
         <ul class="layui-tab-title top_tab" id="top_tabs">
-            <li class="layui-this" lay-id=""><i class="iconfont icon-computer"></i> <cite>公众号留言列表</cite></li>
+            <li class="layui-this" lay-id=""><i class="iconfont icon-computer"></i> <cite>留言管理</cite></li>
         </ul>
         <ul class="layui-nav closeBox">
             <li class="layui-nav-item">
@@ -20,24 +20,14 @@ use yii\widgets\LinkPager;
                 </blockquote>
                 <div class="layui-form news_list">
                     <table class="layui-table">
-                        <colgroup>
-                            <col>
-                            <col>
-                            <col>
-                            <col>
-                            <col>
-                            <col>
-                            <col>
-                        </colgroup>
                         <thead>
                         <tr>
                             <th style="text-align:left;">留言ID</th>
-                            <th>消息ID</th>
-                            <th>消息类型</th>
-                            <th>发送人</th>
-                            <th>消息内容</th>
-                            <th>事件</th>
-                            <th>发送时间</th>
+                            <th>用户ID</th>
+                            <th>留言内容</th>
+                            <th>状态</th>
+                            <th>类型</th>
+                            <th>创建时间</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -50,15 +40,14 @@ use yii\widgets\LinkPager;
 
                                 <tr>
                                     <td align="left"><?=$_record['id'] ?></td>
-                                    <td><?=$_record['msg_id'] ?></td>
-                                    <td><?=$type_map[$_record['msg_type']] ?></td>
-                                    <td><?=$_record['from_user_name'] ?></td>
+                                    <td><?=$_record['uid'] ?></td>
                                     <td><?=$_record['content'] ?></td>
-                                    <td><?=$_record['event'] ?></td>
+                                    <td><?=$_record['status_msg'] ?></td>
+                                    <td><?=$_record['type_msg'] ?></td>
                                     <td><?=$_record['created_at'] ?></td>
                                     <td>
-                                        <a class="layui-btn layui-btn-mini news_edit" href="#"><i class="layui-icon">&#xe618;</i>通过</a>
-                                        <a class="layui-btn layui-btn-danger layui-btn-mini" href="#"><i class="layui-icon">&#x1006;</i>拒绝</a>
+                                        <a class="layui-btn layui-btn-mini news_edit" href="#"><i class="layui-icon">&#xe618;</i>xx</a>
+                                        <a class="layui-btn layui-btn-danger layui-btn-mini" href="#"><i class="layui-icon">&#x1006;</i>xx</a>
                                     </td>
                                 </tr>
 
