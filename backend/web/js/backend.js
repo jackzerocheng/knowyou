@@ -123,6 +123,26 @@ layui.config({
             })
             //layui.layer.full(backend);
         })
+
+        $(".rule_add").click(function(){
+            var backend = layui.layer.open({
+                title : "添加微信规则",
+                type : 2,
+                content : "index.php?r=wx%2Frule-add",
+                area : ['80%', '60%'],
+                success : function(layero, index){
+                    setTimeout(function(){
+                        layui.layer.tips('点击此处返回规则列表', '.layui-layer-setwin .layui-layer-close', {
+                            tips: 3
+                        });
+                    },500)
+                },
+                end : function () {
+                    location.reload();
+                }
+            })
+            //layui.layer.full(backend);
+        })
     }).resize();
 
     //弹层提交完后自动close
@@ -196,6 +216,28 @@ layui.config({
             title : "编辑菜单",
             type : 2,
             content : "index.php?r=menu%2Fedit&id=" + menu_id,
+            area : ['80%', '60%'],
+            success : function(layero, index){
+                setTimeout(function(){
+                    layui.layer.tips('点击此处返回菜单列表', '.layui-layer-setwin .layui-layer-close', {
+                        tips: 3
+                    });
+                },500)
+            },
+            end : function () {
+                location.reload();
+            }
+        })
+    })
+
+    //微信规则编辑
+    $("body").on("click",".rule_edit",function(){  //编辑
+        var _this = $(this);
+        var rule_id = _this.attr("data-id");
+        var rs = layui.layer.open({
+            title : "编辑规则",
+            type : 2,
+            content : "index.php?r=wx%2Frule-edit&id=" + rule_id,
             area : ['80%', '60%'],
             success : function(layero, index){
                 setTimeout(function(){

@@ -17,7 +17,7 @@ use yii\widgets\LinkPager;
             <div class="layui-tab-item layui-show internal-container">
                 <blockquote class="layui-elem-quote news_search">
                     <div class="layui-inline">
-                        <a class="layui-btn layui-btn-normal frontendMenu_add">添加规则</a>
+                        <a class="layui-btn layui-btn-normal rule_add">添加规则</a>
                     </div>
                     <div class="layui-inline">
                         <p style="color:red"><?=Yii::$app->session->getFlash('rule_message') ?></p>
@@ -68,8 +68,8 @@ use yii\widgets\LinkPager;
                                     <td><?=$_rule['type_msg'] ?></td>
                                     <td><?=$_rule['created_at'] ?></td>
                                     <td>
-                                        <a class="layui-btn layui-btn-mini news_edit" href="<?=Url::to(['wx-rules/update', 'id' => $_rule['id']]) ?>"><i class="layui-icon">&#xe618;</i>编辑</a>
-                                        <a class="layui-btn layui-btn-danger layui-btn-mini" href="<?=Url::to(['wx-rules/delete', 'id' => $_rule['id']]) ?>"><i class="layui-icon">&#x1006;</i>删除</a>
+                                        <a class="layui-btn layui-btn-mini rule_edit" data-id="<?=$data['id'] ?>"><i class="layui-icon">&#xe618;</i>编辑</a>
+                                        <a class="layui-btn layui-btn-danger layui-btn-mini" href="<?=Url::to(['wx-rules/delete', 'id' => $data['id']]) ?>"><i class="layui-icon">&#x1006;</i>删除</a>
                                     </td>
                                 </tr>
 

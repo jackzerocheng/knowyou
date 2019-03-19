@@ -47,23 +47,45 @@ class WxRulesController extends CommonController
     }
 
     /*
-     * 规则编辑
+     * 编辑规则
      */
     public function actionUpdate()
     {
-        $id = Yii::$app->request->get('id');
-        if (!$id) {
-            Yii::$app->session->setFlash('error_message', '异常操作编辑规则');
+        $data = Yii::$app->request->post();
+        if (empty($data['id'])) {
+            Yii::$app->session->setFlash('error_message', '数据错误');
             return $this->redirect(['site/error']);
         }
 
         $ruleModel = new WxRulesModel();
-        $ruleInfo = $ruleModel->getOneByCondition(['id' => $id]);
-        if (empty($rulesInfo)) {
-            Yii::$app->session->setFlash('rule_message', '规则信息不存在');
-            return $this->redirect(['wx/rules']);
+        $check = $ruleModel->checkData($data);
+        if ($check) {
+            $rs = $ruleModel->update($data, ['id' => $data['id']]);
+            if ($rs) {
+                Yii::$app->session->setFlash('rule_message', '编辑规则成功');
+                return $this->redirect(['wx/rules']);
+            }
         }
 
+        return false;
+    }
 
+    /*
+     * 添加规则
+     */
+    public function actionInsert()
+    {
+        $data = Yii::$app->request->post();
+        $ruleModel = new WxRulesModel();
+        $check = $ruleModel->checkData($data);
+        if ($check) {
+            $rs = $ruleModel->insert($data);
+            if ($rs) {
+                Yii::$app->session->setFlash('rule_message', '添加规则成功');
+                return $this->redirect(['wx/rules']);
+            }
+        }
+
+        return false;
     }
 }

@@ -32,9 +32,9 @@ class WxRules extends ActiveRecord
         return $rs;
     }
 
-    public function updateData(array $data)
+    public function updateData(array $data, $condition)
     {
-        $rs = self::getDb()->createCommand()->update(self::tableName(), $data)->execute();
+        $rs = self::getDb()->createCommand()->update(self::tableName(), $data, $condition)->execute();
         return $rs;
     }
 

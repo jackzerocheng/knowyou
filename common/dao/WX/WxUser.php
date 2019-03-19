@@ -51,7 +51,7 @@ class WxUser extends ActiveRecord
 
     public function getCountByCondition($condition)
     {
-        $db = self::find()->from(self::$tableName);
+        $db = self::find()->from(self::tableName());
         $db = $this->handlerCondition($db, $condition);
 
         return intval($db->count());

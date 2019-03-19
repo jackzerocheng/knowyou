@@ -6,7 +6,7 @@ use yii\widgets\LinkPager;
 <div class="layui-body layui-form">
     <div class="layui-tab marg0" lay-filter="bodyTab" id="top_tabs_box">
         <ul class="layui-tab-title top_tab" id="top_tabs">
-            <li class="layui-this" lay-id=""><i class="iconfont icon-computer"></i> <cite>公众号留言列表</cite></li>
+            <li class="layui-this" lay-id=""><i class="iconfont icon-computer"></i> <cite>消息管理</cite></li>
         </ul>
         <ul class="layui-nav closeBox">
             <li class="layui-nav-item">

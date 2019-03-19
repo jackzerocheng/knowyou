@@ -15,9 +15,11 @@ use Yii;
 
 class SuggestModel extends Model
 {
+    const TYPE_UNDEFINED = 0;
     const TYPE_WX = 1;//微信留言
     const TYPE_WEB = 2;//网站留言
     public $typeMap = [
+        self::TYPE_UNDEFINED => '未定义',
         self::TYPE_WX => '微信',
         self::TYPE_WEB => '网站'
     ];

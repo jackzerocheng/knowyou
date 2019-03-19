@@ -89,6 +89,19 @@ class WxController extends CommonController
             return $this->redirect(['wx/rules']);
         }
 
-        return $this->renderPartial('rule_edit', ['data' => $ruleInfo]);
+        $data = [
+            'data' => $ruleInfo,
+            'status_map' => $ruleModel->statusMap,
+            'type_map' => $ruleModel->typeMap
+        ];
+        return $this->renderPartial('rule_edit', $data);
+    }
+
+    /*
+     * 规则插入
+     */
+    public function actionRuleAdd()
+    {
+        return $this->renderPartial('rule_add');
     }
 }

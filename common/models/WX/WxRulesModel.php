@@ -11,6 +11,7 @@ namespace common\models\WX;
 
 use common\dao\WX\WxRules;
 use yii\base\Model;
+use Yii;
 
 class WxRulesModel extends Model
 {
@@ -49,6 +50,20 @@ class WxRulesModel extends Model
         return $rs;
     }
 
+    public function checkData($data)
+    {
+        $rs = false;
+        if (empty($data) || !isset($data['key_word']) || !isset($data['to_word'])) {
+            Yii::$app->session->setFlash('edit_rule_message', '数据错误');
+        } elseif (!empty($this->getOneByCondition(['key_word' => $data['key_word']]))) {
+            Yii::$app->session->setFlash('edit_rule_message', '关键字已存在');
+        } else {
+            $rs = true;
+        }
+
+        return $rs;
+    }
+
     public function getListByCondition($condition, $limit, $offset)
     {
         $list =  (new WxRules())->getListByCondition($condition, $limit, $offset);
@@ -70,8 +85,21 @@ class WxRulesModel extends Model
         return (new WxRules())->getOneByCondition($condition);
     }
 
-    public function update($data)
+    public function update($data, $condition)
     {
-        return (new WxRules())->updateData($data);
+        $rs = (new WxRules())->updateData($data, $condition);
+        if (!$rs) {
+            Yii::error("update data to wx_rule failed;data:".json_encode($data), CATEGORIES_ERROR);
+        }
+    }
+
+    public function insert($data)
+    {
+        $rs = (new WxRules())->insertData($data);
+        if (!$rs) {
+            Yii::error("insert data to wx_rule failed;data:".json_encode($data), CATEGORIES_ERROR);
+        }
+
+        return $rs;
     }
 }
