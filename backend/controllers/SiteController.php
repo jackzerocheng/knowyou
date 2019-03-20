@@ -3,6 +3,7 @@ namespace backend\controllers;
 
 use common\models\ArticleIndexModel;
 use common\models\BackendMessageModel;
+use common\models\SuggestModel;
 use common\models\UserIndexModel;
 use Yii;
 use common\models\AdminModel;
@@ -17,7 +18,7 @@ class SiteController extends CommonController
         $params = ['start_at' => TODAY,'end_at' => TOMORROW];
         //聚合汇总数量
         $countNumber = [
-            'today_message_number' => (new BackendMessageModel())->getCountByCondition($params),//今日留言
+            'today_message_number' => (new SuggestModel())->getCountByCondition($params),//今日留言
             'today_new_user_number' => (new UserIndexModel())->getUserCountNumber($params),//今日注册数
             'all_user_number' => (new UserIndexModel())->getUserCountNumber([]),//总用户量
             'today_article_number' => (new ArticleIndexModel())->getArticleNumberCount($params),//今日文章数
