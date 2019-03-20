@@ -10,6 +10,7 @@
 namespace common\dao\WX;
 
 use Yii;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 class WxRules extends ActiveRecord
@@ -74,11 +75,21 @@ class WxRules extends ActiveRecord
         return intval($db->count());
     }
 
+    /**
+     * @param ActiveQuery $db
+     * @param $condition
+     * @return ActiveQuery
+     */
     public function handlerCondition($db, $condition)
     {
         if (!empty($condition) && is_array($condition)) {
             foreach ($condition as $k => $v) {
-                $db = $db->andWhere([$k => $v]);
+                if ($k == 'not_status') {
+                    $db = $db->andWhere("status != {$v}");
+                } else {
+                    $db = $db->andWhere([$k => $v]);
+                }
+
             }
         }
 

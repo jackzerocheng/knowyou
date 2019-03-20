@@ -17,11 +17,10 @@ class WxRulesModel extends Model
 {
     const STATUS_OPEN = 1;
     const STATUS_CLOSED = 2;
-    const STATUS_DELETED = 3;
+    const STATUS_DELETED = 3;//已删除，不再展示
     public $statusMap = [
         self::STATUS_OPEN => '打开',
         self::STATUS_CLOSED => '关闭',
-        self::STATUS_DELETED => '删除'
     ];
 
     const TYPE_KEY_WORD = 1;//关键词自动回复
@@ -91,6 +90,8 @@ class WxRulesModel extends Model
         if (!$rs) {
             Yii::error("update data to wx_rule failed;data:".json_encode($data), CATEGORIES_ERROR);
         }
+
+        return $rs;
     }
 
     public function insert($data)

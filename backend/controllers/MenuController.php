@@ -82,7 +82,7 @@ class MenuController extends CommonController
             if ($rs) {
                 Yii::info('add menu;data:'.json_encode($data).';uid:'.$this->uid, CATEGORIES_INFO);
                 Yii::$app->session->setFlash($key, '添加菜单成功');
-                return true;
+                return $this->redirect(['site/close']);
             }
 
 
@@ -134,7 +134,7 @@ class MenuController extends CommonController
             if ($rs) {
                 Yii::info('update menu;data:'.json_encode($data).';uid:'.$this->uid, CATEGORIES_INFO);
                 Yii::$app->session->setFlash($key, '更新菜单成功');
-                return true;
+                return $this->redirect(['site/close']);
             }
 
 

@@ -38,6 +38,7 @@ class SiteController extends CommonController
         return Yii::$app->response->redirect(['login/index']);
     }
 
+    //错误页展示
     public function actionError()
     {
         $exception = Yii::$app->errorHandler->exception;
@@ -46,5 +47,10 @@ class SiteController extends CommonController
         }
 
         return $this->render('error');
+    }
+
+    public function actionClose()
+    {
+        return $this->renderPartial('close');
     }
 }

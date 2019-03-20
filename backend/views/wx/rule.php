@@ -68,8 +68,8 @@ use yii\widgets\LinkPager;
                                     <td><?=$_rule['type_msg'] ?></td>
                                     <td><?=$_rule['created_at'] ?></td>
                                     <td>
-                                        <a class="layui-btn layui-btn-mini rule_edit" data-id="<?=$data['id'] ?>"><i class="layui-icon">&#xe618;</i>编辑</a>
-                                        <a class="layui-btn layui-btn-danger layui-btn-mini" href="<?=Url::to(['wx-rules/delete', 'id' => $data['id']]) ?>"><i class="layui-icon">&#x1006;</i>删除</a>
+                                        <a class="layui-btn layui-btn-mini rule_edit" data-id="<?=$_rule['id'] ?>"><i class="layui-icon">&#xe618;</i>编辑</a>
+                                        <a class="layui-btn layui-btn-danger layui-btn-mini" href="<?=Url::to(['wx-rules/delete', 'id' => $_rule['id']]) ?>"><i class="layui-icon">&#x1006;</i>删除</a>
                                     </td>
                                 </tr>
 

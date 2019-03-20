@@ -61,11 +61,12 @@ class WxController extends CommonController
         $rulesModel = new WxRulesModel();
 
         //分页组件
-        $count = $rulesModel->getCountByCondition([]);
+        $condition = ['not_status' => $rulesModel::STATUS_DELETED];//排除已删除的
+        $count = $rulesModel->getCountByCondition($condition);
         $page = new Pagination(['totalCount' => $count, 'pageSize' => '10']);
         $rulesList = array();
         if ($count > 0) {
-            $rulesList = $rulesModel->getListByCondition([], $page->limit, $page->offset);
+            $rulesList = $rulesModel->getListByCondition($condition, $page->limit, $page->offset);
         }
 
         return $this->render('rule', ['data' => $rulesList, 'pages' => $page]);
@@ -102,6 +103,11 @@ class WxController extends CommonController
      */
     public function actionRuleAdd()
     {
-        return $this->renderPartial('rule_add');
+        $ruleModel = new WxRulesModel();
+        $data = [
+            'status_map' => $ruleModel->statusMap,
+            'type_map' => $ruleModel->typeMap
+        ];
+        return $this->renderPartial('rule_add', $data);
     }
 }

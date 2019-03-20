@@ -22,7 +22,7 @@ use yii\helpers\Url;
     <div class="layui-form-item">
         <label class="layui-form-label">关键词</label>
         <div class="layui-input-block">
-            <input type="text" name="key_word" class="layui-input" lay-verify="required" value="<?=$data['key_word']?:'' ?>" placeholder="请输入关键词">
+            <input type="text" name="key_word" class="layui-input" lay-verify="required" value="<?=$data['key_word']?:'' ?>" disabled>
         </div>
     </div>
     <div class="layui-form-item">
@@ -38,9 +38,9 @@ use yii\helpers\Url;
             if (!empty($type_map)) {
                 foreach ($type_map as $k => $v) {
                     if ($k == $data['type']) {
-                        echo "<input type='radio' name='status' value='{$k}' title='{$v}' checked>";
+                        echo "<input type='radio' name='type' value='{$k}' title='{$v}' checked>";
                     } else {
-                        echo "<input type='radio' name='status' value='{$k}' title='{$v}'>";
+                        echo "<input type='radio' name='type' value='{$k}' title='{$v}'>";
                     }
                 }
             }
@@ -70,7 +70,7 @@ use yii\helpers\Url;
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn close-layer" lay-submit="" lay-filter="addNews">立即提交</button>
+            <button class="layui-btn" lay-submit="" lay-filter="addNews">立即提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>

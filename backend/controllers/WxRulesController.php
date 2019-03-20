@@ -34,7 +34,7 @@ class WxRulesController extends CommonController
             return $this->redirect(['wx/rules']);
         }
 
-        $rs = $rulesModel->update(['status' => $rulesModel::STATUS_DELETED]);
+        $rs = $rulesModel->update(['status' => $rulesModel::STATUS_DELETED], ['id' => $id]);
         if (!$rs) {
             Yii::warning("delete rule info failed;id:".$id, CATEGORIES_WARN);
             Yii::$app->session->setFlash('rule_message', '删除规则失败');
@@ -58,16 +58,14 @@ class WxRulesController extends CommonController
         }
 
         $ruleModel = new WxRulesModel();
-        $check = $ruleModel->checkData($data);
-        if ($check) {
-            $rs = $ruleModel->update($data, ['id' => $data['id']]);
-            if ($rs) {
-                Yii::$app->session->setFlash('rule_message', '编辑规则成功');
-                return $this->redirect(['wx/rules']);
-            }
+        //$check = $ruleModel->checkData($data);
+        $rs = $ruleModel->update($data, ['id' => $data['id']]);
+        if ($rs) {
+            Yii::$app->session->setFlash('rule_message', '编辑规则成功');
+            return $this->redirect(['site/close']);
         }
 
-        return false;
+        return $this->redirect(['wx/rule-edit']);
     }
 
     /*
@@ -76,16 +74,17 @@ class WxRulesController extends CommonController
     public function actionInsert()
     {
         $data = Yii::$app->request->post();
+        //var_dump($data);die;
         $ruleModel = new WxRulesModel();
         $check = $ruleModel->checkData($data);
         if ($check) {
             $rs = $ruleModel->insert($data);
             if ($rs) {
                 Yii::$app->session->setFlash('rule_message', '添加规则成功');
-                return $this->redirect(['wx/rules']);
+                return $this->redirect(['site/close']);
             }
         }
 
-        return false;
+        return $this->redirect(['wx/rule-add']);
     }
 }
