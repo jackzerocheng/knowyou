@@ -140,10 +140,10 @@ class MenuController extends CommonController
 
             Yii::$app->session->setFlash($key, '菜单更新失败');
             Yii::warning('update menu info failed;data:'.json_encode($data), CATEGORIES_WARN);
-            return false;
+            return $this->redirect(['site/close']);
         }
 
-        return false;
+        return $this->redirect(['site/close']);
     }
 
     //delete操作

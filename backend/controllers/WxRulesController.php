@@ -65,7 +65,8 @@ class WxRulesController extends CommonController
             return $this->redirect(['site/close']);
         }
 
-        return $this->redirect(['wx/rule-edit']);
+        Yii::$app->session->setFlash('rule_message', '编辑规则失败');
+        return $this->redirect(['site/close']);
     }
 
     /*
@@ -85,6 +86,7 @@ class WxRulesController extends CommonController
             }
         }
 
+        Yii::$app->session->setFlash('edit_rule_message', '添加规则失败');
         return $this->redirect(['wx/rule-add']);
     }
 }

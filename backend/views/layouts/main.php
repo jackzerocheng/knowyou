@@ -92,6 +92,9 @@ $notice = (new Config())->getEnv('backend/notice.default');
                 <li class="layui-nav-item">
                     <a href="<?=Url::to(['suggest/index']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>留言管理</cite></a>
                 </li>
+                <li class="layui-nav-item">
+                    <a href="<?=Url::to(['banner/index']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>运营位管理</cite></a>
+                </li>
                 <li class="layui-nav-item layui-nav-itemed">
                     <a>
                         <i class="iconfont icon-text" data-icon="icon-text"></i>
@@ -118,13 +121,13 @@ $notice = (new Config())->getEnv('backend/notice.default');
                     </a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="<?=Url::to(['wx/index']) ?>"><i class="iconfont" data-icon=""></i><cite>留言管理</cite></a>
+                            <a href="<?=Url::to(['article/index']) ?>"><i class="iconfont" data-icon=""></i><cite>待审核文章</cite></a>
                         </dd>
                         <dd>
-                            <a href="<?=Url::to(['wx/user']) ?>"><i class="iconfont" data-icon=""></i><cite>用户管理</cite></a>
+                            <a href="<?=Url::to(['article/index']) ?>"><i class="iconfont" data-icon=""></i><cite>已发布文章</cite></a>
                         </dd>
                         <dd>
-                            <a href="<?=Url::to(['wx/rules']) ?>"><i class="iconfont" data-icon=""></i><cite>规则管理</cite></a>
+                            <a href="<?=Url::to(['article/index']) ?>"><i class="iconfont" data-icon=""></i><cite>新增文章</cite></a>
                         </dd>
                     </dl>
                 </li>
