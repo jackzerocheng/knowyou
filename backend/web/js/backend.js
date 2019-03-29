@@ -1,36 +1,12 @@
 var $,tab;
 layui.config({
     base : "js/"
-}).use(['bodyTab','form','element','layer','jquery'],function(){
+}).use(['form','element','layer','jquery'],function(){
     var form = layui.form(),
         layer = parent.layer === undefined ? layui.layer : parent.layer,
         element = layui.element();
-    laypage = layui.laypage;
-    $ = layui.jquery;
-    tab = layui.bodyTab();
-
-    //隐藏左侧导航
-    $(".hideMenu").click(function(){
-        $(".layui-layout-admin").toggleClass("showMenu");
-        //渲染顶部窗口
-        tab.tabMove();
-    })
-
-    //渲染左侧菜单
-    tab.render();
-
-    //手机设备的简单适配
-    var treeMobile = $('.site-tree-mobile'),
-        shadeMobile = $('.site-mobile-shade')
-
-    treeMobile.on('click', function(){
-        $('body').addClass('site-mobile');
-    });
-
-    shadeMobile.on('click', function(){
-        $('body').removeClass('site-mobile');
-    });
-
+    var laypage = layui.laypage;
+    var $ = layui.jquery;
 
     //
     //添加菜单
@@ -192,4 +168,27 @@ layui.config({
             }
         })
     })
+
+    //公告层
+    function showNotice(content){
+        layer.open({
+            type: 1,
+            title: "系统公告",
+            closeBtn: false,
+            area: '310px',
+            shade: 0.8,
+            id: 'layui',
+            btn: ['我知道了'],
+            moveType: 1,
+            content: '<div style="padding:15px 20px; text-align:justify; line-height: 22px; ' +
+            'text-indent:2em;border-bottom:1px solid #e2e2e2;"><p>'+content+'</p></div>',
+            success: function(layero){
+                var btn = layero.find('.layui-layer-btn');
+                btn.css('text-align', 'center');
+                btn.on("click",function(){
+                    window.sessionStorage.setItem("showNotice","true");
+                })
+            }
+        });
+    }
 })

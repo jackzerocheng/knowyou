@@ -57,7 +57,7 @@ $notice = (new Config())->getEnv('backend/notice.default');
             <!-- 顶部右侧菜单 -->
             <ul class="layui-nav top_menu">
                 <li class="layui-nav-item showNotice" id="showNotice" pc>
-                    <a href="javascript:showNotice();"><i class="iconfont icon-gonggao"></i><cite>系统公告</cite></a>
+                    <a href=""><i class="iconfont icon-gonggao"></i><cite>系统公告</cite></a>
                 </li>
                 <li class="layui-nav-item" pc>
                     <a href="javascript:;">
@@ -147,28 +147,7 @@ $notice = (new Config())->getEnv('backend/notice.default');
 <div class="site-mobile-shade"></div>
 
     <script>
-        //公告层
-        function showNotice(){
-            layer.open({
-                type: 1,
-                title: "系统公告",
-                closeBtn: false,
-                area: '310px',
-                shade: 0.8,
-                id: 'layui',
-                btn: ['我知道了'],
-                moveType: 1,
-                content: '<div style="padding:15px 20px; text-align:justify; line-height: 22px; ' +
-                'text-indent:2em;border-bottom:1px solid #e2e2e2;"><p><?=$notice ?></p></div>',
-                success: function(layero){
-                    var btn = layero.find('.layui-layer-btn');
-                    btn.css('text-align', 'center');
-                    btn.on("click",function(){
-                        window.sessionStorage.setItem("showNotice","true");
-                    })
-                }
-            });
-        }
+
     </script>
 
 <?php $this->endBody() ?>
