@@ -1,6 +1,6 @@
 <?php
 /**
- * Message:
+ * Message: 获取HTTP请求参数
  * User: jzc
  * Date: 2018/10/23
  * Time: 5:27 PM

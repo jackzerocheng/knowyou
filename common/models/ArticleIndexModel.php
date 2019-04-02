@@ -31,7 +31,7 @@ class ArticleIndexModel extends Model
      */
     public function getArticleByTime($maxID = 0, $limit = 10)
     {
-        $articleCount = Yii::$app->redis->get(self::ARTICLE_NUMBER_COUNT);//获取计数
+        $articleCount = Yii::$app->redis->get(self::ARTICLE_NUMBER_COUNT) ? : 0;//获取计数
         if (!$maxID) {
             $maxID = $articleCount + 1;
         }

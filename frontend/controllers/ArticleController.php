@@ -22,6 +22,7 @@ class ArticleController extends CommonController
 {
     public $layout = 'index';
 
+    //文章详情页
     public function actionIndex()
     {
         $articleModel = new ArticleModel();
@@ -49,6 +50,7 @@ class ArticleController extends CommonController
         return $this->render('article', $data);
     }
 
+    //文章列表页
     public function actionList()
     {
         $condition = array();
@@ -85,6 +87,7 @@ class ArticleController extends CommonController
         return $this->render('list', $data);
     }
 
+    //文章发表页
     public function actionCreate()
     {
         $this->checkLogin();
@@ -112,6 +115,7 @@ class ArticleController extends CommonController
         return $this->render('create', ['data' => $data]);
     }
 
+    //文章 - 时间线 - 列表
     public function actionTimeLine()
     {
         $maxID = (new Request())->get('max_id');//当前页的索引ID,由此计算上一页和下一页
