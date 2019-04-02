@@ -35,7 +35,7 @@ class SuggestModel extends Model
 
     public function insert($data)
     {
-        $rs = (new Suggest())->insert($data);
+        $rs = (new Suggest())->insertData($data);
         if (!$rs) {
             Yii::error('insert data to suggest failed;data:'.json_encode($data), CATEGORIES_ERROR);
         }

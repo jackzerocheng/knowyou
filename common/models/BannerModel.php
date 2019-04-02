@@ -26,18 +26,20 @@ class BannerModel extends Model
     ];
 
     //运营位类型
-    const TYPE_NORMAL_BANNER = 1;//普通文图类
-    const TYPE_AD =2;//广告类
-    const TYPE_INDEX_WORD_MESSAGE = 3;//首页滚动文字链消息
-    const TYPE_INDEX_ROLL_IMAGE = 4;//首页滚动大图
-    const TYPE_FOOTER_ROLL_IMAGE = 5;//底部滚动图片
+    const TYPE_NORMAL_BANNER       = 1;//普通文图类
+    const TYPE_AD                  = 2;//广告类
+    const TYPE_INDEX_WORD_MESSAGE  = 3;//首页滚动文字链消息
+    const TYPE_INDEX_ROLL_IMAGE    = 4;//首页滚动大图
+    const TYPE_FOOTER_ROLL_IMAGE   = 5;//底部滚动图片
+    const TYPE_INDEX_TOP_IMAGE     = 6;//首页顶部头图
 
     public $bannerTypeMap = [
         self::TYPE_NORMAL_BANNER => '普通图文类',
         self::TYPE_AD => '广告',
         self::TYPE_INDEX_WORD_MESSAGE => '首页滚动文字链消息',
         self::TYPE_INDEX_ROLL_IMAGE => '首页滚动大图',
-        self::TYPE_FOOTER_ROLL_IMAGE => '底部滚动图片'
+        self::TYPE_FOOTER_ROLL_IMAGE => '底部滚动图片',
+        self::TYPE_INDEX_TOP_IMAGE  => '首页顶部头图'
     ];
 
     //运营位状态

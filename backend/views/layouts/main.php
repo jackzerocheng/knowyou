@@ -32,7 +32,7 @@ $notice = (new Config())->getEnv('backend/notice.default');
     <meta name="format-detection" content="telephone=no">
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
-    <link rel="icon" href="<?=Url::to('@web/img/favicon.ico') ?>">
+    <link rel="icon" href="<?=Url::to('@web/favicon.ico') ?>">
     <?php $this->head() ?>
 </head>
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Message:
+ * Message: http请求响应
  * User: jzc
  * Date: 2018/10/23
  * Time: 4:52 PM

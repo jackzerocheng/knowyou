@@ -14,20 +14,33 @@ IndexAsset::register($this);
 
 //首页滚动信息
 $bannerModel = new BannerModel();
-$bannerWordCondition = [
-    'platform_id' => $bannerModel::PLATFORM_WEB,
-    'status' => $bannerModel::STATUS_SHOWING,
-    'type' => $bannerModel::TYPE_INDEX_WORD_MESSAGE,
-];
-$bannerWordList = $bannerModel->getListByCondition($bannerWordCondition);
 
-//底部轮播图
-$footerCondition = [
+$condition = [
     'platform_id' => $bannerModel::PLATFORM_WEB,
-    'status' => $bannerModel::STATUS_SHOWING,
-    'type' => $bannerModel::TYPE_FOOTER_ROLL_IMAGE
+    'status'      => $bannerModel::STATUS_SHOWING
 ];
-$bannerFooterImage = $bannerModel->getListByCondition($footerCondition);
+$bannerList = $bannerModel->getListByCondition($condition);
+
+$wordList = array();//首页滚动字幕
+$topImage = array();//首页顶部图片
+$footerImage = array();//首页底部滚动图片
+if (!empty($bannerList)) {
+    foreach ($bannerList as $k => $v) {
+        switch ($v['type']) {
+            case $bannerModel::TYPE_INDEX_WORD_MESSAGE :
+                $wordList[] = $v;
+                break;
+            case $bannerModel::TYPE_INDEX_TOP_IMAGE :
+                $topImage[] = $v;
+                break;
+            case $bannerModel::TYPE_FOOTER_ROLL_IMAGE :
+                $footerImage[] = $v;
+                break;
+            default :
+                break;
+        }
+    }
+}
 
 //控制按钮显示,用户信息
 $isLogin = false;
@@ -54,7 +67,7 @@ $menuList = (new MenuModel())->getMenuList();
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <?php $this->registerCsrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
-        <link rel="icon" href="<?=Url::to('@web/img/core-img/favicon.ico') ?>">
+        <link rel="icon" href="<?=Url::to('@web/favicon.ico') ?>">
         <?php $this->head() ?>
     </head>
     <body>
@@ -100,8 +113,8 @@ $menuList = (new MenuModel())->getMenuList();
                             <div id="breakingNewsTicker" class="ticker">
                                 <ul>
                                     <?php
-                                    if (!empty($bannerWordList)) {
-                                        foreach ($bannerWordList as $line) {
+                                    if (!empty($wordList)) {
+                                        foreach ($wordList as $line) {
                                             echo "<li><a href='{$line['link']}'>{$line['name']}</a></li>";
                                         }
                                     } else {
@@ -136,7 +149,7 @@ $menuList = (new MenuModel())->getMenuList();
             <div class="container h-100">
                 <div class="row h-100 align-items-center">
                     <div class="col-12">
-                        <a href="<?=Url::to(['site/index']) ?>" class="original-logo"><?=Html::img('@web/img/core-img/logo.png') ?></a>
+                        <a href="<?= !empty($topImage) ? $topImage[0]['link'] : '' ?>" class="original-logo"><?=Html::img(!empty($topImage) ? $topImage[0]['img'] : '@web/img/core-img/logo.png') ?></a>
                     </div>
                 </div>
             </div>
@@ -152,9 +165,7 @@ $menuList = (new MenuModel())->getMenuList();
                         <!-- Subscribe btn -->
                         <div class="subscribe-btn">
                             <?php
-                            /*
-                             * 判断用户是否登录选择展示内容
-                             */
+                                // 判断用户是否登录选择展示内容
                                 if ($isLogin) {
                                     echo "<a href=\"#\" class=\"btn subscribe-btn\" data-toggle=\"modal\" data-target=\"#subsModal\">{$userInfo['username']}，你好</a>";
                                 } else {
@@ -190,7 +201,7 @@ $menuList = (new MenuModel())->getMenuList();
                                     if (!empty($menu['child_menu'])) {
                                         echo "<ul class='dropdown'>";
                                         foreach ($menu['child_menu'] as $_line) {
-                                            echo "<li><a href=\'{$_line['url']}\'>{$_line['name']}</a></li>";
+                                            echo "<li><a href=\"{$_line['url']}\">{$_line['name']}</a></li>";
                                         }
                                         echo "</ul>";
                                     }
@@ -206,7 +217,7 @@ $menuList = (new MenuModel())->getMenuList();
                                 <!-- Search Form  -->
                                 <div id="search-wrapper">
                                     <?=Html::beginForm(['article/list'], 'post', ['id' => 'searchForm']) ?>
-                                    <?=Html::input('text', 'search', '', ['placeholder' => 'test', 'id' => 'search']) ?>
+                                    <?=Html::input('text', 'search', '', ['placeholder' => '搜索关键字', 'id' => 'search']) ?>
                                     <div id="close-icon"></div>
                                     <?=Html::submitInput('', ['class' => 'd-none']) ?>
                                     <?=Html::endForm() ?>
@@ -245,8 +256,8 @@ $menuList = (new MenuModel())->getMenuList();
             <!-- Instagram Slides -->
             <div class="instagram-slides owl-carousel">
                 <?php
-                    if (!empty($bannerFooterImage)) {
-                        foreach ($bannerFooterImage as $line) {
+                    if (!empty($footerImage)) {
+                        foreach ($footerImage as $line) {
                 ?>
                     <div class="single-insta-feed">
                         <?=Html::img($line['img']) ?>
