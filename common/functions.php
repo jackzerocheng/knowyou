@@ -22,22 +22,31 @@ function setPassword($basePassword)
 
 
 /**
- * 获取IP方法，获取不到则返回255.255.255.255
- * @return string
+ * @param bool $toLong //输出整形
+ * @param bool $userCdnSrcIp
+ * @return int|null|string
  */
-function getIP()
+function getIP($toLong = false, $userCdnSrcIp = true)
 {
-    if (!empty($_SERVER["HTTP_CLIENT_IP"])) {
-        $cip = $_SERVER["HTTP_CLIENT_IP"];
-    } elseif (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
-        $cip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+    $onlineip = '';
+    if ($userCdnSrcIp && $_SERVER['HTTP_CDN_SRC_IP'] && strcasecmp($_SERVER['HTTP_CDN_SRC_IP'], 'unknown')) {
+        $onlineip = $_SERVER['HTTP_CDN_SRC_IP'];
+    } elseif ($_SERVER['HTTP_X_FORWARDED_FOR'] && strcasecmp($_SERVER['HTTP_X_FORWARDED_FOR'], 'unknown')) {
+        $onlineip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } elseif (!empty($_SERVER["HTTP_CLIENT_IP"])) {
+        $onlineip = $_SERVER["HTTP_CLIENT_IP"];
     } elseif (!empty($_SERVER["REMOTE_ADDR"])) {
-        $cip = $_SERVER["REMOTE_ADDR"];
-    } else {
-        $cip = "255.255.255.255";
+        $onlineip = $_SERVER["REMOTE_ADDR"];
     }
 
-    return $cip;
+    preg_match("/[\d\.]{7,15}/", $onlineip, $onlineipmatches);
+    $onlineip = $onlineipmatches [0] ? $onlineipmatches [0] : null;
+    unset($onlineipmatches);
+    if($toLong){
+        $onlineip = ip2long($onlineip);
+    }
+
+    return $onlineip;
 }
 
 /**

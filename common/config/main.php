@@ -52,20 +52,5 @@ return [
             'class' => 'yii\web\Session',
             'timeout' => 7200,
         ],
-        /*
-        'errorHandler' => [
-            'errorAction' => 'site/error',
-        ]*/
-        //URL配置
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'enableStrictParsing' => false,
-            'rules' => [
-                '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
-            ]
-        ],
-*/
     ],
 ];

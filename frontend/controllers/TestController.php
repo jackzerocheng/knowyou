@@ -25,7 +25,7 @@ class TestController extends CommonController
     {
         echo (new RandomString())->outputRandomString(16);
 
-        $a = (new WxRulesModel())->getListByCondition([]);
-        var_dump($a);
+        //$a = (new WxRulesModel())->getListByCondition([]);
+        //var_dump($a);
     }
 }

@@ -75,6 +75,6 @@ class SiteController extends CommonController
             return $this->render('error', ['exception' => $exception]);
         }
 
-        return true;
+        return $this->render('error');
     }
 }

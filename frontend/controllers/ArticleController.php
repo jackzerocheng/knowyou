@@ -1,6 +1,6 @@
 <?php
 /**
- * Message:
+ * Message: 文章操作
  * User: jzc
  * Date: 2018/10/29
  * Time: 4:19 PM
