@@ -9,11 +9,12 @@
 
 namespace console\controllers\crontab;
 
+use Yii;
 
 class TestCodeController extends BaseController
 {
     public function actionIndex()
     {
-        echo "hello";
+        Yii::info('test:'.time(), CATEGORIES_CONSOLE);
     }
 }

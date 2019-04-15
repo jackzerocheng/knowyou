@@ -17,5 +17,5 @@
 return array(
     //'0 1 * * * php /credit_card/clean_dirty_apply_data 1 1.0',
 
-    ""
+    "1 * * * * /usr/local/php/bin/php /var/www/html/knowyou/yii /crontab/test-code/index 1 1.0"
 );
