@@ -24,6 +24,15 @@ class CommonController extends Controller
 
     public function init()
     {
+        /*
+        * 记录每次请求信息
+        */
+        $moduleName = Yii::$app->controller->module->id;
+        $controllerName = Yii::$app->controller->id;
+        $actionName = Yii::$app->controller->action->id;
+        Yii::info("Request Route:".$moduleName.'/'.$controllerName.'/'.$actionName.';Client IP:'.getIP(), CATEGORIES_ACCESS);
+
+
         //要求登录态访问
         if ($this->requireLogin) {
             $this->checkLogin();

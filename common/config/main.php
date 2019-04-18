@@ -42,7 +42,15 @@ return [
                     'categories' => ['know_you_console'],
                     'logFile' => '@root/log/know_you/know_you_console.log',
                     'exportInterval' => 100,
-                ]
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['info', 'warning', 'error'],
+                    'logVars' => ['*'],
+                    'categories' => ['know_you_access'],
+                    'logFile' => '@root/log/know_you/know_you_access.log',
+                    'exportInterval' => 100,
+                ],
             ]
         ],
         'cache' => [

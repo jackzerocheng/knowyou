@@ -375,7 +375,7 @@ unique key un_type (`type`)
 
 /*
 微信相关
- */
+*/
 
 use wx;
 

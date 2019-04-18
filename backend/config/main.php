@@ -37,6 +37,14 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'urlManager' => YII_ENV == 'prod' ? [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'enableStrictParsing' => false,
+            'rules' => [
+                '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+            ]
+        ] : [],
     ],
     'params' => $params,
 ];
