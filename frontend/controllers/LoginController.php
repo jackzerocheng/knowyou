@@ -19,6 +19,8 @@ class LoginController extends CommonController
 
     public function init()
     {
+        parent::init();
+
         //登录态则跳回主页
         if ((new UserModel())->getSession()) {
             Yii::$app->session->setFlash('message', '您已登录');
