@@ -22,7 +22,7 @@ $this->title = '简 · 默';
                     <div class="col-12">
                         <div class="slide-content text-center">
                             <div class="post-tag">
-                                <a href="#" data-animation="fadeInUp">每周精选</a>
+                                <a href="#" data-animation="fadeInUp"></a>
                             </div>
                             <h2 data-animation="fadeInUp" data-delay="250ms"><a href="<?=$line['link'] ?>"><?=$line['name'] ?></a></h2>
                         </div>

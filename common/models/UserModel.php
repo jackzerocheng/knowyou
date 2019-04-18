@@ -28,14 +28,19 @@ class UserModel extends Model
     //多端登录时去Redis判断，是否在其他端已登录
     const REDIS_KEY_PREFIX = 'know_you_web_';
 
+    //自增生成UID
+    const BASE_USER_ID_KEY = self::REDIS_KEY_PREFIX . 'BASE_USER_ID';
+    //起始UID段
+    const START_UID = 10000000;
+
     //保持登录时长
     const REDIS_KEEP_TIME = 60 * 60 * 24;//一天
     const COOKIE_KEEP_TIME = 60 * 60 * 24 * 7;//七天
 
+    //用户状态
     const STATUS_NORMAL = 1;
     const STATUS_STOP = 2;
     const STATUS_DELETED = 3;
-
     public $statusMap = [
         self::STATUS_NORMAL => '正常',
         self::STATUS_STOP => '封禁',
@@ -274,7 +279,7 @@ class UserModel extends Model
      */
     public function register(array $data)
     {
-        if (empty($data)) {
+        if (empty($data) || empty($data['password'])) {
             return false;
         }
 
@@ -282,8 +287,18 @@ class UserModel extends Model
             $data['password'] = (new CryptAes(USER_AES_KEY))->encrypt($data['password']);
         }
 
-        $user = new User();
+        /*
+         * 依赖Redis自增UID
+         */
+        $redis = Yii::$app->redis;
+        if (!$redis->exists(self::BASE_USER_ID_KEY)) {
+            $redis->set(self::BASE_USER_ID_KEY, self::START_UID);
+        }
+        $uid = $redis->incr(self::BASE_USER_ID_KEY);
+        $data['uid'] = $uid;
 
+
+        $user = new User($uid);
         $transaction = Yii::$app->db->beginTransaction();
 
         if (!$user->insert(false, $data)) {
@@ -292,15 +307,15 @@ class UserModel extends Model
             return false;
         }
 
-        if (!(new UserIndexModel())->insert($data['uid'])) {
-            Yii::warning('insert user info failed;info:'.json_encode($data), CATEGORIES_WARN);
+        if (!(new UserIndexModel())->insert($uid)) {
+            Yii::warning('insert user index info failed;uid:'.$uid, CATEGORIES_WARN);
             $transaction->rollBack();
             return false;
         }
 
         $transaction->commit();
-        Yii::info('user register;uid:'.$user::$uid, CATEGORIES_INFO);
-        return intval($user::$uid);
+        Yii::info('user register;uid:'.$uid, CATEGORIES_INFO);
+        return intval($uid);
     }
 
     /**

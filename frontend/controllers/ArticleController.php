@@ -150,4 +150,12 @@ class ArticleController extends CommonController
 
         return $this->render('newest', $data);
     }
+
+    /*
+     * 最热文章
+     */
+    public function actionHottest()
+    {
+
+    }
 }

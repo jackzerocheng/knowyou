@@ -20,18 +20,17 @@ class User extends ActiveRecord
 
     const TABLE_PARTITION = 4;//分表数
 
-    public static $uid;
     protected static $tableName = '';
 
     /**
      * User constructor.
-     * @param string $uid
+     * @param int $uid
      * @param array $config
      */
-    public function __construct($uid = -1, array $config = [])
+    public function __construct($uid = 0, array $config = [])
     {
         parent::__construct($config);
-        static::$tableName = static::getTableName($uid);
+        self::$tableName = '{{%user0' . $uid % self::TABLE_PARTITION . '}}';
     }
 
     public static function tableName()
@@ -39,35 +38,9 @@ class User extends ActiveRecord
         return static::$tableName;
     }
 
-    private static function getTableName($uid)
-    {
-        if ($uid == -1) {
-            $uid = static::getUid();
-        }
-
-        return '{{%user0' . $uid % self::TABLE_PARTITION . '}}';
-    }
-
-    /**
-     * 依赖Redis返回生成的UID
-     * @return int
-     */
-    private static function getUid()
-    {
-        $redis = Yii::$app->redis;
-        if (!$redis->exists(self::BASE_USER_ID_KEY)) {
-            $redis->set(self::BASE_USER_ID_KEY, self::BASE_USER_ID);
-        }
-
-        static::$uid = $redis->incr(self::BASE_USER_ID_KEY);
-        return static::$uid;
-    }
-
     public function insert($runValidation = true, $data = null)
     {
         $data['created_at'] = empty($data['created_at']) ? NOW_DATE : $data['created_at'];
-        $data['uid'] = empty($data['uid']) ? self::$uid : $data['uid'];
-
         return self::getDb()->schema->insert(static::tableName(), $data);
     }
 
