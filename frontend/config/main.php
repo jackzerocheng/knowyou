@@ -41,7 +41,9 @@ return [
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
-                '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+                '<controller:\w+\-\w+|\w+>/<action:\w+\-\w+|\w+>'=>'<controller>/<action>',
+                '<module:\w+\-\w+|\w+>/<controller:\w+\-\w+|\w+>/<action:\w+\-\w+|\w+>'=>'<module>/<controller>/<action>',
+                '/'=>'site/index',
             ]
         ] : [],
     ],

@@ -44,7 +44,11 @@ use yii\helpers\Url;
                 <?php
                 if (!empty($type_map)) {
                     foreach ($type_map as $k => $v) {
-                        echo "<option value=\"{$k}\">{$v}</option>";
+                        if ($k == $data['type']) {
+                            echo "<option value=\"{$k}\" selected>{$v}</option>";
+                        } else {
+                            echo "<option value=\"{$k}\">{$v}</option>";
+                        }
                     }
                 }
                 ?>
@@ -58,7 +62,12 @@ use yii\helpers\Url;
                 <?php
                 if (!empty($status_map)) {
                     foreach ($status_map as $k => $v) {
-                        echo "<option value=\"{$k}\">{$v}</option>";
+                        if ($k == $data['status']) {
+                            echo "<option value=\"{$k}\" selected>{$v}</option>";
+                        } else {
+                            echo "<option value=\"{$k}\" selected>{$v}</option>";
+                        }
+
                     }
                 }
                 ?>

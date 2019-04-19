@@ -34,8 +34,8 @@ class ArticleModel extends Model
     const REDIS_EXPIRE_TIME = 259200;//三天
     const BASE_ARTICLE_ID_KEY = 'BASE_ARTICLE_ID';//id = base_id * partition + uid % partition
 
-    const ARTICLE_COVER_DEFAULT = '/img/knowyou_article_img/default_article_cover.jpg';//文章默认封面
-    const TABLE_PARTITION = Article::TABLE_PARTITION;
+    const ARTICLE_COVER_DEFAULT = '/img/sys_img/default_cover.jpg';//文章默认封面
+    const TABLE_PARTITION = 4;
 
     public function rules()
     {
@@ -165,11 +165,12 @@ class ArticleModel extends Model
             return false;
         }
 
-        if (!Yii::$app->redis->exists(self::BASE_ARTICLE_ID_KEY)) {
-            Yii::$app->redis->set(self::BASE_ARTICLE_ID_KEY, 0);
+        $redisClient = Yii::$app->redis;
+        if (!$redisClient->exists(self::BASE_ARTICLE_ID_KEY)) {
+            $redisClient->set(self::BASE_ARTICLE_ID_KEY, 0);
         }
 
-        $articleID = Yii::$app->redis->incr(self::BASE_ARTICLE_ID_KEY) * self::TABLE_PARTITION + $data['uid'] % self::TABLE_PARTITION;
+        $articleID = $redisClient->incr(self::BASE_ARTICLE_ID_KEY) * self::TABLE_PARTITION + $data['uid'] % self::TABLE_PARTITION;
         $data['id'] = $articleID;
 
         $transaction = Yii::$app->db->beginTransaction();

@@ -96,6 +96,7 @@ class ArticleController extends CommonController
         if (Yii::$app->request->isPost) {
             $data = Yii::$app->request->post();
 
+            //封面图片处理
             if (empty($data['cover'])) {
                 //系统选择默认图片
                 if (preg_match("/src=\"(.+?)\"/", $data['content'], $match)) {
@@ -105,7 +106,13 @@ class ArticleController extends CommonController
                 }
             }
 
-            if (!$articleID = (new ArticleModel())->insert($data)) {
+            $info = [
+                'uid' => $this->userId,
+                'cover' => $data['cover'],
+                'content' => $data['content']
+            ];
+
+            if (!$articleID = (new ArticleModel())->insert($info)) {
                 Yii::$app->session->setFlash('message', '发表失败');
             } else {
                 $this->redirect(['article/index', 'id' => $articleID]);

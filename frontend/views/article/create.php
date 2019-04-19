@@ -35,7 +35,7 @@ $this->title = '发表文章';
                                 <textarea name="content" id="content" rows="30" cols="70" placeholder="文章内容..." style="height: 300px" required></textarea>
                                 <script type="text/javascript">
                                     window.UEDITOR_HOME_URL = "./ueditor/";
-                                    UE.getEditor("content");
+                                    var ue = UE.getEditor("content");
                                 </script>
                             </div>
                         </div>
