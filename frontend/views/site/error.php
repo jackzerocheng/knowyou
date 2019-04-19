@@ -1,6 +1,3 @@
-<?php
-use yii\helpers\Url;
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +12,7 @@ use yii\helpers\Url;
 </head>
 <body class="childrenBody">
 <div style="text-align: center; padding:11% 0;">
-    <img src="<?=Url::to('@web/img/sys_img/not_found.gif') ?>">
+    <img src="http://data.jianmo.top/img/default/not_found.gif">
     <p>系统遭受不明生物入侵！</p>
     <p style="font-size: 20px; font-weight: 300; color: #999;">
         <?= Yii::$app->session->getFlash('frontend_error_message') ?>

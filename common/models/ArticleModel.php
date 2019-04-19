@@ -34,7 +34,7 @@ class ArticleModel extends Model
     const REDIS_EXPIRE_TIME = 259200;//三天
     const BASE_ARTICLE_ID_KEY = 'BASE_ARTICLE_ID';//id = base_id * partition + uid % partition
 
-    const ARTICLE_COVER_DEFAULT = '/img/sys_img/default_cover.jpg';//文章默认封面
+    const ARTICLE_COVER_DEFAULT = 'http://data.jianmo.top/img/default/default_cover.png';//文章默认封面
     const TABLE_PARTITION = 4;
 
     public function rules()

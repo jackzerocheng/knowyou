@@ -55,7 +55,7 @@ $this->title = '文章列表';
                     <div class="row align-items-center">
                         <div class="col-12 col-md-6">
                             <div class="single-blog-thumbnail">
-                                <?=Html::img('@web/img/sys_img/not_found.gif') ?>
+                                <?=Html::img('http://data.jianmo.top/img/default/not_found.gif') ?>
                             </div>
                         </div>
                         <div class="col-12 col-md-6">

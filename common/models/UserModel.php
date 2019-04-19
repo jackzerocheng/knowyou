@@ -32,7 +32,7 @@ class UserModel extends Model
     const BASE_USER_ID_KEY = self::REDIS_KEY_PREFIX . 'BASE_USER_ID';
     //起始UID段
     const START_UID = 10000000;
-    const DEFAULT_HEAD_IMG = '@web/img/sys_img/default_head.jpg';
+    const DEFAULT_HEAD_IMG = 'http://data.jianmo.top/img/default/default_head.png';
 
     //保持登录时长
     const REDIS_KEEP_TIME = 60 * 60 * 24;//一天
