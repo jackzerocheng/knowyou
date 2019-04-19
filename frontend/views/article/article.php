@@ -45,10 +45,16 @@ $day = date('d', strtotime($article_info['created_at']));
                             <p><?='阅读:' . $read_number . ' | ' ?></p>
                             <p><?='点赞:' . $article_info['praise_number'] . ' | ' ?></p>
                             <p><?='评论:' . $comment_number . ' | ' ?></p>
+                            <hr>
                         </div>
-                        <p>
-                            <?=$article_info['content'] ?>
-                        </p>
+                    </div>
+
+                    <div>
+                        <strong>
+                            <p style="font-size: larger;">
+                                <?=$article_info['content'] ?>
+                            </p>
+                        </strong>
                     </div>
                 </div>
 
@@ -67,8 +73,13 @@ $day = date('d', strtotime($article_info['created_at']));
 
                 <!-- Comment Area Start -->
                 <div class="comment_area clearfix mt-70">
-                    <h5 class="title">Comments</h5>
+                    <h5 class="title">评论</h5>
 
+                    <?php
+                        if (!empty($comment_list)) {
+
+                        }
+                    ?>
                     <ol>
                         <!-- Single Comment Area -->
                         <li class="single_comment_area">

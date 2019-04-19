@@ -2,7 +2,7 @@ create table knowyou_article03 (
 id int(11) PRIMARY KEY comment 'baseID * partition + uid % partition',
 uid int(11) not null default 0,
 title varchar(50) not null default '' comment '标题',
-cover varchar(50) not null default '' comment '封面图片',
+cover varchar(100) not null default '' comment '封面图片',
 content text  comment '文章内容',
 forward_id int(11) default 0 comment '转发，原文章ID',
 status tinyint(4) not null default 1 comment '文章状态，1正常2封禁（无法查看）3禁止评论4删除',

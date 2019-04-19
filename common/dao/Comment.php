@@ -1,6 +1,6 @@
 <?php
 /**
- * Message:
+ * Message: 评论DAO
  * User: jzc
  * Date: 2018/10/30
  * Time: 5:55 PM
@@ -9,11 +9,11 @@
 
 namespace common\dao;
 
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 class Comment extends ActiveRecord
 {
-    const BASE_ARTICLE_ID = 'BASE_COMMENT_ID';//id = base_id * partition + uid % partition
     const TABLE_PARTITION = 4;
     protected static $tableName = '';
 
@@ -36,6 +36,36 @@ class Comment extends ActiveRecord
         return intval($db->count());
     }
 
+    /**
+     * @param $condition
+     * @param string $orderBy
+     * @param int $limit
+     * @param $offset
+     * @return mixed
+     */
+    public function getListByCondition($condition, $limit = 1000, $offset = 0, $orderBy = 'created_at desc')
+    {
+        $db = self::find()->from(self::$tableName);
+        $db = $this->handlerCondition($db, $condition);
+
+        $rs = $db->offset($offset)->limit($limit)->orderBy($orderBy)->asArray()->all();
+        return $rs;
+    }
+
+    public function getAllList($condition, $limit = 100000, $orderBy = 'created_at desc')
+    {
+        $db = self::find()->from(self::$tableName);
+        $db = $this->handlerCondition($db, $condition);
+
+        $rs = $db->limit($limit)->orderBy($orderBy)->asArray()->all();
+        return $rs;
+    }
+
+    /**
+     * @param $db
+     * @param $condition
+     * @return ActiveQuery
+     */
     public function handlerCondition($db, $condition)
     {
         if (!empty($condition) && is_array($condition)) {

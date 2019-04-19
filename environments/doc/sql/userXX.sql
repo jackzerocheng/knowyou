@@ -2,7 +2,7 @@ create table knowyou_user03 (
 uid int(11)  comment '依赖Redis生成',
 username varchar(30)  not null default '',
 password varchar(64)  not null DEFAULT '' comment 'ase加密',
-head varchar(50) not null default '@web/img/default/default_head.jpg' comment '用户头像',
+head varchar(100) not null default '@web/img/default/default_head.jpg' comment '用户头像',
 sex tinyint(4) default 0 comment '0保密1男2女',
 signature varchar(50) DEFAULT '无个性，不签名' comment '个性签名',
 phone varchar(20)  default '',

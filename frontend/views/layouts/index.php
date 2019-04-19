@@ -47,7 +47,7 @@ $isLogin = false;
 $userInfo = array();
 $user = new UserModel();
 if ($uid = $user->getSession()) {
-    $userInfo = $user->getOneByCondition($uid);
+    $userInfo = $user->getOneByCondition($uid, ['uid' => $uid]);
     $isLogin = true;
 }
 

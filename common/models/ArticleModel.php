@@ -59,7 +59,7 @@ class ArticleModel extends Model
             Yii::warning("msg:set redis read number hash;date:{$nowDate};", CATEGORIES_WARN);
         }
 
-        //获取今日的缓存，若没有则去取昨日缓存（说明这个时间段没人访问这个ID）
+        //获取今日该ID文章的缓存，若没有则去取昨日缓存（说明这个时间段没人访问这个ID）
         if (!$redis->hexists(self::REDIS_ARTICLE_READ_NUMBER . date('Ymd'), $id)) {
             $readNumber = $redis->hget(self::REDIS_ARTICLE_READ_NUMBER . date('Ymd', strtotime('yesterday')), $id);
             if (!$readNumber) {
