@@ -169,7 +169,7 @@ $day = date('d', strtotime($article_info['created_at']));
                     }
 
                     $.ajax({
-                        url: "http://localhost:7888/knowyou/frontend/web/index.php?r=comment%2Freply",
+                        url: <?=Url::to('comment/reply') ?>,
                         contentType: "application/x-www-form-urlencode",
                         type: "post",
                         data: {

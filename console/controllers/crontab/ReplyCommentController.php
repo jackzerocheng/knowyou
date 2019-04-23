@@ -30,7 +30,7 @@ class ReplyCommentController extends BaseController
         $userModel = new UserModel();
         $commentModel = new CommentModel();
 
-
+        $startTime = time();
         while (true) {
             //所有数据只负责传送，并未在之前做校验
             $jsonData = $redis->lpop($commentModel::LIST_COMMENT_REPLY);
@@ -59,6 +59,10 @@ class ReplyCommentController extends BaseController
             }
 
             sleep(1);//每秒执行一次
+
+            if ((time() - $startTime) > 60) {
+                break;
+            }
         }
 
         exit();
