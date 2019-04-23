@@ -29,6 +29,8 @@ class TestController extends CommonController
 
         $rs = Yii::$app->cache->get('WEB_COMMENT_LIST_17');
         var_dump($rs);
+        $test = Yii::$app->redis->lpop('abc');
+        var_dump($test);
         //echo (new RandomString())->outputRandomString(16);
 
         //$a = (new WxRulesModel())->getListByCondition([]);

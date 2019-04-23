@@ -60,7 +60,7 @@ class ReplyCommentController extends BaseController
 
             sleep(1);//每秒执行一次
 
-            if ((time() - $startTime) > 60) {
+            if ((time() - $startTime) > 60) {//防止脚本一直无法终止
                 break;
             }
         }

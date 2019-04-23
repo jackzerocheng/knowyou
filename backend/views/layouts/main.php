@@ -83,17 +83,17 @@ $user_info = (new AdminModel())->getOneByCondition(['admin_id' => $uid]);
         <div class="navBar layui-side-scroll">
             <ul class="layui-nav layui-nav-tree">
                 <li class="layui-nav-item">
-                    <a href="<?=Url::to('site/index') ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>后台首页</cite></a>
+                    <a href="<?=Url::to(['site/index']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>后台首页</cite></a>
                 </li>
                 <!-- 不要循环输出了 -->
                 <li class="layui-nav-item">
-                    <a href="<?=Url::to('menu/index') ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>菜单管理</cite></a>
+                    <a href="<?=Url::to(['menu/index']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>菜单管理</cite></a>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="<?=Url::to('suggest/index') ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>留言管理</cite></a>
+                    <a href="<?=Url::to(['suggest/index']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>留言管理</cite></a>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="<?=Url::to('banner/index') ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>运营位管理</cite></a>
+                    <a href="<?=Url::to(['banner/index']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>运营位管理</cite></a>
                 </li>
                 <li class="layui-nav-item layui-nav-itemed">
                     <a>
@@ -103,13 +103,13 @@ $user_info = (new AdminModel())->getOneByCondition(['admin_id' => $uid]);
                     </a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="<?=Url::to('wx/index') ?>"><i class="iconfont" data-icon=""></i><cite>消息管理</cite></a>
+                            <a href="<?=Url::to(['wx/index']) ?>"><i class="iconfont" data-icon=""></i><cite>消息管理</cite></a>
                         </dd>
                         <dd>
-                            <a href="<?=Url::to('wx/user') ?>"><i class="iconfont" data-icon=""></i><cite>用户管理</cite></a>
+                            <a href="<?=Url::to(['wx/user']) ?>"><i class="iconfont" data-icon=""></i><cite>用户管理</cite></a>
                         </dd>
                         <dd>
-                            <a href="<?=Url::to('wx/rules') ?>"><i class="iconfont" data-icon=""></i><cite>规则管理</cite></a>
+                            <a href="<?=Url::to(['wx/rules']) ?>"><i class="iconfont" data-icon=""></i><cite>规则管理</cite></a>
                         </dd>
                     </dl>
                 </li>
@@ -121,13 +121,13 @@ $user_info = (new AdminModel())->getOneByCondition(['admin_id' => $uid]);
                     </a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="<?=Url::to('article/index') ?>"><i class="iconfont" data-icon=""></i><cite>待审核文章</cite></a>
+                            <a href="<?=Url::to(['article/index']) ?>"><i class="iconfont" data-icon=""></i><cite>待审核文章</cite></a>
                         </dd>
                         <dd>
-                            <a href="<?=Url::to('article/index') ?>"><i class="iconfont" data-icon=""></i><cite>已发布文章</cite></a>
+                            <a href="<?=Url::to(['article/index']) ?>"><i class="iconfont" data-icon=""></i><cite>已发布文章</cite></a>
                         </dd>
                         <dd>
-                            <a href="<?=Url::to('article/index') ?>"><i class="iconfont" data-icon=""></i><cite>新增文章</cite></a>
+                            <a href="<?=Url::to(['article/index']) ?>"><i class="iconfont" data-icon=""></i><cite>新增文章</cite></a>
                         </dd>
                     </dl>
                 </li>
