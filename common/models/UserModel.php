@@ -206,7 +206,7 @@ class UserModel extends Model
         if ($cookie->has(self::COOKIE_USER_INFO)) {
             $userInfo = $cookie->getValue(self::COOKIE_USER_INFO);
             if (isset($userInfo['uid']) && isset($userInfo['password'])) {
-                $this->user = User::find()->where(['uid' => $userInfo['uid'], 'password' => $userInfo['password']])->asArray()->one();
+                $this->user = (new User($userInfo['uid']))->getOneByCondition(['uid' => $userInfo['uid'], 'password' => $userInfo['password']]);
                 if ($this->user) {
                     $this->createSession($this->user['uid']);
                     return true;
@@ -348,7 +348,7 @@ class UserModel extends Model
      * @param $condition
      * @return mixed
      */
-    public function getOneByCondition($uid, $condition = null)
+    public function getOneByCondition($uid, $condition)
     {
         $user = new User($uid);
         return $user->getOneByCondition($condition);

@@ -21,9 +21,14 @@ class CommentModel extends Model
     const COMMENT_STATUS_DELETED = 3;
 
     //Redis自增评论ID
-    const BASE_ARTICLE_ID = 'BASE_COMMENT_ID';//id = base_id * partition + uid % partition
+    const BASE_COMMENT_ID = 'BASE_COMMENT_ID';//id = base_id * partition + uid % partition
     //评论缓存key
-    const HASH_COMMENT_LIST_KEY = 'WEB_COMMENT_LIST';
+    const CACHE_COMMENT_LIST = 'WEB_COMMENT_LIST_';
+    const CACHE_COMMENT_NUMBER = 'WEB_COMMENT_NUMBER_';
+    const CACHE_DURATION = 60*60*24;//一天
+
+    //redis消息队列
+    const LIST_COMMENT_REPLY = 'WEB_COMMENT_REPLY';
 
     /**
      * 获取评论数
@@ -37,29 +42,83 @@ class CommentModel extends Model
     }
 
     /**
-     * 分页获取评论列表
-     * 第一次请求去读库，一次性取出所有评论并组织好结构
-     * 然后将该结构缓存
+     * 优先读取缓存数据
+     * 如果不存在则读取DB
      * @param $id
      * @param $condition
-     * @param int $limit
-     * @param int $offset
-     * @return mixed
+     * @return array
      */
-    public function getListByCondition($id, $condition, $limit = 10, $offset = 0)
+    public function getListByCache($id, $condition)
     {
-        $redis = Yii::$app->redis;
-        if ($redis->exists(self::HASH_COMMENT_LIST_KEY)) {
-            $list = $redis->hget(self::HASH_COMMENT_LIST_KEY, $id);
-            if (!empty($list)) {
-                return $list;
+        $cache = Yii::$app->cache;
+        $commentNumber = $cache->get(self::CACHE_COMMENT_NUMBER.$id) ? : 0;
+        $commentList = array();
+        if ($commentNumber) { //走缓存
+            $commentList = $cache->get(self::CACHE_COMMENT_LIST.$id);
+            if (!empty($commentList)) {
+                $commentList = json_decode($commentList, true);
             }
         }
 
-        $data = (new Comment($id))->getAllList($condition);
+        if (empty($commentNumber || empty($commentList))) {
+            list($commentList, $commentNumber) = $this->getListByDb($id, $condition);
+        }
 
+        return array($commentList, $commentNumber);
+    }
 
+    /**
+     * 主动读取DB数据并添加到缓存
+     * @param $id
+     * @param $condition
+     * @return array
+     */
+    public function getListByDb($id, $condition)
+    {
+        $cache = Yii::$app->cache;
+        $commentList = array();
+        $commentNumber = $this->getCountByCondition($id, $condition);
+        if ($commentNumber > 0) {
+            $cache->set(self::CACHE_COMMENT_NUMBER.$id, $commentNumber, self::CACHE_DURATION);
+            $data = (new Comment($id))->getAllList($condition);
 
-        return $data;
+            $tmp = array();
+            if (!empty($data)) {
+                //区分一级评论和二级评论
+                foreach ($data as $k => $v) {
+                    if (intval($v['parent_id']) == 0) {
+                        $commentList[$v['id']] = $v;
+                    } else {
+                        $tmp[$v['parent_id']] = $v;
+                    }
+                }
+
+                //插入二级评论  => 二级评论是个数组，可能有多个回复
+                if (!empty($tmp)) {
+                    foreach ($tmp as $k => $v) {
+                        $commentList[$k]['child_comment'][] = $v;
+                    }
+                }
+
+                $cache->set(self::CACHE_COMMENT_LIST.$id, json_encode($commentList), self::CACHE_DURATION);
+            }
+        }
+
+        return array($commentList, $commentNumber);
+    }
+
+    public function insert($info)
+    {
+        $baseCommentId = Yii::$app->redis->incr(self::BASE_COMMENT_ID);
+
+        $commentId = $baseCommentId * Comment::TABLE_PARTITION + intval($info['uid']) % Comment::TABLE_PARTITION;
+
+        $rs = (new Comment($commentId))->insertData($info);
+        if (!$rs) {
+            Yii::error("insert data to comment failed;data:".json_encode($info), CATEGORIES_ERROR);
+            return false;
+        }
+
+        return $rs;
     }
 }

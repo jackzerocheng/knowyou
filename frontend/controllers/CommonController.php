@@ -12,15 +12,18 @@ namespace frontend\controllers;
 use yii\web\Controller;
 use Yii;
 use common\models\UserModel;
+use common\lib\Config;
+use common\lib\Response;
 
 class CommonController extends Controller
 {
     public $userId;
-    public $username;
-    public $status;
+    public $userInfo;
     public $redisSession;//uid,time,ip
 
     public $requireLogin = false;
+    public $apiCheckLogin = false;//ajax请求
+    public $errorCodeFile = 'frontErrorCode';
 
     public function init()
     {
@@ -38,6 +41,10 @@ class CommonController extends Controller
             $this->checkLogin();
         }
 
+        //api检测
+        if ($this->apiCheckLogin) {
+            $this->apiCheckLogin();
+        }
 
     }
 
@@ -87,10 +94,47 @@ class CommonController extends Controller
 
         $this->redisSession = $redisSession;
 
-        $userInfo = $userModel->getOneByCondition($this->userId);
-        $this->username = $userInfo['username'];
-        $this->status = $userInfo['status'];
+        $this->userInfo = $userModel->getOneByCondition($this->userId);
 
         return true;
+    }
+
+    public function apiCheckLogin()
+    {
+        $userModel = new UserModel();
+        if (!$this->userId = $userModel->getSession()) {
+            $this->outputJson('not_login');
+        }
+
+        $this->userInfo = $userModel->getOneByCondition($this->userId);
+    }
+
+    public function outputJson($errorCode, $data = '', $msg = '')
+    {
+        $result = Config::errorLang($this->errorCodeFile, $errorCode);
+
+        if (empty($result)) {
+            $result = Config::errorLang($this->errorCodeFile, 'failed');
+        }
+
+        if (!empty($msg)) {
+            $result['msg'] = $msg;
+        }
+
+        if (!empty($data)) {
+            $result['data'] = $data;
+        }
+
+        Response::json($result);
+    }
+
+    public function success($data = '')
+    {
+        $result = Config::errorLang($this->errorCodeFile, 'success');
+        if (!empty($result)) {
+            $result['data'] = $data;
+        }
+
+        Response::json($result);
     }
 }

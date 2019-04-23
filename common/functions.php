@@ -125,3 +125,22 @@ function getEnvParam($key, $default = '')
         return $default;
     }
 }
+
+/**
+ * 检索data中符合需求的值
+ * @param array $data
+ * @param array $needKeys
+ * @return array
+ */
+function getNeedData(array $data, array $needKeys)
+{
+    if (!empty($data)) {
+        foreach ($data as $k => $v) {
+            if (!in_array($k, $needKeys)) {
+                unset($data[$k]);
+            }
+        }
+    }
+
+    return $data;
+}

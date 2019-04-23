@@ -151,7 +151,12 @@ class ArticleModel extends Model
     {
         $index = intval($id) % Article::TABLE_PARTITION;
         $article = new Article($index);
-        return $article->getOneByCondition($condition);
+        $data = $article->getOneByCondition($condition);
+        if (!empty($data)) {
+            $data['tag_msg'] = (new TagModel())->tagMap[$data['tag']];
+        }
+
+        return $data;
     }
 
     /**
@@ -166,11 +171,9 @@ class ArticleModel extends Model
         }
 
         $redisClient = Yii::$app->redis;
-        if (!$redisClient->exists(self::BASE_ARTICLE_ID_KEY)) {
-            $redisClient->set(self::BASE_ARTICLE_ID_KEY, 0);
-        }
+        $baseArticleId = $redisClient->incr(self::BASE_ARTICLE_ID_KEY);
 
-        $articleID = $redisClient->incr(self::BASE_ARTICLE_ID_KEY) * self::TABLE_PARTITION + $data['uid'] % self::TABLE_PARTITION;
+        $articleID = $baseArticleId * Article::TABLE_PARTITION + $data['uid'] % Article::TABLE_PARTITION;
         $data['id'] = $articleID;
 
         $transaction = Yii::$app->db->beginTransaction();

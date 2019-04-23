@@ -35,7 +35,7 @@ $this->title = '文章列表';
                             <div class="single-blog-content">
                                 <div class="line"></div>
                                 <a href="#" class="post-tag"><?=!empty($tag_map[$_article['tag']]) ? $tag_map[$_article['tag']]['name'] : '无' ?></a>
-                                <h4><a href="<?=Url::to(['article/index', 'id' => $_article['id']]) ?>" class="post-headline"><?=$_article['title'] ?></a></h4>
+                                <h4><a href="<?=Url::to(['article/index', 'id' => $_article['id']]) ?>" class="post-headline" style="color: green"><?=$_article['title'] ?></a></h4>
                                 <p><?=substr($_article['content'], 0, 20) . '...' ?></p>
                                 <div class="post-meta">
                                     <p>By <a href="#"><?=$user_info[$_article['uid']]['username'] ?></a></p>

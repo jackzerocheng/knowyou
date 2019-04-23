@@ -11,6 +11,7 @@ namespace common\dao;
 
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use Yii;
 
 class Comment extends ActiveRecord
 {
@@ -26,6 +27,14 @@ class Comment extends ActiveRecord
     public static function tableName()
     {
         return static::$tableName;
+    }
+
+    public function insertData($info)
+    {
+        $info['created_at'] = !empty($info['created_at']) ? $info['created_at'] : NOW_DATE;
+
+        $rs = Yii::$app->db->createCommand()->insert(self::$tableName, $info)->execute();
+        return $rs;
     }
 
     public function getCountByCondition($condition)
@@ -52,7 +61,7 @@ class Comment extends ActiveRecord
         return $rs;
     }
 
-    public function getAllList($condition, $limit = 100000, $orderBy = 'created_at desc')
+    public function getAllList($condition, $limit = 100000, $orderBy = 'created_at asc')
     {
         $db = self::find()->from(self::$tableName);
         $db = $this->handlerCondition($db, $condition);

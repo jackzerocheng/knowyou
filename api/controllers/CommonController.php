@@ -37,7 +37,7 @@ class CommonController extends Controller
         parent::init();
 
         if ($this->requireLogin) {//登录态token校验
-
+            $this->checkLogin();
         }
 
         if ($this->requireAccessToken) {//微信access_token获取
@@ -55,6 +55,11 @@ class CommonController extends Controller
             }
 
         }
+    }
+
+    public function checkLogin()
+    {
+
     }
 
     public function outputJson($errorCode, $data = '', $msg = '')

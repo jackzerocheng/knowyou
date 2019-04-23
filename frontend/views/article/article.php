@@ -38,7 +38,7 @@ $day = date('d', strtotime($article_info['created_at']));
                     <!-- Blog Content -->
                     <div class="single-blog-content">
                         <div class="line"></div>
-                        <a href="#" class="post-tag">Know you</a>
+                        <a href="#" class="post-tag"><?=$article_info['tag_msg'] ?></a>
                         <h4><a href="#" class="post-headline mb-0"><?=$article_info['title'] ?></a></h4>
                         <div class="post-meta mb-50">
                             <p>By <a href="#"><?=$user_info['username'] ?></a></p>
@@ -72,112 +72,125 @@ $day = date('d', strtotime($article_info['created_at']));
                 </div>
 
                 <!-- Comment Area Start -->
-                <div class="comment_area clearfix mt-70">
-                    <h5 class="title">评论</h5>
-
+                <div class="comment_area clearfix mt-50">
+                    <h2 class="title">评论</h2>
+                    <ol>
                     <?php
                         if (!empty($comment_list)) {
+                            foreach ($comment_list as $k => $v) {
+                    ?>
 
+                        <!-- Single Comment Area -->
+                        <li class="single_comment_area">
+                            <!-- Comment Content -->
+                            <div class="comment-content d-flex">
+                                <!-- Comment Author -->
+                                <div class="comment-author">
+                                    <img src="<?=Url::to($v['head']) ?>" alt="author">
+                                </div>
+                                <!-- Comment Meta -->
+                                <div class="comment-meta">
+                                    <a href="#" class="post-date"><?=$v['created_at'] ?></a>
+                                    <p><a href="#" class="post-author"><?=$v['username'] ?></a></p>
+                                    <p><?=$v['content'] ?></p>
+                                    <input id="<?=$v['id'] ?>" style="width:500px" placeholder="请文明评论，友善讨论">&nbsp;&nbsp;
+                                    <a href="#" onclick="reply_comment(<?=$v['id'] ?>,<?=$v['id'] ?>)" style="color:blue">回复</a>
+                                </div>
+                            </div>
+                            <?php
+                                if (!empty($v['child_comment'])) {
+                                    foreach ($v['child_comment'] as $item => $value) {//楼中楼
+                            ?>
+
+                                <ol class="children">
+                                    <li class="single_comment_area">
+                                        <!-- Comment Content -->
+                                        <div class="comment-content d-flex">
+                                            <!-- Comment Author -->
+                                            <div class="comment-author">
+                                                <img src="<?=Url::to($value['head']) ?>" alt="author">
+                                            </div>
+                                            <!-- Comment Meta -->
+                                            <div class="comment-meta">
+                                                <a href="#" class="post-date"><?=$value['created_at'] ?></a>
+                                                <p><a href="#" class="post-author"><?=$value['username'] ?></a></p>
+                                                <p><?=$value['content'] ?></p>
+                                                <input id="<?=$value['id'] ?>" style="width:500px" placeholder="请文明评论，友善讨论">&nbsp;&nbsp;
+                                                <a href="#" onclick="reply_comment(<?=$value['id'] ?>,<?=$v['id'] ?>)" style="color:blue">回复</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ol>
+
+                            <?php
+                                    }
+                                }
+                            ?>
+
+                        </li>
+
+                    <?php
+                            }
+                        } else { //没有评论的情况
+                    ?>
+
+                        <li class="single_comment_area">
+                            <div class="comment-content d-flex">
+                                <p>当前还没人评论哦，快来抢沙发~</p>
+                            </div>
+
+                        </li>
+
+                    <?php
                         }
                     ?>
-                    <ol>
-                        <!-- Single Comment Area -->
-                        <li class="single_comment_area">
-                            <!-- Comment Content -->
-                            <div class="comment-content d-flex">
-                                <!-- Comment Author -->
-                                <div class="comment-author">
-                                    <img src="<?=Url::to('@web/img/bg-img/b7.jpg') ?>" alt="author">
-                                </div>
-                                <!-- Comment Meta -->
-                                <div class="comment-meta">
-                                    <a href="#" class="post-date">March 12</a>
-                                    <p><a href="#" class="post-author">William James</a></p>
-                                    <p>Efficitur lorem sed tempor. Integer aliquet tempor cursus. Nullam vestibulum convallis risus vel condimentum. Nullam auctor lorem in libero luctus, vel volutpat quam tincidunt.</p>
-                                    <a href="#" class="comment-reply">Reply</a>
-                                </div>
-                            </div>
-                            <ol class="children">
-                                <li class="single_comment_area">
-                                    <!-- Comment Content -->
-                                    <div class="comment-content d-flex">
-                                        <!-- Comment Author -->
-                                        <div class="comment-author">
-                                            <img src="<?=Url::to('@web/img/bg-img/b7.jpg') ?>" alt="author">
-                                        </div>
-                                        <!-- Comment Meta -->
-                                        <div class="comment-meta">
-                                            <a href="#" class="post-date">March 12</a>
-                                            <p><a href="#" class="post-author">William James</a></p>
-                                            <p>Efficitur lorem sed tempor. Integer aliquet tempor cursus. Nullam vestibulum convallis risus vel condimentum. Nullam auctor lorem in libero luctus, vel volutpat quam tincidunt.</p>
-                                            <a href="#" class="comment-reply">Reply</a>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ol>
-                        </li>
-
-                        <!-- Single Comment Area -->
-                        <li class="single_comment_area">
-                            <!-- Comment Content -->
-                            <div class="comment-content d-flex">
-                                <!-- Comment Author -->
-                                <div class="comment-author">
-                                    <img src="<?=Url::to('@web/img/bg-img/b7.jpg') ?>" alt="author">
-                                </div>
-                                <!-- Comment Meta -->
-                                <div class="comment-meta">
-                                    <a href="#" class="post-date">March 12</a>
-                                    <p><a href="#" class="post-author">William James</a></p>
-                                    <p>Efficitur lorem sed tempor. Integer aliquet tempor cursus. Nullam vestibulum convallis risus vel condimentum. Nullam auctor lorem in libero luctus, vel volutpat quam tincidunt.</p>
-                                    <a href="#" class="comment-reply">Reply</a>
-                                </div>
-                            </div>
-                        </li>
                     </ol>
                 </div>
 
-                <div class="post-a-comment-area mt-70">
-                    <h5>Leave a reply</h5>
+
+                <div class="post-a-comment-area mt-50">
                     <!-- Reply Form -->
-                    <form action="#" method="post">
-                        <div class="row">
-                            <div class="col-12 col-md-6">
-                                <div class="group">
-                                    <input type="text" name="name" id="name" required>
-                                    <span class="highlight"></span>
-                                    <span class="bar"></span>
-                                    <label>Name</label>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <div class="group">
-                                    <input type="email" name="email" id="email" required>
-                                    <span class="highlight"></span>
-                                    <span class="bar"></span>
-                                    <label>Email</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="group">
-                                    <input type="text" name="subject" id="subject" required>
-                                    <span class="highlight"></span>
-                                    <span class="bar"></span>
-                                    <label>Subject</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="group">
-                                    <textarea name="message" id="message" required></textarea>
-                                    <span class="highlight"></span>
-                                    <span class="bar"></span>
-                                    <label>Comment</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <button type="submit" class="btn original-btn">Reply</button>
-                            </div>
-                        </div>
-                    </form>
+                    <div class="col-12">
+                        <textarea id="submit_comment" placeholder="请文明评论，友善讨论哦" style="width:800px;height:200px;word-wrap:break-word"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn original-btn" onclick="reply_comment('submit_comment',0)">回复</button>
+                    </div>
                 </div>
             </div>
+
+            <script type="text/javascript">
+                function reply_comment(comment_id,parent_id) {
+                    var comment_content = window.document.getElementById(comment_id).value;
+
+                    if (comment_content == "") {
+                        alert("请填写评论内容");
+                        return false;
+                    }
+
+                    $.ajax({
+                        url: "http://localhost:7888/knowyou/frontend/web/index.php?r=comment%2Freply",
+                        contentType: "application/x-www-form-urlencode",
+                        type: "post",
+                        data: {
+                            article_id: <?=$article_info['id'] ?>,
+                            content: comment_content,
+                            uid: <?=$user_info['uid'] ?>,
+                            parent_id: parent_id
+                        },
+                        dataType: "json",
+                        success: function(result) {
+                            if (result.code == 100000) {
+                                alert("回复成功!(大流量情况下评论可能会延迟刷新哦>_<)");
+                            } else {
+                                alert(result.msg);
+                            }
+                        },
+                        error: function(result) {
+                            alert("发布失败，请重试或检查网络");
+                        }
+                    })
+
+                    return false;
+                }
+            </script>

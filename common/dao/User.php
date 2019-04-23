@@ -15,9 +15,6 @@ use Yii;
 
 class User extends ActiveRecord
 {
-    const BASE_USER_ID_KEY = 'BASE_USER_ID';
-    const BASE_USER_ID = 10000000;
-
     const TABLE_PARTITION = 4;//分表数
 
     protected static $tableName = '';
@@ -27,7 +24,7 @@ class User extends ActiveRecord
      * @param int $uid
      * @param array $config
      */
-    public function __construct($uid = 0, array $config = [])
+    public function __construct($uid, array $config = [])
     {
         parent::__construct($config);
         self::$tableName = '{{%user0' . $uid % self::TABLE_PARTITION . '}}';

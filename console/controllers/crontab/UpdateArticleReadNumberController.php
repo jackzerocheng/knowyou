@@ -24,7 +24,7 @@ class UpdateArticleReadNumberController extends BaseController
         $redis = Yii::$app->redis;
 
         if (!$redis->exists($key)) {
-            Yii::error("error:cannot get redis read number key", CATEGORIES_CONSOLE);
+            //Yii::error("error:cannot get redis read number key", CATEGORIES_CONSOLE);
             exit(1);
         }
 

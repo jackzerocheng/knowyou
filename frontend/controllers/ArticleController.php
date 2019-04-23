@@ -41,17 +41,13 @@ class ArticleController extends CommonController
         $readNumber = $articleModel->getReadNumber($id);//阅读数
 
         $userInfo = (new UserModel())->getOneByCondition($articleInfo['uid'],['uid'=>$articleInfo['uid']]);//作者信息
+
+        //获取评论
         $commentCondition = [
             'article_id' => $articleInfo['id'],
             'status' => CommentModel::COMMENT_STATUS_NORMAL
         ];
-        $commentNumber = (new CommentModel())->getCountByCondition($articleInfo['id'], $commentCondition);//评论数
-        $commentList = array();//评论列表
-        $page = new Pagination(['totalCount' => $commentNumber,'pageSize' => '10']);
-        if ($commentNumber > 0) {
-            $commentCondition = ['parent_id' => 0];//获取一级评论
-            $commentList = (new CommentModel())->getListByCondition($id, $commentCondition, $page->limit, $page->offset);
-        }
+        list($commentList, $commentNumber) = (new CommentModel())->getListByCondition($articleInfo['id'], $commentCondition);
 
         $data = [
             'article_info' => $articleInfo,
@@ -59,7 +55,6 @@ class ArticleController extends CommonController
             'user_info' => $userInfo,
             'comment_number' => $commentNumber,
             'comment_list' => $commentList,
-            'pages' => $page
         ];
         return $this->render('article', $data);
     }

@@ -18,6 +18,11 @@ class TagModel extends Model
     const TAG_STATUS_STOPPED = 2;
     const TAG_STATUS_DELETED = 3;
 
+    const TAG_TYPE_UNDEFINED = 1;
+    public $tagMap = [
+        self::TAG_TYPE_UNDEFINED => '未分类'
+    ];
+
     public function getOneByCondition($condition = null)
     {
         return (new Tag())->getOneByCondition($condition);
