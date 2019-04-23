@@ -92,7 +92,7 @@ $menuList = (new MenuModel())->getMenuList();
                         <form action="#" class="newsletterForm" method="post">
                             <!--<input type="email" name="email" id="subscribesForm2" placeholder="Your e-mail here">-->
                             <a href="#"><button type="button" class="btn original-btn">个人主页</button></a>
-                            <a href="<?=Url::to(['site/logout']) ?>"><button type="button" class="btn original-btn">退出登录</button></a>
+                            <a href="<?=Url::toRoute('/site/logout') ?>"><button type="button" class="btn original-btn">退出登录</button></a>
                         </form>
                     </div>
                 </div>
@@ -169,7 +169,7 @@ $menuList = (new MenuModel())->getMenuList();
                                 if ($isLogin) {
                                     echo "<a href=\"#\" class=\"btn subscribe-btn\" data-toggle=\"modal\" data-target=\"#subsModal\">{$userInfo['username']}，你好</a>";
                                 } else {
-                                    echo "<a href=\"" . Url::to(['login/index']) . "\" class=\"btn subscribe-btn\">登录/注册</a>";
+                                    echo "<a href=\"" . Url::toRoute('/login/index') . "\" class=\"btn subscribe-btn\">登录/注册</a>";
                                 }
                             ?>
 
@@ -190,7 +190,7 @@ $menuList = (new MenuModel())->getMenuList();
                             <!-- Nav Start -->
                             <div class="classynav">
                                 <ul>
-                                <li><a href="<?=Url::to(['site/index']) ?>">Home</a></li>
+                                <li><a href="<?=Url::toRoute('/site/index') ?>">Home</a></li>
                                 <?php
                                     if (!empty($menuList)) {
                                         foreach ($menuList as $menu) {

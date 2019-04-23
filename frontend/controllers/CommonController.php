@@ -94,7 +94,7 @@ class CommonController extends Controller
 
         $this->redisSession = $redisSession;
 
-        $this->userInfo = $userModel->getOneByCondition($this->userId);
+        $this->userInfo = $userModel->getOneByCondition($this->userId, ['uid' => $this->userId]);
 
         return true;
     }
@@ -106,7 +106,7 @@ class CommonController extends Controller
             $this->outputJson('not_login');
         }
 
-        $this->userInfo = $userModel->getOneByCondition($this->userId);
+        $this->userInfo = $userModel->getOneByCondition($this->userId, ['uid' => $this->userId]);
     }
 
     public function outputJson($errorCode, $data = '', $msg = '')
