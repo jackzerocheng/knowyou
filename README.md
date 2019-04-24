@@ -14,7 +14,7 @@
 
 > 分库分表：传统Hash分表
 
-> 操作系统：entos7.5
+> 操作系统：centos7.5
 
 > 缓存组件：Redis，Memcached
 
@@ -57,7 +57,7 @@
 
 ## 公众号模块
 ![微信对话](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E5%BE%AE%E4%BF%A1%E5%AF%B9%E8%AF%9D.png)
-![公众号管理](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E5%BE%AE%E4%BF%A1%E5%AF%B9%E8%AF%9D.png)
+![公众号管理](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E5%85%AC%E4%BC%97%E5%8F%B7%E7%AE%A1%E7%90%86.png)
 ## 主要模块
 
 - frontend
