@@ -27,9 +27,9 @@ class TestController extends CommonController
         echo $controller->module->id . $controller->id . $controller->action->id;
         echo "<br>\n";
 
-        $rs = Yii::$app->cache->get('WEB_COMMENT_LIST_17');
-        var_dump($rs);
-        $test = Yii::$app->redis->lpop('abc');
+        //$rs = Yii::$app->cache->get('WEB_COMMENT_LIST_17');
+        var_dump(time());
+        $test = Yii::$app->redis->zrange('test',0,10);
         var_dump($test);
         //echo (new RandomString())->outputRandomString(16);
 

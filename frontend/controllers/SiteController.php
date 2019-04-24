@@ -10,6 +10,7 @@
 namespace frontend\controllers;
 
 use common\models\BannerModel;
+use common\models\CommentModel;
 use common\models\UserModel;
 use common\models\ArticleModel;
 use common\models\TagModel;
@@ -22,16 +23,12 @@ class SiteController extends CommonController
     public function actionIndex()
     {
         $articleModel = new ArticleModel();
-        $articleList = $articleModel->getListByCondition(['status' => ArticleModel::ARTICLE_STATUS_NORMAL]);
+        $articleList = $articleModel->getArticleUpdateSet();
 
         //获取缓存数据
-        $uid = array();
         foreach ($articleList as $k => $v) {
             $articleList[$k]['redis_read_number'] = $articleModel->getReadNumber($v['id'], false);
-            //去重
-            if (!in_array($v['uid'], $uid)) {
-                $uid[] = $v['uid'];
-            }
+            $articleList[$k]['comment_number'] = Yii::$app->cache->get(CommentModel::CACHE_COMMENT_NUMBER.$v['id']) ? : 0;
         }
 
         $bannerModel = new BannerModel();
@@ -50,13 +47,10 @@ class SiteController extends CommonController
             $tagMap[$_tag['type']] = $_tag;
         }
 
-        //用户数据获取
-        $userInfo = (new UserModel())->getUserMap($uid);
         $data = [
             'article_list' => $articleList,
             'banner_index_image' => $bannerIndexImage,
-            'tag_map' => $tagMap,
-            'user_info' => $userInfo
+            'tag_map' => $tagMap
         ];
         return $this->render('index', $data);
     }

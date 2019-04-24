@@ -107,6 +107,11 @@ class CommentModel extends Model
         return array($commentList, $commentNumber);
     }
 
+    /**
+     * 发布评论，更新缓存
+     * @param $info
+     * @return bool|int
+     */
     public function insert($info)
     {
         $baseCommentId = Yii::$app->redis->incr(self::BASE_COMMENT_ID);
@@ -118,6 +123,8 @@ class CommentModel extends Model
             Yii::error("insert data to comment failed;data:".json_encode($info), CATEGORIES_ERROR);
             return false;
         }
+
+        $this->getListByDb($info['article_id'], ['article_id' => $info['article_id']]);
 
         return $rs;
     }

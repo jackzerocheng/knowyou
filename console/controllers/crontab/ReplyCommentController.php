@@ -30,11 +30,15 @@ class ReplyCommentController extends BaseController
         $userModel = new UserModel();
         $commentModel = new CommentModel();
 
+        /**
+         * 传统观察者模式来实现消费者，当不存在任务时会阻塞等待
+         */
         $startTime = time();
         while (true) {
             //所有数据只负责传送，并未在之前做校验
-            $jsonData = $redis->lpop($commentModel::LIST_COMMENT_REPLY);
+            $jsonData = $redis->brpop($commentModel::LIST_COMMENT_REPLY, 60);
 
+            //业务处理
             if (!empty($jsonData)) {
                 $data = json_decode($jsonData, true);
 
@@ -50,6 +54,7 @@ class ReplyCommentController extends BaseController
                     continue;
                 }
 
+                //插入评论并更新缓存
                 $rs = $commentModel->insert($data);
                 if (!$rs) {
                     continue;
@@ -57,8 +62,6 @@ class ReplyCommentController extends BaseController
 
                 Yii::info("Reply Comment;data:".$jsonData, CATEGORIES_INFO);
             }
-
-            sleep(1);//每秒执行一次
 
             if ((time() - $startTime) > 60) {//防止脚本一直无法终止
                 break;

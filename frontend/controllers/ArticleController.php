@@ -47,7 +47,7 @@ class ArticleController extends CommonController
             'article_id' => $articleInfo['id'],
             'status' => CommentModel::COMMENT_STATUS_NORMAL
         ];
-        list($commentList, $commentNumber) = (new CommentModel())->getListByCondition($articleInfo['id'], $commentCondition);
+        list($commentList, $commentNumber) = (new CommentModel())->getListByCache($articleInfo['id'], $commentCondition);
 
         $data = [
             'article_info' => $articleInfo,
@@ -121,6 +121,8 @@ class ArticleController extends CommonController
 
             $info = [
                 'uid' => $this->userId,
+                'username' => $this->userInfo['username'],
+                'head' => $this->userInfo['head'],
                 'cover' => $data['cover'],
                 'content' => $data['content']
             ];

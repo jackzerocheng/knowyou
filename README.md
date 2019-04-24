@@ -4,19 +4,23 @@
 
 ## 项目参数
 
->  **分布式Web项目**（微博社区）
+>  **分布式Web项目**（类微博社区）
 
 > 基础框架：yii2
 
-> 语言：PHP7+
+> 语言：PHP7.2(7.2以上才能支持MySQL8的用户密码，修改了加密方式)
 
-> 数据库：MySQL5.6.40
+> 数据库：MySQL8
 
-> 分库分表：分表不分库
+> 分库分表：传统Hash分表
 
-> 操作系统：centos7.5
+> 操作系统：entos7.5
 
-> 缓存组件：Redis
+> 缓存组件：Redis，Memcached
+
+> 日志系统：yii2自带文件日志
+
+> 监控系统：
 
 > 开发周期：每周更新
 
@@ -25,15 +29,19 @@
 * openssl   用于AES和RSA加密
 * Redis     用于生成自增ID与计数变量，实现消息队列（考虑到实际场景和成本，就不上kafka了，，）
 * Memcached 用于缓存文章及评论内容
-* kafka     消息队列，用于写入评论或其他频繁执行的操作
+* kafka(暂不需要)     消息队列，用于写入评论或其他频繁执行的操作
 ---
+## 其他插件
+* Ueditor：百度富文本编辑器(http://fex.baidu.com/ueditor/#server-php)
+* layui:   前端开发框架
+
 
 ## 前言
 ```html
 <div>部分文件涉及数据敏感性，需要手动添加</div>
 <ul>
 <li>knowoyu/common/const.php -- 包含系统基本常量参数,如密钥，时间戳等</li>
-<li>DB、REDIS、COOKIE等配置都写在了本地文件knowyou/common/config/main-local.php</li>
+<li>DB、COOKIE等配置都写在了本地文件knowyou/common/config/main-local.php</li>
 </ul>
 
 ```
@@ -47,9 +55,9 @@
 ![添加菜单](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E6%B7%BB%E5%8A%A0%E8%8F%9C%E5%8D%95.png)
 
 
-## 微信模块
+## 公众号模块
 ![微信对话](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E5%BE%AE%E4%BF%A1%E5%AF%B9%E8%AF%9D.png)
-
+![公众号管理](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E5%BE%AE%E4%BF%A1%E5%AF%B9%E8%AF%9D.png)
 ## 主要模块
 
 - frontend
@@ -65,10 +73,6 @@
 
 - api
 - 三方接口请求模块
-
-## 所用插件
-* Ueditor：引用富文本编辑器
-* 文档地址：http://fex.baidu.com/ueditor/#server-php
 
 ---
 

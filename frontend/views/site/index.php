@@ -22,7 +22,7 @@ $this->title = '简 · 默';
                     <div class="col-12">
                         <div class="slide-content text-center">
                             <div class="post-tag">
-                                <a href="#" data-animation="fadeInUp"></a>
+                                <!--<a href="#" data-animation="fadeInUp"></a>-->
                             </div>
                             <h2 data-animation="fadeInUp" data-delay="250ms"><a href="<?=$line['link'] ?>"><?=$line['name'] ?></a></h2>
                         </div>
@@ -84,7 +84,7 @@ $this->title = '简 · 默';
 
                 <?php
                 /**
-                 * 混合feed流
+                 * 展示最近动态文章
                  */
                 if (!empty($article_list)) {
                     foreach ($article_list as $_article) {
@@ -106,10 +106,10 @@ $this->title = '简 · 默';
                             <div class="single-blog-content">
                                 <div class="line"></div>
                                 <a href="#" class="post-tag"><?=$tag_map[$_article['tag']]['name'] ?></a>
-                                <h4><a href="#" class="post-headline"><?=$_article['title'] ?></a></h4>
+                                <h4><a href="<?=Url::toRoute(['/article/index', 'id' => $_article['id']]) ?>" class="post-headline"><?=$_article['title'] ?></a></h4>
                                 <p><?=$_article['content'] ?></p>
                                 <div class="post-meta">
-                                    <p>By <a href="#"><?=$user_info[$_article['uid']]['username'] ?></a></p>
+                                    <p>By <a href="#"><?=$_article['username'] ?></a></p>
                                     <p><?=$_article['redis_read_number'] . '人已读' ?></p>
                                 </div>
                             </div>
@@ -119,6 +119,33 @@ $this->title = '简 · 默';
                 <?php
                     }
                 } else {
+                ?>
+
+                    <div class="single-blog-area blog-style-2 mb-50 wow fadeInUp" data-wow-delay="0.2s" data-wow-duration="1000ms">
+                        <div class="row align-items-center">
+                            <div class="col-12 col-md-6">
+                                <div class="single-blog-thumbnail">
+                                    <?=Html::img('http://data.jianmo.top/img/default/not_found.gif') ?>
+                                    <div class="post-date">
+                                        <a href="#"><?=date('d') ?> <span><?=date('m') ?></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <!-- Blog Content -->
+                                <div class="single-blog-content">
+                                    <div class="line"></div>
+                                    <p>不可能，怎么会什么都没有！！！</p>
+                                    <div class="post-meta">
+                                        <p>By <a href="#">异次元程序员</a></p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <?php
 
                 }
                 ?>

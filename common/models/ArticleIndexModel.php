@@ -172,9 +172,6 @@ class ArticleIndexModel extends Model
     public function insert($articleID)
     {
         $redis = Yii::$app->redis;
-        if (!$redis->exists(self::ARTICLE_NUMBER_COUNT)) {
-            $redis->set(self::ARTICLE_NUMBER_COUNT, 0);
-        }
 
         $id = $redis->incr(self::ARTICLE_NUMBER_COUNT);
         $key = intval($id / self::MAX_RECORD_NUMBER);

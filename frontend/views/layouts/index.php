@@ -221,7 +221,6 @@ $menuList = (new MenuModel())->getMenuList();
                                     <div id="close-icon"></div>
                                     <?=Html::submitInput('', ['class' => 'd-none']) ?>
                                     <?=Html::endForm() ?>
-
                                 </div>
                             </div>
                             <!-- Nav End -->

@@ -1,6 +1,8 @@
 create table knowyou_article03 (
 id int(11) PRIMARY KEY comment 'baseID * partition + uid % partition',
 uid int(11) not null default 0,
+username varchar(30) not null default '',
+head varchar(100) not null default '',
 title varchar(50) not null default '' comment '标题',
 cover varchar(100) not null default '' comment '封面图片',
 content text  comment '文章内容',
