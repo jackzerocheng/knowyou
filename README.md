@@ -48,16 +48,16 @@
 
 ## 系统截图
 
-![首页](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E9%A6%96%E9%A1%B5.png)
-![后台列表页](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E5%90%8E%E5%8F%B0%E5%88%97%E8%A1%A8%E9%A1%B5.png)
-![登录页](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E7%99%BB%E5%BD%95%E9%A1%B5.png)
-![文章列表](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E6%96%87%E7%AB%A0%E5%88%97%E8%A1%A8.png)
-![添加菜单](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E6%B7%BB%E5%8A%A0%E8%8F%9C%E5%8D%95.png)
+![首页](https://github.com/jackzerocheng/data/blob/master/img/projectImage/%E9%A6%96%E9%A1%B5.png)
+![后台列表页](https://github.com/jackzerocheng/data/blob/master/img/projectImage/%E5%90%8E%E5%8F%B0%E5%88%97%E8%A1%A8%E9%A1%B5.png)
+![登录页](https://github.com/jackzerocheng/data/blob/master/img/projectImage/%E7%99%BB%E5%BD%95%E9%A1%B5.png)
+![文章列表](https://github.com/jackzerocheng/data/blob/master/img/projectImage/%E6%96%87%E7%AB%A0%E5%88%97%E8%A1%A8.png)
+![添加菜单](https://github.com/jackzerocheng/data/blob/master/img/projectImage/%E6%B7%BB%E5%8A%A0%E8%8F%9C%E5%8D%95.png)
 
 
 ## 公众号模块
-![微信对话](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E5%BE%AE%E4%BF%A1%E5%AF%B9%E8%AF%9D.png)
-![公众号管理](https://github.com/jackzerocheng/knowyou/blob/master/environments/doc/projectImage/%E5%85%AC%E4%BC%97%E5%8F%B7%E7%AE%A1%E7%90%86.png)
+![微信对话](https://github.com/jackzerocheng/data/blob/master/img/projectImage/%E5%BE%AE%E4%BF%A1%E5%AF%B9%E8%AF%9D.png)
+![公众号管理](https://github.com/jackzerocheng/data/blob/master/img/projectImage/%E5%85%AC%E4%BC%97%E5%8F%B7%E7%AE%A1%E7%90%86.png)
 ## 主要模块
 
 - frontend
