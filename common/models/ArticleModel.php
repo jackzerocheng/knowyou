@@ -46,24 +46,6 @@ class ArticleModel extends Model
     }
 
     /**
-     * 获取最近活跃的文章，默认前20条
-     * @param $start
-     * @param $number
-     * @return array
-     */
-    public function getArticleUpdateSet($start = 0, $number = 20)
-    {
-        $redis = Yii::$app->redis;
-        $key = self::REDIS_ARTICLE_UPDATE_SET.date('Ym');
-
-        //获取集合中数据
-        $ids = $redis->zrange($key, $start, $number - 1);
-        $list = $this->getListByIds($ids);
-
-        return $list;
-    }
-
-    /**
      * ID批量查询
      * @param array $ids
      * @param bool $asc

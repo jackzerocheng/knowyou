@@ -9,8 +9,10 @@
 
 namespace frontend\controllers;
 
+use common\cache\Article\ArticleCache;
+use common\cache\Article\ArticleRedis;
+use common\cache\Comment\CommentCache;
 use common\models\BannerModel;
-use common\models\CommentModel;
 use common\models\UserModel;
 use common\models\ArticleModel;
 use common\models\TagModel;
@@ -23,13 +25,14 @@ class SiteController extends CommonController
     public function actionIndex()
     {
         $articleModel = new ArticleModel();
-        $articleList = $articleModel->getArticleUpdateSet();//获取首页文章列表 - 策略：最新活跃文章
+        //获取首页文章列表 - 策略：最新活跃文章
+        $activeArticle = $articleModel->getListByIds((new ArticleRedis())->getActiveArticleID());
 
         //获取缓存数据
-        if (!empty($articleList)) {
-            foreach ($articleList as $k => $v) {
-                $articleList[$k]['redis_read_number'] = $articleModel->getReadNumber($v['id'], false);
-                $articleList[$k]['comment_number'] = Yii::$app->cache->get(CommentModel::CACHE_COMMENT_NUMBER.$v['id']) ? : 0;
+        if (!empty($activeArticle)) {
+            foreach ($activeArticle as $k => $v) {
+                $activeArticle[$k]['redis_read_number'] = (new ArticleCache())->getArticleReadNumber($v['id']);
+                $activeArticle[$k]['comment_number'] = (new CommentCache())->getCommentNumber($v['id']);
             }
         }
 
@@ -51,7 +54,7 @@ class SiteController extends CommonController
         }
 
         $data = [
-            'article_list' => $articleList,
+            'article_list' => $activeArticle,
             'banner_index_image' => $bannerIndexImage,
             'tag_map' => $tagMap
         ];
