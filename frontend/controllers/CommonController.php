@@ -22,10 +22,10 @@ class CommonController extends Controller
     public $redisSession;//uid,time,ip
 
     public $requireLogin = false;
-    public $apiCheckLogin = false;//ajax请求
     public $errorCodeFile = 'frontErrorCode';
 
-    public function init()
+
+    public function beforeAction($action)
     {
         /*
         * 记录每次请求信息
@@ -35,17 +35,12 @@ class CommonController extends Controller
         $actionName = Yii::$app->controller->action->id;
         Yii::info("Request Route:".$moduleName.'/'.$controllerName.'/'.$actionName.';Client IP:'.getIP(), CATEGORIES_ACCESS);
 
-
         //要求登录态访问
         if ($this->requireLogin) {
             $this->checkLogin();
         }
 
-        //api检测
-        if ($this->apiCheckLogin) {
-            $this->apiCheckLogin();
-        }
-
+        return parent::beforeAction($action);
     }
 
     public function removeSession()
@@ -55,6 +50,10 @@ class CommonController extends Controller
         return true;
     }
 
+    /**
+     * TODO: 优化
+     * @return mixed
+     */
     public function checkLogin()
     {
         $nowIP = getIP();
@@ -97,16 +96,6 @@ class CommonController extends Controller
         $this->userInfo = $userModel->getOneByCondition($this->userId, ['uid' => $this->userId]);
 
         return true;
-    }
-
-    public function apiCheckLogin()
-    {
-        $userModel = new UserModel();
-        if (!$this->userId = $userModel->getSession()) {
-            $this->outputJson('not_login');
-        }
-
-        $this->userInfo = $userModel->getOneByCondition($this->userId, ['uid' => $this->userId]);
     }
 
     public function outputJson($errorCode, $data = '', $msg = '')

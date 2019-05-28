@@ -25,7 +25,7 @@ class ArticleController extends CommonController
 
         $condition = ['status' => $articleModel::ARTICLE_STATUS_UNVERIFIED];
         //记录总数
-        $count = $articleIndexModel->getArticleNumberCount($condition);
+        $count = $articleModel->getCountByCondition($condition);
         $page = new Pagination(['totalCount' => $count, 'pageSize' => '10']);
         $articleList = $articleIndexModel->getListByCondition($condition, $page->limit, $page->offset);
         $uid = array();

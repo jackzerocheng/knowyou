@@ -31,12 +31,12 @@ class ArticleIndexModel extends Model
      */
     public function getArticleByTime($maxID = 0, $limit = 10)
     {
-        $articleCount = Yii::$app->redis->get(self::ARTICLE_NUMBER_COUNT) ? : 0;//获取计数
-        if (!$maxID) {
-            $maxID = $articleCount + 1;
+        $articleNumber = (new ArticleModel)->getArticleNumber();//获取文章总数
+        if (!$maxID) {//未传Maxid为默认情况
+            $maxID = $articleNumber + 1;
         }
 
-        if ($maxID > $articleCount) {
+        if ($maxID > $articleNumber) {
             $oldMaxID = -1;
         }
 
@@ -44,17 +44,24 @@ class ArticleIndexModel extends Model
 
         $count = (new ArticleIndex($key))->getCountByCondition(['max_id' => $maxID]);
         $needNumber = 0;
-        if ($count < $limit && $maxID - $limit > 0 && ($maxID - $limit) < $key * self::MAX_RECORD_NUMBER) {
+        if ($count < $limit && $articleNumber - $limit > 0) {
             //剩余数据不足，需要切换到下一张表取数据
             $needNumber = $limit - $count;
         }
 
-        $data = (new ArticleIndex($key))->getAllList(['max_id' => $maxID], $limit);
-        if ($needNumber > 0) {
-            //去下一张表去数据
-            $temp = (new ArticleIndex($key - 1))->getAllList(['max_id' => $maxID], $needNumber);
-            $data = array_merge($data, $temp);
+        $data = array();
+        if ($count > 0) {//存在数据
+            $data = (new ArticleIndex($key))->getAllList(['max_id' => $maxID], $limit);
+
+            if ($needNumber > 0) {
+                //去下一张表去数据
+                $temp = (new ArticleIndex($key - 1))->getAllList(['max_id' => $maxID], $needNumber);
+                $data = array_merge($data, $temp);
+            }
         }
+
+
+
 
         //循环获取文章列表 -- 保证时间顺序 所以不用批量查询
         $articleList = array();
@@ -122,26 +129,6 @@ class ArticleIndexModel extends Model
         }
 
         return $articleList;
-    }
-
-    /**
-     * 获取所有文章总数
-     * 循环获取
-     * @param $condition
-     * @return int
-     */
-    public function getArticleNumberCount($condition)
-    {
-        $tableNumber = $this->getTableNumberArray($condition);
-
-        $total = 0;
-        if (!empty($tableNumber)) {
-            foreach ($tableNumber as $k => $v) {
-                $total += $v;
-            }
-        }
-
-        return $total;
     }
 
     /**

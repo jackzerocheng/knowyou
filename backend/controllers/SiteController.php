@@ -2,6 +2,7 @@
 namespace backend\controllers;
 
 use common\models\ArticleIndexModel;
+use common\models\ArticleModel;
 use common\models\BackendMessageModel;
 use common\models\SuggestModel;
 use common\models\UserIndexModel;
@@ -21,8 +22,8 @@ class SiteController extends CommonController
             'today_message_number' => (new SuggestModel())->getCountByCondition($params),//今日留言
             'today_new_user_number' => (new UserIndexModel())->getUserCountNumber($params),//今日注册数
             'all_user_number' => (new UserIndexModel())->getUserCountNumber([]),//总用户量
-            'today_article_number' => (new ArticleIndexModel())->getArticleNumberCount($params),//今日文章数
-            'all_article_number' => (new ArticleIndexModel())->getArticleNumberCount([]),//总文章数
+            'today_article_number' => (new ArticleModel())->getCountByCondition($params),//今日文章数
+            'all_article_number' => (new ArticleModel())->getArticleNumber(),//总文章数
         ];
 
         $data = [

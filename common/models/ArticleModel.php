@@ -34,12 +34,11 @@ class ArticleModel extends Model
     const REDIS_ARTICLE_READ_NUMBER = 'know_you_article_read_number_';//文章阅读数 hash 有效期三天
     const REDIS_EXPIRE_TIME = 259200;//三天
     const BASE_ARTICLE_ID_KEY = 'BASE_ARTICLE_ID';//id = base_id * partition + uid % partition
-
+    const REDIS_ARTICLE_UPDATE_SET = 'article_update_set_';//文章更新热度 - 点赞 评论 新发布文章 操作更新该值
     const ARTICLE_COVER_DEFAULT = 'http://data.jianmo.top/img/default/default_cover.png';//文章默认封面
     const TABLE_PARTITION = 4;
+    const REDIS_ARTICLE_NUMBER = 'know_you_article_number';//文章计数 - 定时任务
 
-    //文章更新热度 - 点赞 评论 新发布文章 操作更新该值
-    const REDIS_ARTICLE_UPDATE_SET = 'article_update_set_';
 
     public function rules()
     {
@@ -56,11 +55,8 @@ class ArticleModel extends Model
     {
         $redis = Yii::$app->redis;
         $key = self::REDIS_ARTICLE_UPDATE_SET.date('Ym');
-        if ($redis->zcard($key) < $number) {
-            list($list,$newId,$oldId) = (new ArticleIndexModel())->getArticleByTime(0, $number);
-            return $list;
-        }
 
+        //获取集合中数据
         $ids = $redis->zrange($key, $start, $number - 1);
         $list = $this->getListByIds($ids);
 
@@ -143,11 +139,26 @@ class ArticleModel extends Model
     }
 
     /**
-     * 获取总表记录数
+     * 返回文章总数 - 缓存 or DB
+     * @return int
+     */
+    public function getArticleNumber()
+    {
+        $redis = Yii::$app->redis;
+        $number = $redis->get(self::REDIS_ARTICLE_NUMBER);//获取文章总数，无则读DB
+        if (empty($number)) {
+            $number = $this->getCountByCondition([]);
+        }
+
+        return intval($number);
+    }
+
+    /**
+     * 从DB中获取总表记录数
      * @param null $condition
      * @return int
      */
-    public function getCountByCondition($condition = null)
+    public function getCountByCondition($condition)
     {
         $count = Article::TABLE_PARTITION;
         $result = 0;

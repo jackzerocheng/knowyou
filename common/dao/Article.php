@@ -124,6 +124,10 @@ class Article extends ActiveRecord
                 if ($k == 'search') {
                     $db = $db->orWhere("title like '%{$v}%'");
                     $db = $db->orWhere("content like '%{$v}%'");
+                } elseif ($k == 'start_at') {
+                    $db = $db->andWhere("created_at >= {$v}");
+                } elseif ($k == 'end_at') {
+                    $db = $db->andWhere("created_at < {$v}");
                 } else {
                     $db = $db->andWhere([$k => $v]);
                 }

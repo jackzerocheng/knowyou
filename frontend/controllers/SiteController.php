@@ -23,13 +23,16 @@ class SiteController extends CommonController
     public function actionIndex()
     {
         $articleModel = new ArticleModel();
-        $articleList = $articleModel->getArticleUpdateSet();
+        $articleList = $articleModel->getArticleUpdateSet();//获取首页文章列表 - 策略：最新活跃文章
 
         //获取缓存数据
-        foreach ($articleList as $k => $v) {
-            $articleList[$k]['redis_read_number'] = $articleModel->getReadNumber($v['id'], false);
-            $articleList[$k]['comment_number'] = Yii::$app->cache->get(CommentModel::CACHE_COMMENT_NUMBER.$v['id']) ? : 0;
+        if (!empty($articleList)) {
+            foreach ($articleList as $k => $v) {
+                $articleList[$k]['redis_read_number'] = $articleModel->getReadNumber($v['id'], false);
+                $articleList[$k]['comment_number'] = Yii::$app->cache->get(CommentModel::CACHE_COMMENT_NUMBER.$v['id']) ? : 0;
+            }
         }
+
 
         $bannerModel = new BannerModel();
         $bannerCondition = [
