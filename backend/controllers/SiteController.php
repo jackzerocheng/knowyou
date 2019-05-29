@@ -23,7 +23,7 @@ class SiteController extends CommonController
             'today_new_user_number' => (new UserIndexModel())->getUserCountNumber($params),//今日注册数
             'all_user_number' => (new UserIndexModel())->getUserCountNumber([]),//总用户量
             'today_article_number' => (new ArticleModel())->getCountByCondition($params),//今日文章数
-            'all_article_number' => (new ArticleModel())->getArticleNumber(),//总文章数
+            'all_article_number' => (new ArticleModel())->getArticleTotal(),//总文章数
         ];
 
         $data = [

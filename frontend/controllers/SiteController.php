@@ -9,10 +9,8 @@
 
 namespace frontend\controllers;
 
-use common\cache\Article\ArticleCache;
-use common\cache\Article\ArticleRedis;
-use common\cache\Comment\CommentCache;
 use common\models\BannerModel;
+use common\models\CommentModel;
 use common\models\UserModel;
 use common\models\ArticleModel;
 use common\models\TagModel;
@@ -26,16 +24,15 @@ class SiteController extends CommonController
     {
         $articleModel = new ArticleModel();
         //获取首页文章列表 - 策略：最新活跃文章
-        $activeArticle = $articleModel->getListByIds((new ArticleRedis())->getActiveArticleID());
+        $activeArticle = $articleModel->getActiveArticle();
 
         //获取缓存数据
         if (!empty($activeArticle)) {
             foreach ($activeArticle as $k => $v) {
-                $activeArticle[$k]['redis_read_number'] = (new ArticleCache())->getArticleReadNumber($v['id']);
-                $activeArticle[$k]['comment_number'] = (new CommentCache())->getCommentNumber($v['id']);
+                $activeArticle[$k]['redis_read_number'] = $articleModel->getArticleReadNumber($v['id']);
+                $activeArticle[$k]['comment_number'] = (new CommentModel())->getCommentNumber($v['id']);
             }
         }
-
 
         $bannerModel = new BannerModel();
         $bannerCondition = [
@@ -47,16 +44,12 @@ class SiteController extends CommonController
         $bannerIndexImage = $bannerModel->getListByCondition($bannerCondition);
 
         //标签获取
-        $tagList = (new TagModel())->getListByCondition(['status' => TagModel::TAG_STATUS_USING]);
-        $tagMap = array();
-        foreach ($tagList as $_tag) {
-            $tagMap[$_tag['type']] = $_tag;
-        }
+        $tagList = (new TagModel())->getTagInfo(['status' => TagModel::TAG_STATUS_USING]);
 
         $data = [
             'article_list' => $activeArticle,
             'banner_index_image' => $bannerIndexImage,
-            'tag_map' => $tagMap
+            'tag_map' => $tagList
         ];
         return $this->render('index', $data);
     }

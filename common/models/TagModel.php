@@ -9,6 +9,7 @@
 
 namespace common\models;
 
+use common\cache\Tag\TagCache;
 use yii\base\Model;
 use common\dao\Tag;
 
@@ -22,6 +23,26 @@ class TagModel extends Model
     public $tagMap = [
         self::TAG_TYPE_UNDEFINED => '未分类'
     ];
+
+    public function getTagInfo($condition, $useCache = true)
+    {
+        $tagInfo = array();
+        if ($useCache) {//查询缓存
+            $tagInfo = (new TagCache())->getTagInfo($condition);
+        }
+
+        if (empty($tagInfo)) {
+            $list = $this->getListByCondition($condition);
+            foreach ($list as $_list) {
+                $tagInfo[$_list['type']] = $_list;
+            }
+
+            //添加缓存
+            (new TagCache())->setTagInfo(json_encode($tagInfo));
+        }
+
+        return $tagInfo;
+    }
 
     public function getOneByCondition($condition = null)
     {

@@ -149,7 +149,8 @@ $menuList = (new MenuModel())->getMenuList();
             <div class="container h-100">
                 <div class="row h-100 align-items-center">
                     <div class="col-12">
-                        <a href="<?= !empty($topImage) ? $topImage[0]['link'] : '' ?>" class="original-logo"><?=Html::img(!empty($topImage) ? $topImage[0]['img'] : '@web/img/core-img/logo.png') ?></a>
+                        <a href="<?= !empty($topImage) ? $topImage[0]['link'] : 'http://data.jianmo.top/img/picture/eye.png' ?>" title="凝视深渊" class="original-logo">
+                            <img src="<?= (!empty($topImage) ? $topImage[0]['img'] : 'http://data.jianmo.top/img/picture/eye.png') ?>" style="width:20%;"></a>
                     </div>
                 </div>
             </div>
@@ -217,7 +218,7 @@ $menuList = (new MenuModel())->getMenuList();
                                 <!-- Search Form  -->
                                 <div id="search-wrapper">
                                     <?=Html::beginForm(['article/list'], 'post', ['id' => 'searchForm']) ?>
-                                    <?=Html::input('text', 'search', '', ['placeholder' => '搜索关键字', 'id' => 'search']) ?>
+                                    <?=Html::input('text', 'search', '', ['placeholder' => '搜索关键字', 'id' => 'search', 'autocomplete' => 'off']) ?>
                                     <div id="close-icon"></div>
                                     <?=Html::submitInput('', ['class' => 'd-none']) ?>
                                     <?=Html::endForm() ?>

@@ -9,7 +9,8 @@
 
 namespace frontend\controllers;
 
-use common\cache\Comment\CommentCache;
+use common\cache\Article\ArticleRedis;
+use common\cache\Comment\CommentRedis;
 use common\models\MenuModel;
 use common\models\ArticleIndexModel;
 use yii\web\Cookie;
@@ -28,7 +29,7 @@ class TestController extends CommonController
         echo $controller->module->id . $controller->id . $controller->action->id;
         echo "<br>\n";
 
-        var_dump((new CommentCache())->incrCommentNumber(1));
+        var_dump((new ArticleRedis())->incrArticleReadNumber(1));
         //$rs = Yii::$app->cache->get('WEB_COMMENT_LIST_17');
         //var_dump(time());
         //$test = Yii::$app->redis->zrange('test',0,10);

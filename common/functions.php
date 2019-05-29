@@ -69,8 +69,8 @@ function getMillisecond()
  */
 function quickSortToArray($arr, $index, $asc = true)
 {
-    if (empty($arr)) {
-        return array();
+    if (count($arr) <= 1) {
+        return $arr;
     }
 
     $key = $arr[0];

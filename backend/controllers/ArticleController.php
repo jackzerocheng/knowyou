@@ -31,7 +31,7 @@ class ArticleController extends CommonController
         $uid = array();
         //获取缓存数据
         foreach ($articleList as $k => $v) {
-            $articleList[$k]['redis_read_number'] = $articleModel->getReadNumber($v['id'], false);
+            $articleList[$k]['redis_read_number'] = $articleModel->getArticleReadNumber($v['id']);
             $uid[] = $v['uid'];
         }
 

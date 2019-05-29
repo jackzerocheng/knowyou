@@ -58,7 +58,7 @@ $this->title = '简 · 默';
             <!-- Single Blog Area -->
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="single-catagory-area clearfix mb-100">
-                    <?=Html::img('@web/img/blog-img/1.jpg') ?>
+                    <?=Html::img('http://data.jianmo.top/img/picture/1.jpg') ?>
                     <!-- Catagory Title -->
                     <div class="catagory-title">
                         <a href="<?=Url::to(['article/list']) ?>">看看文章</a>
@@ -68,7 +68,7 @@ $this->title = '简 · 默';
             <!-- Single Blog Area -->
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="single-catagory-area clearfix mb-100">
-                    <?=Html::img('@web/img/blog-img/2.jpg') ?>
+                    <?=Html::img('http://data.jianmo.top/img/picture/2.jpg') ?>
                     <!-- Catagory Title -->
                     <div class="catagory-title">
                         <a href="#">逛逛论坛</a>

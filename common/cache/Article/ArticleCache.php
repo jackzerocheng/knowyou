@@ -13,19 +13,21 @@ use common\cache\BaseCache;
 
 class ArticleCache extends BaseCache
 {
-    const CACHE_ARTICLE_READ_NUMBER = 'article_read_number:';
+    const CACHE_ARTICLE_INFO = 'article_info:';
 
-    public function getArticleReadNumber($id)
+    public function getArticleInfo($id)
     {
-        return intval($this->get(self::CACHE_ARTICLE_READ_NUMBER . $id));
+        $rs = [];
+        $data = $this->get(self::CACHE_ARTICLE_INFO . $id);
+        if (!empty($data)) {
+            $rs = json_decode($data, true);
+        }
+
+        return $rs;
     }
 
-    public function incrArticleReadNumber($id)
+    public function setArticleInfo($id, $value)
     {
-        $number = $this->getArticleReadNumber($id);
-
-        $this->set(self::CACHE_ARTICLE_READ_NUMBER . $id, ++$number, ONE_MONTH);
-
-        return $number;
+        return $this->set(self::CACHE_ARTICLE_INFO . $id, $value. ONE_MONTH);
     }
 }

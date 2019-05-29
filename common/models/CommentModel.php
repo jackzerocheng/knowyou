@@ -9,6 +9,7 @@
 
 namespace common\models;
 
+use common\cache\Comment\CommentRedis;
 use yii\base\Model;
 use common\dao\Comment;
 use Yii;
@@ -30,6 +31,15 @@ class CommentModel extends Model
     //redis消息队列
     const LIST_COMMENT_REPLY = 'WEB_COMMENT_REPLY';
 
+    private $redis;
+
+    public function __construct(array $config = [])
+    {
+        parent::__construct($config);
+
+        $this->redis = new CommentRedis();
+    }
+
     /**
      * 获取评论数
      * @param $id
@@ -39,6 +49,27 @@ class CommentModel extends Model
     public function getCountByCondition($id, $condition)
     {
         return (new Comment($id))->getCountByCondition($condition);
+    }
+
+    /**
+     * 获取文章正常评论数
+     * @param $id
+     * @return int
+     */
+    public function getCommentNumber($id)
+    {
+        $commentNumber = $this->redis->getCommentNumber($id);
+
+        //无缓存
+        if (empty($commentNumber)) {
+            $commentNumber = $this->getCountByCondition($id, ['article_id' => $id, 'status' => self::COMMENT_STATUS_NORMAL]);
+
+            if (!empty($commentNumber)) {
+                $this->redis->setCommentNumber($id, $commentNumber);
+            }
+        }
+
+        return $commentNumber;
     }
 
     /**

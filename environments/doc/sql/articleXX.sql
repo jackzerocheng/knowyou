@@ -12,7 +12,7 @@ read_number int(11) not null default 0 comment '文章阅读数，定期更新DB
 praise_number int(11) not null default 0 comment '文章点赞数，定期更新DB',
 dislike_number int(11) not null default 0 comment '文章不喜欢数',
 tag tinyint(4) not null default 1 comment '文章标签，1未分类，后面大数据用',
-updated_at timestamp not null default '2018-10-01 00:00:00',
-created_at timestamp not null default current_timestamp,
+updated_at timestamp not null default current_timestamp,
+created_at timestamp not null default '2018-10-01 00:00:00',
 index uid_article (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment = '文章表';

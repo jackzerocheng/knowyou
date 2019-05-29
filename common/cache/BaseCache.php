@@ -37,6 +37,10 @@ class BaseCache
      */
     public function set($key, $value, $duration = null)
     {
+        if ($this->useRedis) {
+            return $this->cache->set($key, $value);
+        }
+
         return $this->cache->set($key, $value, $duration);
     }
 

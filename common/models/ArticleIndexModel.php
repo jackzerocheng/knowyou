@@ -31,7 +31,7 @@ class ArticleIndexModel extends Model
      */
     public function getArticleByTime($maxID = 0, $limit = 10)
     {
-        $articleNumber = (new ArticleModel)->getArticleNumber();//获取文章总数
+        $articleNumber = (new ArticleModel)->getArticleTotal();//获取文章总数
         if (!$maxID) {//未传Maxid为默认情况
             $maxID = $articleNumber + 1;
         }
@@ -116,8 +116,8 @@ class ArticleIndexModel extends Model
         }
 
         $indexList = (new ArticleIndex($finalKey))->getListByCondition($condition, $limit, $finalOffset);
-        if ($lessNumber) {
-            $temp = (new ArticleIndex($finalKey -1))->getListByCondition($condition, $lessNumber, 0);
+        if ($lessNumber) {//当前表记录不足的情况
+            $temp = (new ArticleIndex($finalKey - 1))->getListByCondition($condition, $lessNumber, 0);
             $indexList = array_merge($indexList, $temp);
         }
 
@@ -139,7 +139,7 @@ class ArticleIndexModel extends Model
      */
     public function getTableNumberArray($condition)
     {
-        $nowCount = Yii::$app->redis->get(self::ARTICLE_NUMBER_COUNT);
+        $nowCount = (new ArticleModel())->getArticleTotal();
         $key = intval($nowCount / self::MAX_RECORD_NUMBER);
 
         $rs = array();
