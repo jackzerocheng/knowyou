@@ -9,6 +9,7 @@
 
 namespace frontend\controllers;
 
+use common\cache\Tag\TagCache;
 use common\models\ArticleModel;
 use common\models\ArticleIndexModel;
 use common\models\CommentModel;
@@ -26,28 +27,29 @@ class ArticleController extends CommonController
     public function actionIndex()
     {
         $articleModel = new ArticleModel();
+        $commentModel = new CommentModel();
+
         $id = (new Request())->get('id');
         if (empty($id)) {
             Yii::$app->session->setFlash('front_error_message', '对不起，你访问的页面不存在哦');
             return $this->redirect(['site/error']);
         }
 
-        $articleInfo = $articleModel->getOneByCondition($id, ['id' => $id]);
+        $articleInfo = $articleModel->getArticleInfo($id);
         if (empty($articleInfo)) {
             Yii::$app->session->setFlash('front_error_message', '主人，我没找到你想要的！');
             return $this->redirect(['site/error']);
         }
 
-        $readNumber = $articleModel->getReadNumber($id);//阅读数
-
-        $userInfo = (new UserModel())->getOneByCondition($articleInfo['uid'],['uid'=>$articleInfo['uid']]);//作者信息
+        $readNumber = $articleModel->incrArticleReadNumber($id);//阅读数
+        $userInfo = (new UserModel())->getUserInfo($articleInfo['uid']);//作者信息
 
         //获取评论
-        $commentCondition = [
-            'article_id' => $articleInfo['id'],
-            'status' => CommentModel::COMMENT_STATUS_NORMAL
-        ];
-        list($commentList, $commentNumber) = (new CommentModel())->getListByCache($articleInfo['id'], $commentCondition);
+        $commentNumber = $commentModel->getCommentNumber($articleInfo['id']);
+        $commentList = array();
+        if ($commentNumber > 0) {
+            $commentList = $commentModel->getCommentList($articleInfo['id'], ['status' => CommentModel::COMMENT_STATUS_NORMAL]);
+        }
 
         $data = [
             'article_info' => $articleInfo,
@@ -63,9 +65,16 @@ class ArticleController extends CommonController
     public function actionList()
     {
         $condition = array();
-        //搜索
-        if ($key = Yii::$app->request->post('search')) {
-            $condition = ['search' => $key];
+        $params = Yii::$app->request->post();
+
+        //标签
+        if (!empty($params['tag'])) {
+            $condition[] = ['tag' => $params['tag']];
+        }
+
+        //搜索 - 标题 或 内容
+        if (!empty($params['search'])) {
+            $condition[] = ['search' => $params['search']];
         }
 
         $articleModel = new ArticleModel();
@@ -74,26 +83,16 @@ class ArticleController extends CommonController
         $articleList = array();//文章列表
         if ($count > 0) {
             $articleList = $articleModel->getListByCondition($condition, $page->limit, $page->offset);
+            foreach ($articleList as $k => $v) {
+                $articleList[$k]['redis_read_number'] = $articleModel->getArticleReadNumber($v['id']);
+            }
         }
 
-        $uid = array();
-        //获取缓存数据
-        foreach ($articleList as $k => $v) {
-            $articleList[$k]['redis_read_number'] = $articleModel->getReadNumber($v['id'], false);
-            $uid[] = $v['uid'];
-        }
+        $tagMap = (new TagCache())->getTagInfo(['status' => TagModel::TAG_STATUS_USING]);
 
-        $tagList = (new TagModel())->getListByCondition(['status' => TagModel::TAG_STATUS_USING]);
-        $tagMap = array();
-        foreach ($tagList as $_tag) {
-            $tagMap[$_tag['type']] = $_tag;
-        }
-
-        $userInfo = (new UserModel())->getUserMap($uid);
         $data = [
             'article_list' => $articleList,
             'tag_map' => $tagMap,
-            'user_info' => $userInfo,
             'pages' => $page
         ];
 

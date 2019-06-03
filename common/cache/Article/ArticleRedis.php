@@ -58,8 +58,7 @@ class ArticleRedis extends BaseCache
 
     public function setArticleReadNumber($id, $value)
     {
-        $rs = $this->set(self::REDIS_ARTICLE_READ_NUMBER . $id, $value);
-        $this->cache->expire(self::REDIS_ARTICLE_READ_NUMBER . $id, ONE_MONTH);
+        $rs = $this->set(self::REDIS_ARTICLE_READ_NUMBER . $id, $value, ONE_MONTH);
         return $rs;
     }
 
@@ -77,8 +76,7 @@ class ArticleRedis extends BaseCache
 
     public function setArticleTotal($value)
     {
-        $rs = $this->set(self::REDIS_ARTICLE_TOTAL, $value);
-        $this->cache->expire(self::REDIS_ARTICLE_TOTAL, ONE_MONTH);
+        $rs = $this->set(self::REDIS_ARTICLE_TOTAL, $value, ONE_MONTH);
         return $rs;
     }
 

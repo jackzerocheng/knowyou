@@ -41,7 +41,7 @@ $this->title = "时光缄默，岁月无痕";
         <ul>
             <li>
                 <label class="anim">
-                    <a href="<?=Url::to(['index']) ?>">返回首页</a>
+                    <a href="<?=Url::to(['index']) ?>">返回登录</a>
                 </label>
             </li>
             <li>

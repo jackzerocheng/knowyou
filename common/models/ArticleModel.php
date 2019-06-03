@@ -101,6 +101,8 @@ class ArticleModel extends Model
             }
         }
 
+
+
         return $articleList;
     }
 
@@ -124,6 +126,16 @@ class ArticleModel extends Model
         }
 
         return $readNumber;
+    }
+
+    /**
+     * 自增阅读数
+     * @param $id
+     * @return mixed
+     */
+    public function incrArticleReadNumber($id)
+    {
+        return $this->redis->incrArticleReadNumber($id);
     }
 
     /**
@@ -156,7 +168,7 @@ class ArticleModel extends Model
 
         //无缓存
         if (empty($articleInfo)) {
-            $articleInfo = (new Article($id))->getOneByCondition(['id' => $id]);
+            $articleInfo = $this->getOneByCondition(['id' => $id], []);
 
             if (!empty($articleInfo)) {
                 $this->cache->setArticleInfo($id, json_encode($articleInfo));

@@ -46,7 +46,7 @@ if (!empty($bannerList)) {
 $isLogin = false;
 $userInfo = array();
 $user = new UserModel();
-if ($uid = $user->getSession()) {
+if ($uid = (new \common\models\System\SessionModel())->getUidSession()) {
     $userInfo = $user->getOneByCondition($uid, ['uid' => $uid]);
     $isLogin = true;
 }
@@ -248,7 +248,7 @@ $menuList = (new MenuModel())->getMenuList();
                 <div class="row">
                     <div class="col-12">
                         <div class="insta-title">
-                            <h5><a href="#">加入我们@JZC</a></h5>
+                            <h5><a href="javascript:addUs();">加入我们@JZC</a></h5>
                         </div>
                     </div>
                 </div>
@@ -338,4 +338,12 @@ $menuList = (new MenuModel())->getMenuList();
     <?php $this->endBody() ?>
     </body>
     </html>
+<script>
+    function addUs() {
+        alert("我们欢迎有志之士加入我们共同学习成长。\n" +
+            "在这里我们将与你一起分享计算机世界的乐趣。\n" +
+            "只要你有清晰的计算机基础知识，一定的编程实现能力，请发送邮件到我们的邮箱：igetjzc@outlook.com\n" +
+            "标题为：申请加入简默开源社区-姓名-方向，请在邮件中附上你的简历或自我介绍，期待你的加入\n");
+    }
+</script>
 <?php $this->endPage() ?>

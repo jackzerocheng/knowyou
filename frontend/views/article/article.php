@@ -38,24 +38,23 @@ $day = date('d', strtotime($article_info['created_at']));
                     <!-- Blog Content -->
                     <div class="single-blog-content">
                         <div class="line"></div>
-                        <a href="#" class="post-tag"><?=$article_info['tag_msg'] ?></a>
-                        <h4><a href="#" class="post-headline mb-0"><?=$article_info['title'] ?></a></h4>
+                        <a class="post-tag"><?=$article_info['tag_msg'] ?></a>
+                        <h4><a class="post-headline mb-0"><?=$article_info['title'] ?></a></h4>
                         <div class="post-meta mb-50">
                             <p>By <a href="#"><?=$user_info['username'] ?></a></p>
-                            <p><?='阅读:' . $read_number . ' | ' ?></p>
-                            <p><?='点赞:' . $article_info['praise_number'] . ' | ' ?></p>
-                            <p><?='评论:' . $comment_number . ' | ' ?></p>
+                            <p>阅读:<a style="color:blue"><?= $read_number ?></a> | </p>
+                            <p>点赞:<a style="color:green"><?= $article_info['praise_number'] ?></a> | </p>
+                            <p>评论:<a style="color:red"><?= $comment_number  ?></a> | </p>
                             <hr>
                         </div>
                     </div>
 
-                    <div>
-                        <strong>
-                            <p style="font-size: larger;">
-                                <?=$article_info['content'] ?>
-                            </p>
-                        </strong>
-                    </div>
+
+                    <pre>
+                        <?=$article_info['content'] ?>
+                    </pre>
+
+
                 </div>
 
                 <!-- About Author -->
@@ -65,9 +64,10 @@ $day = date('d', strtotime($article_info['created_at']));
                     </div>
                     <div class="author-info">
                         <div class="line"></div>
-                        <span class="author-role">Author</span>
+                        <span class="author-role">作者</span>
                         <h4><a href="#" class="author-name"><?=$user_info['username'] ?></a></h4>
-                        <p><?=$user_info['signature'] ?></p>
+                        <p>发布文章数：<a style="color:blue"><?= !empty($user_info['article_number']) ? $user_info['article_number'] : 0 ?></a></p>
+                        <p>签名：<?= !empty($user_info['signature']) ? $user_info['signature'] : '无个性，不签名' ?></p>
                     </div>
                 </div>
 
@@ -90,7 +90,7 @@ $day = date('d', strtotime($article_info['created_at']));
                                 </div>
                                 <!-- Comment Meta -->
                                 <div class="comment-meta">
-                                    <a href="#" class="post-date"><?=$v['created_at'] ?></a>
+                                    <a class="post-date"><?=$v['created_at'] ?></a>
                                     <p><a href="#" class="post-author"><?=$v['username'] ?></a></p>
                                     <p><?=$v['content'] ?></p>
                                     <input id="<?=$v['id'] ?>" style="width:500px" placeholder="请文明评论，友善讨论">&nbsp;&nbsp;
@@ -112,7 +112,7 @@ $day = date('d', strtotime($article_info['created_at']));
                                             </div>
                                             <!-- Comment Meta -->
                                             <div class="comment-meta">
-                                                <a href="#" class="post-date"><?=$value['created_at'] ?></a>
+                                                <a class="post-date"><?=$value['created_at'] ?></a>
                                                 <p><a href="#" class="post-author"><?=$value['username'] ?></a></p>
                                                 <p><?=$value['content'] ?></p>
                                                 <input id="<?=$value['id'] ?>" style="width:500px" placeholder="请文明评论，友善讨论">&nbsp;&nbsp;

@@ -74,31 +74,6 @@ UNIQUE key un_un (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment = '用户表4';
 
 
-create table knowyou_user_index00 (
-id int(11) comment '索引ID，Redis递增',
-uid int(11) not null default 0 comment '用户ID',
-created_at timestamp not null default current_timestamp,
-PRIMARY KEY (`id`),
-UNIQUE KEY (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment = '用户索引表';
-
-create table knowyou_user_index01 (
-id int(11) comment '索引ID，Redis递增',
-uid int(11) not null default 0 comment '用户ID',
-created_at timestamp not null default current_timestamp,
-PRIMARY KEY (`id`),
-UNIQUE KEY (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment = '用户索引表';
-
-create table knowyou_user_index02 (
-id int(11) comment '索引ID，Redis递增',
-uid int(11) not null default 0 comment '用户ID',
-created_at timestamp not null default current_timestamp,
-PRIMARY KEY (`id`),
-UNIQUE KEY (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment = '用户索引表';
-
-
 create table knowyou_user_admin (
 admin_id int(11)  comment '依赖Redis生成',
 username varchar(30)  not null default '' comment '管理员昵称',

@@ -7,7 +7,7 @@ $this->title = '简 · 默';
 ?>
 
 
-<!-- ##### Hero Area Start ##### -->
+<!-- ##### Hero Area Start 顶部滚动大图 ##### -->
 <div class="hero-area">
     <!-- Hero Slides Area -->
     <div class="hero-slides owl-carousel">
@@ -160,117 +160,50 @@ $this->title = '简 · 默';
             <div class="col-12 col-md-4 col-lg-3">
                 <div class="post-sidebar-area">
 
-                    <!-- Widget Area -->
                     <div class="sidebar-widget-area">
-                        <form action="#" class="search-form">
-                            <input type="search" name="search" id="searchForm" placeholder="Search">
-                            <input type="submit" value="submit">
-                        </form>
-                    </div>
-
-                    <!-- Widget Area -->
-                    <div class="sidebar-widget-area">
-                        <h5 class="title subscribe-title">Subscribe to my newsletter</h5>
-                        <div class="widget-content">
-                            <form action="#" class="newsletterForm">
-                                <input type="email" name="email" id="subscribesForm" placeholder="Your e-mail here">
-                                <button type="submit" class="btn original-btn">Subscribe</button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Widget Area -->
-                    <div class="sidebar-widget-area">
-                        <h5 class="title">Advertisement</h5>
-                        <a href="#"><?=Html::img('@web/img/bg-img/add.gif') ?></a>
-                    </div>
-
-                    <!-- Widget Area -->
-                    <div class="sidebar-widget-area">
-                        <h5 class="title">Latest Posts</h5>
-
-                        <div class="widget-content">
-
-                            <!-- Single Blog Post -->
-                            <div class="single-blog-post d-flex align-items-center widget-post">
-                                <!-- Post Thumbnail -->
-                                <div class="post-thumbnail">
-                                    <?=Html::img('@web/img/blog-img/lp1.jpg') ?>
-                                </div>
-                                <!-- Post Content -->
-                                <div class="post-content">
-                                    <a href="#" class="post-tag">Lifestyle</a>
-                                    <h4><a href="#" class="post-headline">Party people in the house</a></h4>
-                                    <div class="post-meta">
-                                        <p><a href="#">12 March</a></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Single Blog Post -->
-                            <div class="single-blog-post d-flex align-items-center widget-post">
-                                <!-- Post Thumbnail -->
-                                <div class="post-thumbnail">
-                                    <?=Html::img('@web/img/blog-img/lp2.jpg') ?>
-                                </div>
-                                <!-- Post Content -->
-                                <div class="post-content">
-                                    <a href="#" class="post-tag">Lifestyle</a>
-                                    <h4><a href="#" class="post-headline">A sunday in the park</a></h4>
-                                    <div class="post-meta">
-                                        <p><a href="#">12 March</a></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Single Blog Post -->
-                            <div class="single-blog-post d-flex align-items-center widget-post">
-                                <!-- Post Thumbnail -->
-                                <div class="post-thumbnail">
-                                    <?=Html::img('@web/img/blog-img/lp3.jpg') ?>
-                                </div>
-                                <!-- Post Content -->
-                                <div class="post-content">
-                                    <a href="#" class="post-tag">Lifestyle</a>
-                                    <h4><a href="#" class="post-headline">Party people in the house</a></h4>
-                                    <div class="post-meta">
-                                        <p><a href="#">12 March</a></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Single Blog Post -->
-                            <div class="single-blog-post d-flex align-items-center widget-post">
-                                <!-- Post Thumbnail -->
-                                <div class="post-thumbnail">
-                                    <?=Html::img('@web/img/blog-img/lp4.jpg') ?>
-                                </div>
-                                <!-- Post Content -->
-                                <div class="post-content">
-                                    <a href="#" class="post-tag">Lifestyle</a>
-                                    <h4><a href="#" class="post-headline">A sunday in the park</a></h4>
-                                    <div class="post-meta">
-                                        <p><a href="#">12 March</a></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Widget Area -->
-                    <div class="sidebar-widget-area">
-                        <h5 class="title">Tags</h5>
+                        <h5 class="title">栏目</h5>
                         <div class="widget-content">
                             <ul class="tags">
                                 <?php
-                                    if (!empty($tag_map)) {
-                                        foreach ($tag_map as $_tag) {
-                                            echo "<li><a href='{$_tag['type']}'>{$_tag['name']}</a></li>";
-                                        }
+                                if (!empty($tag_map)) {
+                                    foreach ($tag_map as $_tag) {
+                                        echo "<li><a href='{$_tag['type']}'>{$_tag['name']}</a></li>";
                                     }
+                                } else {
+                                    echo "什么都没有。。(T.T)";
+                                }
 
                                 ?>
                             </ul>
+                        </div>
+                    </div>
+
+                    <!-- Widget Area -->
+                    <div class="sidebar-widget-area">
+                        <h5 class="title">您的点击，是网站存活的动力↓</h5>
+                        <a href="#"><?=Html::img('http://data.jianmo.top/img/picture/adver_git.gif') ?></a>
+                    </div>
+
+                    <!-- Widget Area -->
+                    <div class="sidebar-widget-area">
+                        <h5 class="title">关于我们</h5>
+
+                        <div class="widget-content">
+
+                            <!-- Single Blog Post -->
+                            <div class="single-blog-post d-flex align-items-center widget-post">
+                                <p>微信公众号：异次元程序员</p>
+                            </div>
+
+                            <!-- Single Blog Post -->
+                            <div class="single-blog-post d-flex align-items-center widget-post">
+                                <p>邮箱：igetjzc@outlook.com</p>
+                            </div>
+
+                            <!-- Single Blog Post -->
+                            <div class="single-blog-post d-flex align-items-center widget-post">
+                                <img src="http://data.jianmo.top/img/default/qrcode.png">
+                            </div>
                         </div>
                     </div>
                 </div>

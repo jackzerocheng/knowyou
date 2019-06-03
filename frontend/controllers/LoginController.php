@@ -9,6 +9,8 @@
 
 namespace frontend\controllers;
 
+use common\lib\CryptAes;
+use common\models\System\SessionModel;
 use Yii;
 use common\models\UserModel;
 
@@ -22,7 +24,7 @@ class LoginController extends CommonController
         parent::init();
 
         //登录态则跳回主页
-        if ((new UserModel())->getSession()) {
+        if ((new SessionModel())->getUidSession()) {
             Yii::$app->session->setFlash('message', '您已登录');
             return Yii::$app->response->redirect(['site/index']);
         }
@@ -44,14 +46,21 @@ class LoginController extends CommonController
         ];
     }
 
+    //登录
     public function actionIndex()
     {
         $userModel = new UserModel();
 
         if (Yii::$app->request->isPost) {
-            $data = Yii::$app->request->post();
-            if ($userModel->load($data) && $userModel->validate() && $userModel->login()) {
-                return $this->redirect(['site/index']);
+            $data = Yii::$app->request->post('UserModel');
+
+            if (!empty($data['uid']) && !empty($data['password'])) {
+                $data['password'] = (new CryptAes(USER_AES_KEY))->encrypt(base64_decode($data['password']));
+
+                $rs = $userModel->login($data['uid'], $data['password'], $data['remember']);
+                if ($rs) {
+                    return $this->redirect(['site/index']);
+                }
             }
 
             Yii::warning("user_login_failed;msg:".json_encode($data), CATEGORIES_WARN);
@@ -60,6 +69,7 @@ class LoginController extends CommonController
         return $this->render('index', ['model' => $userModel]);
     }
 
+    //注册
     public function actionRegister()
     {
         $userModel = new UserModel();
@@ -70,7 +80,7 @@ class LoginController extends CommonController
             if ($userModel->validateRegister($params)) {
                 $data = [
                     'username' => $params['username'],
-                    'password' => $params['password']
+                    'password' => (new CryptAes(USER_AES_KEY))->encrypt($params['password'])
                 ];
                 if ($uid = $userModel->register($data)) {
                     Yii::$app->session->setFlash('success', '注册用户成功,账号为' . $uid);

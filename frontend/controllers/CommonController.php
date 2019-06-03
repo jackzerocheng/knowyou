@@ -9,6 +9,8 @@
 
 namespace frontend\controllers;
 
+use common\models\System\CookieModel;
+use common\models\System\SessionModel;
 use yii\web\Controller;
 use Yii;
 use common\models\UserModel;
@@ -19,7 +21,6 @@ class CommonController extends Controller
 {
     public $userId;
     public $userInfo;
-    public $redisSession;//uid,time,ip
 
     public $requireLogin = false;
     public $errorCodeFile = 'frontErrorCode';
@@ -43,59 +44,34 @@ class CommonController extends Controller
         return parent::beforeAction($action);
     }
 
-    public function removeSession()
-    {
-        Yii::$app->session->remove(UserModel::SESSION_USE_ID);
-        Yii::$app->session->destroy();
-        return true;
-    }
-
-    /**
-     * TODO: 优化
-     * @return mixed
-     */
     public function checkLogin()
     {
-        $nowIP = getIP();
         $userModel = new UserModel();
-        //获取session
-        if (!$this->userId = $userModel->getSession()) {
-            //获取cookie
-            $cookie = Yii::$app->request->cookies;
-            if ($cookie->has($userModel::COOKIE_USER_INFO)) {
-                //cookie自动登录
-                $userModel->loginByCookie();
-            }
+        $sessionModel = new SessionModel();
+        $cookieModel = new CookieModel();
+        $nowIP = getIP();
 
-            if (!$this->userId = $userModel->getSession()) {
-                Yii::warning("try to login by cookie failed!login_ip:{$nowIP}", CATEGORIES_WARN);
+        $uid = $sessionModel->getUidSession();
+        if (empty($uid)) {//session为空
+            $userCookie = $cookieModel->getUserInfoCookie();
+
+            if (empty($userCookie)) {//cookie不存在
                 Yii::$app->session->setFlash('failed', '登录后再访问');
                 return Yii::$app->response->redirect(['login/index']);
             }
 
-            Yii::info("login by cookie success!uid:{$this->userId}", CATEGORIES_INFO);
+            //通过cookie自动登录
+            $uid = $userModel->login($userCookie['uid'], $userCookie['password']);
+            if (!$uid) {
+                Yii::warning("try to login by cookie failed!login_ip:{$nowIP}", CATEGORIES_WARN);
+                Yii::$app->session->setFlash('failed', '登录后再访问');
+                return Yii::$app->response->redirect(['login/index']);
+            }
         }
 
-        $redisSession = $userModel->getRedis($this->userId);
-        if (!$redisSession) {
-            Yii::warning("cannot find redis info;uid:{$this->userId}", CATEGORIES_WARN);
-            $this->removeSession();
-            Yii::$app->session->setFlash('failed', '登录失效，请重新登录');
-            return Yii::$app->response->redirect(['login/index']);
-        }
-        //验证当前IP和登录时记录IP是否一致
-        if ($nowIP != $redisSession['login_ip']) {
-            Yii::warning("force to logout because of ip diff;old_ip:{$redisSession['login_ip']};now_ip:{$nowIP};uid:{$this->userId}", CATEGORIES_WARN);
-            $this->removeSession();
-            Yii::$app->session->setFlash('failed', '你已在别处登录，请重新登录');
-            return Yii::$app->response->redirect(['login/index']);
-        }
-
-        $this->redisSession = $redisSession;
-
-        $this->userInfo = $userModel->getOneByCondition($this->userId, ['uid' => $this->userId]);
-
-        return true;
+        $this->userId = $uid;
+        $this->userInfo = $userModel->getUserInfo($uid);
+        return $uid;
     }
 
     public function outputJson($errorCode, $data = '', $msg = '')

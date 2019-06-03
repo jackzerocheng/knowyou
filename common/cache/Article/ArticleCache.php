@@ -28,6 +28,6 @@ class ArticleCache extends BaseCache
 
     public function setArticleInfo($id, $value)
     {
-        return $this->set(self::CACHE_ARTICLE_INFO . $id, $value. ONE_MONTH);
+        return $this->set(self::CACHE_ARTICLE_INFO . $id, $value, ONE_MONTH);
     }
 }

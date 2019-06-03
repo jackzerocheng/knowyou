@@ -1,42 +1,28 @@
 <?php
 namespace common\models;
 
+use common\cache\User\UserCache;
+use common\cache\User\UserRedis;
 use common\lib\Config;
 use common\lib\CryptAes;
+use common\models\System\CookieModel;
+use common\models\System\SessionModel;
 use Yii;
-use yii\base\Exception;
 use yii\base\Model;
-use yii\web\Cookie;
 use common\dao\User;
 use common\lib\CryptRsa;
 
 class UserModel extends Model
 {
+    //表单所需
     public $uid;
     public $username;
     public $password;
-    public $password_again;
     public $verifyCode;
+    public $password_again;
     public $remember;
 
-    private $user;
-
-    //本地状态直接先获取session，来判断是否已登录
-    const SESSION_USE_ID = 'SESSION_USER_ID';
-    //不存在session则去拿cookie
-    const COOKIE_USER_INFO = 'COOKIE_USER_INFO';
-    //多端登录时去Redis判断，是否在其他端已登录
-    const REDIS_KEY_PREFIX = 'know_you_web_';
-
-    //自增生成UID
-    const BASE_USER_ID_KEY = self::REDIS_KEY_PREFIX . 'BASE_USER_ID';
-    //起始UID段
-    const START_UID = 10000000;
     const DEFAULT_HEAD_IMG = 'http://data.jianmo.top/img/default/default_head.png';
-
-    //保持登录时长
-    const REDIS_KEEP_TIME = 60 * 60 * 24;//一天
-    const COOKIE_KEEP_TIME = 60 * 60 * 24 * 7;//七天
 
     //用户状态
     const STATUS_NORMAL = 1;
@@ -48,37 +34,24 @@ class UserModel extends Model
         self::STATUS_DELETED => '删除'
     ];
 
+    private $cache;
+    private $redis;
+
+    public function __construct(array $config = [])
+    {
+        parent::__construct($config);
+
+        $this->cache = new UserCache();
+        $this->redis = new UserRedis();
+    }
+
     public function rules()
     {
         return [
-            ['uid', 'validateLogin', 'skipOnEmpty' => false],
+            ['uid', 'skipOnEmpty' => false],
             ['verifyCode', 'captcha', 'captchaAction' => 'login/captcha', 'message' => '验证码错误'],
             [['password', 'remember'], 'safe']
         ];
-    }
-
-    public function validateLogin($attribute, $params)
-    {
-        //base64解密
-        $this->password = base64_decode($this->password);
-
-        if (!preg_match('/^\w{2,30}$/', $this->$attribute)) {
-            $this->addError($attribute, '账号长度不正确');
-        } elseif(strlen($this->password) < 6 || strlen($this->password) > 20) {
-            $this->addError('password', '密码长度不正确');
-        } elseif (!empty($this->uid)) {
-            $userModel = new User($this->uid);
-            $user = $userModel::find()->where(['uid' => $this->uid])->asArray()->one();
-            if (!$user) {
-                $this->addError($attribute, '账号不存在');
-            } elseif ((new CryptAes(USER_AES_KEY))->encrypt($this->password) != $user['password']) {
-                $this->addError('password', '密码不正确');
-            } elseif ($user['status'] != self::STATUS_NORMAL) {
-                $this->addError($attribute, '账号状态异常');
-            } else {
-                $this->user = $user;
-            }
-        }
     }
 
     public function validateRegister($params)
@@ -100,24 +73,21 @@ class UserModel extends Model
         return true;
     }
 
-    /**
-     * 先判断rule是否通过
-     * 创建session和cookie
-     * @return bool
-     */
-    public function login()
+    public function login($uid, $password, $createCookie = false)
     {
-        if (!$this->user) {
+        $userInfo = $this->getOneByCondition($uid, ['uid'=>$uid,'password'=>$password]);
+        if (empty($userInfo)) {
             return false;
         }
 
-        $this->createSession($this->user['uid']);
+        //创建session
+        (new SessionModel())->createUidSession($uid);
 
-        if ($this->remember) {
-            $this->createCookie();
+        if ($createCookie) {
+            (new CookieModel())->createUserInfoCookie($userInfo);
         }
 
-        return true;
+        return $uid;
     }
 
     /**
@@ -153,124 +123,15 @@ class UserModel extends Model
     }
 
     /**
-     * 生成session登录态
-     * 本地一份，Redis一份
-     * @param  int $uid
-     * @throws Exception
-     * @return bool
-     */
-    public function createSession($uid)
-    {
-        try {
-            Yii::$app->session->set(self::SESSION_USE_ID, $uid);
-
-            $redis = Yii::$app->redis;
-            $redis->hset(self::REDIS_KEY_PREFIX . $uid, 'login_ip', getIP());
-            $redis->hset(self::REDIS_KEY_PREFIX . $uid, 'login_time', NOW_DATE);
-            $redis->expire(self::REDIS_KEY_PREFIX . $uid, self::REDIS_KEEP_TIME);
-        } catch (Exception $e) {
-            Yii::error("create session failed;uid:{$uid};error:{$e}", CATEGORIES_ERROR);
-            throw $e;
-        }
-
-        return true;
-    }
-
-    /**
-     * 创建cookie
-     * @return bool
-     */
-    public function createCookie()
-    {
-        $cookie = new Cookie();
-        $cookie->name = self::COOKIE_USER_INFO;
-        $cookie->value = [
-            'uid' => $this->user['uid'],
-            'password' => $this->user['password'],
-            'status' => $this->user['status'],
-        ];
-        $cookie->expire = time() + self::COOKIE_KEEP_TIME;
-        $cookie->httpOnly = true;
-
-        Yii::$app->response->cookies->add($cookie);
-        return true;
-    }
-
-    /**
-     * 通过cookie登录
-     * @return bool
-     */
-    public function loginByCookie()
-    {
-        $cookie = Yii::$app->request->cookies;
-        if ($cookie->has(self::COOKIE_USER_INFO)) {
-            $userInfo = $cookie->getValue(self::COOKIE_USER_INFO);
-            if (isset($userInfo['uid']) && isset($userInfo['password'])) {
-                $this->user = (new User($userInfo['uid']))->getOneByCondition(['uid' => $userInfo['uid'], 'password' => $userInfo['password']]);
-                if ($this->user) {
-                    $this->createSession($this->user['uid']);
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * 注销登录，session + Redis
+     * 注销登录
      * @return bool
      */
     public function logout()
     {
-        Yii::$app->session->remove(self::SESSION_USE_ID);
-        Yii::$app->session->destroy();
-
-        Yii::$app->redis->del($this->user['uid']);
-
-        $cookie = Yii::$app->response->cookies;
-        if ($cookie->has(self::COOKIE_USER_INFO)) {
-            $cookie->remove($cookie->get(self::COOKIE_USER_INFO));
-        }
+        (new SessionModel())->removeUidSession();
+        (new CookieModel())->removeUserInfoCookie();
 
         return true;
-    }
-
-    /**
-     * 获取用户session
-     * @return bool|mixed
-     */
-    public function getSession()
-    {
-        $session = Yii::$app->session;
-        $uid = $session->get(self::SESSION_USE_ID);
-        if (empty($uid)) {
-            return false;
-        }
-
-        return $uid;
-    }
-
-    /**
-     * 获取用户Redis
-     * @param $uid
-     * @return array|bool
-     */
-    public function getRedis($uid)
-    {
-        $redis = Yii::$app->redis;
-        $key = self::REDIS_KEY_PREFIX . $uid;
-        if (!$redis->exists($key)) {
-            return false;
-        }
-
-        $rs = [
-            'uid' => $uid,
-            'login_time' => $redis->hget($key, 'login_time'),
-            'login_ip' => $redis->hget($key, 'login_ip')
-        ];
-
-        return $rs;
     }
 
     /**
@@ -280,47 +141,19 @@ class UserModel extends Model
      */
     public function register(array $data)
     {
-        if (empty($data) || empty($data['password'])) {
-            return false;
-        }
+        //默认头像
+        $data['head'] = empty($data['head']) ? self::DEFAULT_HEAD_IMG : $data['head'];
+        //uid获取
+        $data['uid'] = $this->redis->incrBaseUid();
 
-        if (!empty($data['password'])) {
-            $data['password'] = (new CryptAes(USER_AES_KEY))->encrypt($data['password']);
-        }
-
-        if (empty($data['head'])) {
-            $data['head'] = self::DEFAULT_HEAD_IMG;
-        }
-
-        /*
-         * 依赖Redis自增UID
-         */
-        $redis = Yii::$app->redis;
-        if (!$redis->exists(self::BASE_USER_ID_KEY)) {
-            $redis->set(self::BASE_USER_ID_KEY, self::START_UID);
-        }
-        $uid = $redis->incr(self::BASE_USER_ID_KEY);
-        $data['uid'] = $uid;
-
-
-        $user = new User($uid);
-        $transaction = Yii::$app->db->beginTransaction();
-
+        $user = new User($data['uid']);
         if (!$user->insert(false, $data)) {
             Yii::warning('insert user info failed;info:'.json_encode($data), CATEGORIES_WARN);
-            $transaction->rollBack();
             return false;
         }
 
-        if (!(new UserIndexModel())->insert($uid)) {
-            Yii::warning('insert user index info failed;uid:'.$uid, CATEGORIES_WARN);
-            $transaction->rollBack();
-            return false;
-        }
-
-        $transaction->commit();
-        Yii::info('user register;uid:'.$uid, CATEGORIES_INFO);
-        return intval($uid);
+        Yii::info('user register;info:'.json_encode($data), CATEGORIES_INFO);
+        return $data['uid'];
     }
 
     /**
@@ -383,5 +216,27 @@ class UserModel extends Model
         }
 
         return $rs;
+    }
+
+    /**
+     * 根据UID获取用户信息
+     * @param $uid
+     * @return array|mixed
+     */
+    public function getUserInfo($uid)
+    {
+        $userInfo = $this->cache->getUserInfo($uid);
+
+        if (empty($userInfo)) {
+            $userInfo = $this->getOneByCondition($uid, ['uid' => $uid]);
+
+            if (!empty($userInfo)) {
+                $userInfo['article_number'] = (new ArticleModel())->getCountByCondition(['uid' => $userInfo['uid'], 'status'=> ArticleModel::ARTICLE_STATUS_NORMAL]);
+
+                $this->cache->setUserInfo($uid, json_encode($userInfo));
+            }
+        }
+
+        return $userInfo;
     }
 }

@@ -11,6 +11,7 @@ $this->title = '文章列表';
 
     <div class="container">
         <div class="row">
+
             <div class="col-12 col-lg-9">
 
                 <?php
@@ -38,7 +39,7 @@ $this->title = '文章列表';
                                 <h4><a href="<?=Url::to(['article/index', 'id' => $_article['id']]) ?>" class="post-headline" style="color: green"><?=$_article['title'] ?></a></h4>
                                 <p><?=substr($_article['content'], 0, 20) . '...' ?></p>
                                 <div class="post-meta">
-                                    <p>By <a href="#"><?=$user_info[$_article['uid']]['username'] ?></a></p>
+                                    <p>By <a href="#"><?=$_article['username'] ?></a></p>
                                     <p><?=$_article['redis_read_number'] . '人已读' ?></p>
                                 </div>
                             </div>
@@ -87,4 +88,57 @@ $this->title = '文章列表';
                     <a href="#" class="btn original-btn">换一波</a>
                 </div>
                 -->
+            </div>
+
+            <!-- ##### Sidebar Area ##### -->
+            <div class="col-12 col-md-4 col-lg-3">
+                <div class="post-sidebar-area">
+
+                    <div class="sidebar-widget-area">
+                        <h5 class="title">栏目</h5>
+                        <div class="widget-content">
+                            <ul class="tags">
+                                <?php
+                                if (!empty($tag_map)) {
+                                    foreach ($tag_map as $_tag) {
+                                        echo "<li><a href='{$_tag['type']}'>{$_tag['name']}</a></li>";
+                                    }
+                                } else {
+                                    echo "什么都没有。。(T.T)";
+                                }
+
+                                ?>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Widget Area -->
+                    <div class="sidebar-widget-area">
+                        <h5 class="title">您的点击，是网站存活的动力↓</h5>
+                        <a href="#"><?=Html::img('http://data.jianmo.top/img/picture/adver_git.gif') ?></a>
+                    </div>
+
+                    <!-- Widget Area -->
+                    <div class="sidebar-widget-area">
+                        <h5 class="title">关于我们</h5>
+
+                        <div class="widget-content">
+
+                            <!-- Single Blog Post -->
+                            <div class="single-blog-post d-flex align-items-center widget-post">
+                                <p>微信公众号：异次元程序员</p>
+                            </div>
+
+                            <!-- Single Blog Post -->
+                            <div class="single-blog-post d-flex align-items-center widget-post">
+                                <p>邮箱：igetjzc@outlook.com</p>
+                            </div>
+
+                            <!-- Single Blog Post -->
+                            <div class="single-blog-post d-flex align-items-center widget-post">
+                                <img src="http://data.jianmo.top/img/default/qrcode.png">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>

@@ -25,8 +25,6 @@ h6 {
    }
 
 p {
-  color: #878787;
-  font-size: 14px;
   line-height: 1.4;
    }
 
@@ -577,7 +575,6 @@ img {
         margin-bottom: 30px; } }
   .single-blog-area .single-blog-content .post-meta p {
     font-size: 9px;
-    text-transform: uppercase;
     margin-bottom: 0;
     letter-spacing: 3px;
     display: inline-block; }
@@ -585,7 +582,6 @@ img {
       margin-right: 30px; }
     .single-blog-area .single-blog-content .post-meta p a {
       font-size: 9px;
-      text-transform: uppercase;
       color: #000000;
       letter-spacing: 3px; }
   .single-blog-area.blog-style-2 .single-blog-content > p {
@@ -891,7 +887,6 @@ img {
       display: block; }
     .comment_area .comment-content .comment-meta p {
       margin-bottom: 15px;
-      font-size: 14px;
       font-family: "Open Sans", sans-serif;
       line-height: 2; }
     .comment_area .comment-content .comment-meta .comment-reply {

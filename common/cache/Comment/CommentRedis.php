@@ -15,7 +15,7 @@ class CommentRedis extends BaseCache
 {
     protected $useRedis = true;
 
-    const REDIS_COMMENT_NUMBER = 'comment_number:';
+    const REDIS_COMMENT_NUMBER = 'comment_number:';//单个文章评论数
 
     public function getCommentNumber($id)
     {
@@ -24,8 +24,7 @@ class CommentRedis extends BaseCache
 
     public function setCommentNumber($id, $value)
     {
-        $rs = $this->set(self::REDIS_COMMENT_NUMBER . $id, $value);
-        $this->cache->expire(self::REDIS_COMMENT_NUMBER . $id, ONE_MONTH);
+        $rs = $this->set(self::REDIS_COMMENT_NUMBER . $id, $value, ONE_MONTH);
         return $rs;
     }
 

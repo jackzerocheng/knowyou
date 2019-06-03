@@ -9,6 +9,7 @@
 
 namespace common\models;
 
+use common\cache\Comment\CommentCache;
 use common\cache\Comment\CommentRedis;
 use yii\base\Model;
 use common\dao\Comment;
@@ -18,37 +19,23 @@ class CommentModel extends Model
 {
     //评论状态
     const COMMENT_STATUS_NORMAL = 1;
-    const COMMENT_STATUS_FORBIDDEN = 2;
-    const COMMENT_STATUS_DELETED = 3;
+    const COMMENT_STATUS_DELETED = 2;
 
     //Redis自增评论ID
     const BASE_COMMENT_ID = 'BASE_COMMENT_ID';//id = base_id * partition + uid % partition
-    //评论缓存key
-    const CACHE_COMMENT_LIST = 'WEB_COMMENT_LIST_';
-    const CACHE_COMMENT_NUMBER = 'WEB_COMMENT_NUMBER_';
-    const CACHE_DURATION = 60*60*24;//一天
 
     //redis消息队列
     const LIST_COMMENT_REPLY = 'WEB_COMMENT_REPLY';
 
     private $redis;
+    private $cache;
 
     public function __construct(array $config = [])
     {
         parent::__construct($config);
 
         $this->redis = new CommentRedis();
-    }
-
-    /**
-     * 获取评论数
-     * @param $id
-     * @param $condition
-     * @return int
-     */
-    public function getCountByCondition($id, $condition)
-    {
-        return (new Comment($id))->getCountByCondition($condition);
+        $this->cache = new CommentCache();
     }
 
     /**
@@ -73,45 +60,17 @@ class CommentModel extends Model
     }
 
     /**
-     * 优先读取缓存数据
-     * 如果不存在则读取DB
+     * 获取某个文章下的评论列表
      * @param $id
      * @param $condition
-     * @return array
+     * @return array|mixed
      */
-    public function getListByCache($id, $condition)
+    public function getCommentList($id, $condition)
     {
-        $cache = Yii::$app->cache;
-        $commentNumber = $cache->get(self::CACHE_COMMENT_NUMBER.$id) ? : 0;
-        $commentList = array();
-        if ($commentNumber) { //走缓存
-            $commentList = $cache->get(self::CACHE_COMMENT_LIST.$id);
-            if (!empty($commentList)) {
-                $commentList = json_decode($commentList, true);
-            }
-        }
+        $commentList = $this->cache->getCommentList($id);
 
-        if (empty($commentNumber || empty($commentList))) {
-            list($commentList, $commentNumber) = $this->getListByDb($id, $condition);
-        }
-
-        return array($commentList, $commentNumber);
-    }
-
-    /**
-     * 主动读取DB数据并添加到缓存
-     * @param $id
-     * @param $condition
-     * @return array
-     */
-    public function getListByDb($id, $condition)
-    {
-        $cache = Yii::$app->cache;
-        $commentList = array();
-        $commentNumber = $this->getCountByCondition($id, $condition);
-        if ($commentNumber > 0) {
-            $cache->set(self::CACHE_COMMENT_NUMBER.$id, $commentNumber, self::CACHE_DURATION);
-            $data = (new Comment($id))->getAllList($condition);
+        if (empty($commentList)) {
+            $data = $this->getAllList($id, $condition);
 
             $tmp = array();
             if (!empty($data)) {
@@ -131,11 +90,11 @@ class CommentModel extends Model
                     }
                 }
 
-                $cache->set(self::CACHE_COMMENT_LIST.$id, json_encode($commentList), self::CACHE_DURATION);
+                $this->cache->setCommentList($id, json_encode($commentList));
             }
         }
 
-        return array($commentList, $commentNumber);
+        return $commentList;
     }
 
     /**
@@ -155,8 +114,22 @@ class CommentModel extends Model
             return false;
         }
 
-        $this->getListByDb($info['article_id'], ['article_id' => $info['article_id']]);
-
         return $rs;
+    }
+
+    /**
+     * 获取评论数
+     * @param $id
+     * @param $condition
+     * @return int
+     */
+    public function getCountByCondition($id, $condition)
+    {
+        return (new Comment($id))->getCountByCondition($condition);
+    }
+
+    public function getAllList($id, $condition)
+    {
+        return (new Comment($id))->getAllList($condition);
     }
 }
