@@ -24,9 +24,6 @@ class CommentModel extends Model
     //Redis自增评论ID
     const BASE_COMMENT_ID = 'BASE_COMMENT_ID';//id = base_id * partition + uid % partition
 
-    //redis消息队列
-    const LIST_COMMENT_REPLY = 'WEB_COMMENT_REPLY';
-
     private $redis;
     private $cache;
 
@@ -98,16 +95,50 @@ class CommentModel extends Model
     }
 
     /**
+     * 回复评论
+     * @param $data
+     * @return bool|int
+     */
+    public function replyComment($data)
+    {
+        //优先提交到消息队列处理
+        $rs = $this->redis->pushCommentReplyList(json_encode($data));
+
+        if (!$rs) {//提交失败则直接插入
+            $rs = $this->insert($data);
+        }
+
+        return $rs;
+    }
+
+    public function getMaxCommentId()
+    {
+        $rs = 0;
+        $count = TABLE_PARTITION - 1;
+        while ($count >= 0) {
+            $tmp = (new Comment($count))->getMaxCommentId();
+            $rs = $tmp > $rs ? $tmp : $rs;
+        }
+
+        return $rs;
+    }
+
+    /**
      * 发布评论，更新缓存
      * @param $info
      * @return bool|int
      */
     public function insert($info)
     {
-        $baseCommentId = Yii::$app->redis->incr(self::BASE_COMMENT_ID);
+        $commentId = $this->redis->getCommentId($info['uid']);
+        if (!empty($this->getOneByCondition($commentId, []))) {//检测是否正确
+            $maxId = $this->getMaxCommentId();
 
-        $commentId = $baseCommentId * Comment::TABLE_PARTITION + intval($info['uid']) % Comment::TABLE_PARTITION;
+            $commentId = $maxId - $maxId % TABLE_PARTITION + TABLE_PARTITION + $info['uid'] % 4;
+            $this->redis->setCommentId($commentId);
+        }
 
+        $info['id'] = $commentId;
         $rs = (new Comment($commentId))->insertData($info);
         if (!$rs) {
             Yii::error("insert data to comment failed;data:".json_encode($info), CATEGORIES_ERROR);
@@ -131,5 +162,10 @@ class CommentModel extends Model
     public function getAllList($id, $condition)
     {
         return (new Comment($id))->getAllList($condition);
+    }
+
+    public function getOneByCondition($id, $condition)
+    {
+        return (new Comment($id))->getOneByCondition($condition);
     }
 }

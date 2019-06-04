@@ -56,6 +56,12 @@ class User extends ActiveRecord
         return $db->offset($offset)->limit($limit)->orderBy($orderBy)->asArray()->all();
     }
 
+    public function getMaxUid()
+    {
+        $rs = \Yii::$app->db->createCommand('select max(uid) as max_id from ' . static::$tableName)->queryOne();
+        return intval($rs['max_id']);
+    }
+
     public function getCountByCondition($condition)
     {
         $db = self::find();

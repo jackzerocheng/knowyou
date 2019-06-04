@@ -14,7 +14,8 @@ use yii\base\Model;
 
 class CookieModel extends Model
 {
-    private $cookie;
+    private $requestCookie;
+    private $responseCookie;
 
     const COOKIE_USER_INFO = 'user_info:';
 
@@ -22,14 +23,15 @@ class CookieModel extends Model
     {
         parent::__construct($config);
 
-        $this->cookie = \Yii::$app->request->cookies;
+        $this->requestCookie = \Yii::$app->request->cookies;
+        $this->responseCookie = \Yii::$app->response->cookies;
     }
 
     public function getUserInfoCookie()
     {
         $userInfo = [];
-        if ($this->cookie->has(self::COOKIE_USER_INFO)) {
-            $userInfo = $this->cookie->getValue(self::COOKIE_USER_INFO);
+        if ($this->requestCookie->has(self::COOKIE_USER_INFO)) {
+            $userInfo = $this->requestCookie->getValue(self::COOKIE_USER_INFO);
         }
 
         return $userInfo;
@@ -47,14 +49,14 @@ class CookieModel extends Model
         $cookie->expire = time() + ONE_WEEK;
         $cookie->httpOnly = true;
 
-        \Yii::$app->response->cookies->add($cookie);
+        $this->responseCookie->add($cookie);
         return true;
     }
 
     public function removeUserInfoCookie()
     {
-        if ($this->cookie->has(self::COOKIE_USER_INFO)) {
-            $this->cookie->remove($this->cookie->get(self::COOKIE_USER_INFO));
+        if ($this->requestCookie->has(self::COOKIE_USER_INFO)) {
+            $this->responseCookie->remove(self::COOKIE_USER_INFO);
         }
 
         return true;

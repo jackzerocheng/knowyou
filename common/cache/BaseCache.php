@@ -38,7 +38,11 @@ class BaseCache
     public function set($key, $value, $duration = null)
     {
         if ($this->useRedis) {
-            return $this->cache->setex($key, $duration, $value);
+            if (!empty($duration)) {
+                return $this->cache->setex($key, $duration, $value);
+            }
+
+            return $this->cache->set($key, $value);
         }
 
         return $this->cache->set($key, $value, $duration);

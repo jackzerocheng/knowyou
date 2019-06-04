@@ -48,7 +48,7 @@ class UserModel extends Model
     public function rules()
     {
         return [
-            ['uid', 'skipOnEmpty' => false],
+            ['uid', 'string', 'skipOnEmpty' => false],
             ['verifyCode', 'captcha', 'captchaAction' => 'login/captcha', 'message' => '验证码错误'],
             [['password', 'remember'], 'safe']
         ];
@@ -144,8 +144,14 @@ class UserModel extends Model
         //默认头像
         $data['head'] = empty($data['head']) ? self::DEFAULT_HEAD_IMG : $data['head'];
         //uid获取
-        $data['uid'] = $this->redis->incrBaseUid();
+        $uid = $this->redis->incrBaseUid();
 
+        if (!empty($this->getUserInfo($uid))) {//异常情况下，如Redis数据被清空，需要依赖DB生成
+            $uid = $this->getMaxUid() + 1;
+            $this->redis->setBaseUid($uid);
+        }
+
+        $data['uid'] = $uid;
         $user = new User($data['uid']);
         if (!$user->insert(false, $data)) {
             Yii::warning('insert user info failed;info:'.json_encode($data), CATEGORIES_WARN);
@@ -238,5 +244,18 @@ class UserModel extends Model
         }
 
         return $userInfo;
+    }
+
+    public function getMaxUid()
+    {
+        $maxId = 0;
+        $count = USER::TABLE_PARTITION - 1;
+        while ($count >= 0) {
+            $tmp = (new User($count))->getMaxUid();
+            $maxId = $tmp > $maxId ? $tmp : $maxId;
+            $count--;
+        }
+
+        return $maxId;
     }
 }

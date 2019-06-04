@@ -18,6 +18,11 @@ class Comment extends ActiveRecord
     const TABLE_PARTITION = 4;
     protected static $tableName = '';
 
+    /**
+     * Comment constructor.
+     * @param int $id
+     * @param array $config
+     */
     public function __construct($id, array $config = [])
     {
         parent::__construct($config);
@@ -37,12 +42,26 @@ class Comment extends ActiveRecord
         return $rs;
     }
 
+    public function getMaxCommentId()
+    {
+        $rs = Yii::$app->db->createCommand('select max(id) as max_id from ' . static::$tableName)->queryOne();
+        return intval($rs['max_id']);
+    }
+
     public function getCountByCondition($condition)
     {
         $db = self::find();
         $db = self::handlerCondition($db, $condition);
 
         return intval($db->count());
+    }
+
+    public function getOneByCondition($condition)
+    {
+        $db = self::find();
+        $db = self::handlerCondition($db, $condition);
+
+        return $db->asArray()->one();
     }
 
     /**

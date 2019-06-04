@@ -23,6 +23,15 @@ class TestController extends CommonController
 {
     public $requireLogin = false;
 
+    public function actions()
+    {
+        return [
+            'test' => [
+                'class' => 'frontend\actions\Test\TestAction'
+            ]
+        ];
+    }
+
     public function actionIndex()
     {
         $controller = Yii::$app->controller;

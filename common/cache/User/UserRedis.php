@@ -26,4 +26,9 @@ class UserRedis extends BaseCache
 
         return intval($this->cache->incr(self::REDIS_BASE_UID));
     }
+
+    public function setBaseUid($value)
+    {
+        return $this->set(self::REDIS_BASE_UID, $value);
+    }
 }

@@ -1,45 +1,35 @@
 <?php
 /**
- * Message: 通用规则
+ * Message: 基础action
  * User: jzc
- * Date: 2018/9/6
- * Time: 下午11:17
+ * Date: 2019/6/3
+ * Time: 10:29 PM
  * Return:
  */
 
-namespace frontend\controllers;
+namespace frontend\actions;
 
-use common\models\System\CookieModel;
-use common\models\System\SessionModel;
-use yii\web\Controller;
-use Yii;
+use yii\base\Action;
+use common\lib\Config;
+use common\lib\Response;
 use common\models\UserModel;
+use common\models\System\SessionModel;
+use common\models\System\CookieModel;
+use Yii;
 
-class CommonController extends Controller
+class BaseAction extends Action
 {
-    public $userId;
-    public $userInfo;
+    protected $uid;
+    protected $userInfo;
 
-    public $requireLogin = false;
-    public $errorCodeFile = 'frontErrorCode';
+    private $errorCodeFile = 'frontErrorCode';
+    protected $requireLogin = false;
 
-
-    public function beforeAction($action)
+    protected function beforeRun()
     {
-        /*
-        * 记录每次请求信息
-        */
-        $moduleName = Yii::$app->controller->module->id;
-        $controllerName = Yii::$app->controller->id;
-        $actionName = Yii::$app->controller->action->id;
-        Yii::info("Request Route:".$moduleName.'/'.$controllerName.'/'.$actionName.';Client IP:'.getIP(), CATEGORIES_ACCESS);
-
-        //要求登录态访问
         if ($this->requireLogin) {
             $this->checkLogin();
         }
-
-        return parent::beforeAction($action);
     }
 
     public function checkLogin()
@@ -67,8 +57,37 @@ class CommonController extends Controller
             }
         }
 
-        $this->userId = $uid;
+        $this->uid = $uid;
         $this->userInfo = $userModel->getUserInfo($uid);
         return $uid;
+    }
+
+    public function outputJson($errorCode, $data = '', $msg = '')
+    {
+        $result = Config::errorLang($this->errorCodeFile, $errorCode);
+
+        if (empty($result)) {
+            $result = Config::errorLang($this->errorCodeFile, 'failed');
+        }
+
+        if (!empty($msg)) {
+            $result['msg'] = $msg;
+        }
+
+        if (!empty($data)) {
+            $result['data'] = $data;
+        }
+
+        Response::json($result);
+    }
+
+    public function success($data = '')
+    {
+        $result = Config::errorLang($this->errorCodeFile, 'success');
+        if (!empty($result)) {
+            $result['data'] = $data;
+        }
+
+        Response::json($result);
     }
 }

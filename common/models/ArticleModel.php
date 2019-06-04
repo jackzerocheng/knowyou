@@ -62,7 +62,7 @@ class ArticleModel extends Model
 
         $rs = [];
         foreach ($ids as $_id) {
-            if (empty($_id)) {
+            if (empty($_id) || !is_numeric($_id)) {
                 continue;
             }
 
@@ -85,6 +85,7 @@ class ArticleModel extends Model
         $articleList = [];
         //获取缓存中的ID列表
         $ids = $this->redis->getActiveArticleID();
+
         if (!empty($ids)) {
             $articleList = $this->getListByIds($ids);
         }
@@ -100,8 +101,6 @@ class ArticleModel extends Model
                 }
             }
         }
-
-
 
         return $articleList;
     }

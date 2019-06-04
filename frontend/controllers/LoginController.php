@@ -52,9 +52,10 @@ class LoginController extends CommonController
         $userModel = new UserModel();
 
         if (Yii::$app->request->isPost) {
-            $data = Yii::$app->request->post('UserModel');
+            $data = Yii::$app->request->post();
 
-            if (!empty($data['uid']) && !empty($data['password'])) {
+            if ($userModel->load($data) && $userModel->validate()) {
+                $data = $data['UserModel'];
                 $data['password'] = (new CryptAes(USER_AES_KEY))->encrypt(base64_decode($data['password']));
 
                 $rs = $userModel->login($data['uid'], $data['password'], $data['remember']);
@@ -63,6 +64,7 @@ class LoginController extends CommonController
                 }
             }
 
+            $userModel->addError('uid', '账号或密码错误，检查后重试');
             Yii::warning("user_login_failed;msg:".json_encode($data), CATEGORIES_WARN);
         }
 
