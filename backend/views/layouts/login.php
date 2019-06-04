@@ -25,7 +25,7 @@ LoginAsset::register($this);
         <link rel="icon" href="<?=Url::to('@web/favicon.ico') ?>">
         <?php $this->head() ?>
     </head>
-    <body>
+    <body background="http://data.jianmo.top/img/picture/1559117149960.jpg">
             <?php $this->beginBody() ?>
 
             <?= $content ?>

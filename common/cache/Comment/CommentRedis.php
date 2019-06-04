@@ -66,6 +66,8 @@ class CommentRedis extends BaseCache
 
     public function setCommentId($value)
     {
-        return $this->set(self::REDIS_BASE_COMMENT_ID, $value);
+        $baseId = ($value - $value % 4) / 4;
+
+        return $this->set(self::REDIS_BASE_COMMENT_ID, $baseId);
     }
 }

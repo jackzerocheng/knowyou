@@ -134,6 +134,22 @@ class UserModel extends Model
         return true;
     }
 
+    public function getUserTotal($sync = false)
+    {
+        $userTotal = $this->redis->getUserTotal();
+
+        if (empty($userTotal) || $sync) {
+            $tmp = $this->getAllCountByCondition([]);
+            if ($userTotal != $tmp) {
+                $this->redis->setUserTotal($tmp);
+            }
+
+            $userTotal = $tmp;
+        }
+
+        return $userTotal;
+    }
+
     /**
      * 注册用户，返回用户账号
      * @param $data
@@ -157,6 +173,8 @@ class UserModel extends Model
             Yii::warning('insert user info failed;info:'.json_encode($data), CATEGORIES_WARN);
             return false;
         }
+
+        $this->redis->incrUserTotal();//总用户数
 
         Yii::info('user register;info:'.json_encode($data), CATEGORIES_INFO);
         return $data['uid'];

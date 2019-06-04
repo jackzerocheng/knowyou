@@ -62,6 +62,12 @@ class Article extends ActiveRecord
         return Yii::$app->db->createCommand($sql)->execute();
     }
 
+    public function getMaxArticleId()
+    {
+        $rs = Yii::$app->db->createCommand('select max(id) as max_id from ' . static::$tableName)->queryOne();
+        return intval($rs['max_id']);
+    }
+
     /**
      * @param $condition
      * @param string $orderBy

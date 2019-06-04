@@ -85,6 +85,9 @@ $user_info = (new AdminModel())->getOneByCondition(['admin_id' => $uid]);
                 <li class="layui-nav-item">
                     <a href="<?=Url::to(['site/index']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>后台首页</cite></a>
                 </li>
+                <li class="layui-nav-item">
+                    <a href="<?=Url::to(['user/index']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>用户管理</cite></a>
+                </li>
                 <!-- 不要循环输出了 -->
                 <li class="layui-nav-item">
                     <a href="<?=Url::to(['menu/index']) ?>"><i class="iconfont icon-computer" data-icon="icon-computer"></i><cite>菜单管理</cite></a>

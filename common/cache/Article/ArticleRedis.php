@@ -18,6 +18,7 @@ class ArticleRedis extends BaseCache
     const REDIS_ACTIVE_ARTICLE_SET = 'active_article_id:';//活跃文章ID
     const REDIS_ARTICLE_READ_NUMBER = 'article_read_number:';//文章阅读数
     const REDIS_ARTICLE_TOTAL = 'article_total:';//文章总数统计
+    const REDIS_BASE_ARTICLE_ID = 'base_article_id:';//文章基础ID
 
     /**
      * @param int $start - 排名，越小越新
@@ -51,6 +52,7 @@ class ArticleRedis extends BaseCache
         return $rs;
     }
 
+    /** 文章阅读数 */
     public function getArticleReadNumber($id)
     {
         return intval($this->get(self::REDIS_ARTICLE_READ_NUMBER . $id));
@@ -69,6 +71,7 @@ class ArticleRedis extends BaseCache
         return $rs;
     }
 
+    /** 文章总数统计 */
     public function getArticleTotal()
     {
         return intval($this->get(self::REDIS_ARTICLE_TOTAL));
@@ -85,5 +88,20 @@ class ArticleRedis extends BaseCache
         $rs = $this->cache->incr(self::REDIS_ARTICLE_TOTAL);
         $this->cache->expire(self::REDIS_ARTICLE_TOTAL, ONE_MONTH);
         return $rs;
+    }
+
+    /** 文章基础ID */
+    public function getArticleId($uid)
+    {
+        $baseId = $this->cache->incr(self::REDIS_BASE_ARTICLE_ID);
+        $articleId = $baseId * TABLE_PARTITION + intval($uid) % TABLE_PARTITION;
+
+        return $articleId;
+    }
+
+    public function setArticleId($value)
+    {
+        $baseId = ($value - $value % 4) / 4;
+        return $this->set(self::REDIS_BASE_ARTICLE_ID, $baseId);
     }
 }

@@ -6,11 +6,6 @@ use yii\captcha\Captcha;
 $this->title = 'Jian Mo - 简默';
 ?>
 
-<video class="video-player" muted preload="auto" autoplay="autoplay" loop="loop" data-height="1080" data-width="1920" height="1080" width="1920">
-    <source src="<?=Url::to('@web/video/login.mp4') ?>" type="video/mp4">
-    <!-- 此视频文件为支付宝所有，在此仅供样式参考，如用到商业用途，请自行更换为其他视频或图片，否则造成的任何问题使用者本人承担，谢谢 -->
-</video>
-<div class="video_mask"></div>
 <div class="login">
     <h1>简默无声后台登录</h1>
     <?=Html::beginForm(['index'], 'post', ['id' => 'loginForm', 'class' => 'layui-form', 'onsubmit' => 'return checkform()']) ?>

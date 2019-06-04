@@ -33,8 +33,6 @@ class ArticleModel extends Model
         self::ARTICLE_STATUS_NOT_PASS => '审核未通过'
     ];
 
-    const REDIS_EXPIRE_TIME = 259200;//三天
-    const BASE_ARTICLE_ID_KEY = 'BASE_ARTICLE_ID';//id = base_id * partition + uid % partition
     const ARTICLE_COVER_DEFAULT = 'http://data.jianmo.top/img/default/default_cover.png';//文章默认封面
     const TABLE_PARTITION = 4;
 
@@ -141,16 +139,17 @@ class ArticleModel extends Model
      * 返回文章总数 - 缓存 or DB
      * @return int
      */
-    public function getArticleTotal()
+    public function getArticleTotal($sync = false)
     {
         $number = $this->redis->getArticleTotal();
 
-        if (empty($number)) {
-            $number = $this->getCountByCondition([]);
+        if (empty($number) || $sync) {
+            $tmp = $this->getCountByCondition([]);
 
-            if (!empty($number)) {
+            if ($tmp != $number) {
                 $this->redis->setArticleTotal($number);
             }
+            $number = $tmp;
         }
 
         return intval($number);
@@ -175,6 +174,19 @@ class ArticleModel extends Model
         }
 
         return $articleInfo;
+    }
+
+    public function getMaxArticleId()
+    {
+        $rs = 0;
+        $count = TABLE_PARTITION - 1;
+        while ($count >= 0) {
+            $tmp = (new Article($count))->getMaxArticleId();
+            $rs = $tmp > $rs ? $tmp : $rs;
+            $count--;
+        }
+
+        return $rs;
     }
 
     /**
@@ -262,12 +274,15 @@ class ArticleModel extends Model
             return false;
         }
 
-        $redisClient = Yii::$app->redis;
-        $baseArticleId = $redisClient->incr(self::BASE_ARTICLE_ID_KEY);
+        $articleID = $this->redis->getArticleId($data['uid']);
+        if (!empty($this->getArticleInfo($articleID))) {//redis异常
+            $maxArticleId = $this->getMaxArticleId();
 
-        $articleID = $baseArticleId * Article::TABLE_PARTITION + $data['uid'] % Article::TABLE_PARTITION;
+            $articleID = $maxArticleId - $maxArticleId % TABLE_PARTITION + 4 + $data['uid'] % TABLE_PARTITION;
+            $this->redis->setArticleId($articleID);
+        }
+
         $data['id'] = $articleID;
-
         $transaction = Yii::$app->db->beginTransaction();
 
         //插入文章数据
@@ -284,6 +299,9 @@ class ArticleModel extends Model
         }
 
         $transaction->commit();
+
+        $this->redis->incrArticleTotal();//文章总数
+
         Yii::info("new article data;article_id:{$articleID};article_index_id:{$articleIndexID}", CATEGORIES_INFO);
         return $articleID;
     }

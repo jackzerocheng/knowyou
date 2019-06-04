@@ -118,6 +118,7 @@ class CommentModel extends Model
         while ($count >= 0) {
             $tmp = (new Comment($count))->getMaxCommentId();
             $rs = $tmp > $rs ? $tmp : $rs;
+            $count--;
         }
 
         return $rs;
