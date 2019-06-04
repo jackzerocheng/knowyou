@@ -16,20 +16,18 @@ class IndexAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/style.css',
-        //'css/animate.css',
-        'css/bootstrap.min.css',
-        'css/classy-nav.css',
-        'css/font-awesome.min.css',
-        'css/owl.carousel.css',
+        'http://data.jianmo.top/css/know_you/style.css',
+        'http://data.jianmo.top/css/bootstrap.min.css',
+        'http://data.jianmo.top/css/know_you/classy-nav.css',
+        'http://data.jianmo.top/css/know_you/owl.carousel.css',
     ];
 
     public $js = [
-        'js/jquery/jquery-2.2.4.min.js',
-        'js/popper.min.js',
-        'js/bootstrap.min.js',
-        'js/plugins.js',
-        'js/active.js'
+        'http://data.jianmo.top/js/jquery/jquery-2.2.4.min.js',
+        'http://data.jianmo.top/js/popper.min.js',
+        'http://data.jianmo.top/js/bootstrap.min.js',
+        'http://data.jianmo.top/js/plugins.js',
+        'http://data.jianmo.top/js/know_you/active.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

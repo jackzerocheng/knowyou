@@ -4,10 +4,10 @@ use yii\helpers\Url;
 $this->title = '联系我们';
 
 ?>
-<link rel="stylesheet" href="<?=Url::to('@web/css/contact_form/style.css') ?>">
-<link rel="stylesheet" href="<?=Url::to('@web/css/contact_form/style2.css') ?>">
-<script src="<?=Url::to('@web/js/jquery/jquery-2.2.4.min.js') ?>"></script>
-<script src="<?=Url::to('@web/js/index.js') ?>"></script>
+<link rel="stylesheet" href="http://data.jianmo.top/css/contact_form_1/style.css">
+<link rel="stylesheet" href="http://data.jianmo.top/css/contact_form_1/style2.css">
+<script href="http://data.jianmo.top/js/jquery/jquery-2.2.4.min.js"></script>
+<script href="http://data.jianmo.top/js/contact_form_1/index.js"></script>
 
 <div class="blog-wrapper section-padding-100 clearfix">
     <div class="container">

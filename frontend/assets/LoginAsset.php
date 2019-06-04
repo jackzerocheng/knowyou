@@ -16,12 +16,12 @@ class LoginAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'home/style.css',
-        'home/fontawesome-all.css'
+        'http://data.jianmo.top/css/login_form_1/style.css',
+        'http://data.jianmo.top/css/login_form_1/fontawesome-all.css'
     ];
 
     public $js = [
-        'home/canva_moving_effect.js'
+        'http://data.jianmo.top/js/canva_moving_effect.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

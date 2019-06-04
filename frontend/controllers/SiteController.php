@@ -22,6 +22,10 @@ class SiteController extends CommonController
 
     public function actionIndex()
     {
+        header("Access-Control-Allow-Origin: *");
+        header('Access-Control-Allow-Methods:* ');
+        header('Access-Control-Allow-Headers:x-requested-with,content-type');
+
         $articleModel = new ArticleModel();
         //获取首页文章列表 - 策略：最新活跃文章
         $activeArticle = $articleModel->getActiveArticle();

@@ -58,6 +58,7 @@ $menuList = (new MenuModel())->getMenuList();
 <?php $this->beginPage() ?>
     <!DOCTYPE html>
     <html lang="<?= Yii::$app->language ?>">
+
     <head>
         <meta charset="<?= Yii::$app->charset ?>">
         <meta name="keywords" content="简默,社交,论坛,博客,新闻,文章,交友,社区,美文,美图,文艺,交流,心情">
@@ -128,12 +129,9 @@ $menuList = (new MenuModel())->getMenuList();
                     <!-- Top Social Area -->
                     <div class="col-12 col-sm-4">
                         <div class="top-social-area">
-                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="Pinterest"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="Dribbble"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
-                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="Behance"><i class="fa fa-behance" aria-hidden="true"></i></a>
-                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="Linkedin"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="QQ"><i class="fa fa-pinterest" aria-hidden="true">QQ</i></a>
+                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="WeChat"><i class="fa fa-facebook" aria-hidden="true">WeChat</i></a>
+                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="mail"><i class="fa fa-twitter" aria-hidden="true">mail</i></a>
                         </div>
                     </div>
                 </div>
