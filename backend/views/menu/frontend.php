@@ -31,18 +31,17 @@ use yii\helpers\Url;
                 <div class="layui-form news_list">
                     <table class="layui-table">
                         <colgroup>
-                            <col width="5%">
-                            <col width="5%">
-                            <col width="9%">
-                            <col width="9%">
-                            <col width="9%">
+                            <col width="">
+                            <col width="">
+                            <col width="">
+                            <col width="">
+                            <col width="">
                             <col>
-                            <col width="9%">
-                            <col width="15%">
+                            <col width="">
+                            <col width="">
                         </colgroup>
                         <thead>
                         <tr>
-                            <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose" id="allChoose"></th>
                             <th>菜单ID</th>
                             <th>菜单名称</th>
                             <th>菜单类别</th>
@@ -61,8 +60,7 @@ use yii\helpers\Url;
                                 //一级菜单
                         ?>
                             <tr>
-                                <td><input type="checkbox" name="checked" lay-skin="primary" lay-filter="choose"></td>
-                                <td align="left"><?=$menu['id'] ?></td>
+                                <td align="center"><?=$menu['id'] ?></td>
                                 <td><?=$menu['name'] ?></td>
                                 <td><?=$level_map[$menu['level']] ?></td>
                                 <td>无</td>
@@ -84,8 +82,7 @@ use yii\helpers\Url;
                                     //二级菜单
                         ?>
                                     <tr>
-                                        <td><input type="checkbox" name="checked" lay-skin="primary" lay-filter="choose"></td>
-                                        <td align="left"><?=$child_menu['id'] ?></td>
+                                        <td align="center"><?=$child_menu['id'] ?></td>
                                         <td><?=$child_menu['name'] ?></td>
                                         <td><?=$level_map[$child_menu['level']] ?></td>
                                         <td><?=$menu['name'] ?></td>

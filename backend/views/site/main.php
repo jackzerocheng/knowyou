@@ -78,8 +78,11 @@ use yii\helpers\Url;
                     </div>
                 </div>
                 <blockquote class="layui-elem-quote explain">
-                    <p>后台功能</p>
-                    <p>注意事项</p>
+                    <p>代码仓库：https://github.com/jackzerocheng/knowyou<br>
+                        网站首页：http://www.jianmo.top
+                        开发语言：php
+                        运行平台：Linux
+                    </p>
                 </blockquote>
                 <div class="row">
                     <div class="sysNotice col">
@@ -91,7 +94,7 @@ use yii\helpers\Url;
                             </colgroup>
                             <tbody class="hot_news">
                             <tr>
-                                <td align="left"><a href="#">帅逼的修炼之路</a></td>
+                                <td align="left"><a href="#">该功能暂未开发</a></td>
                                 <td>2018-12-12</td>
                             </tr>
                             </tbody>
@@ -106,7 +109,7 @@ use yii\helpers\Url;
                             </colgroup>
                             <tbody class="hot_news">
                             <tr>
-                                <td align="left">帅逼的修炼之路</td>
+                                <td align="left">该功能暂未开发</td>
                                 <td>2018-12-12</td>
                             </tr>
                             </tbody>

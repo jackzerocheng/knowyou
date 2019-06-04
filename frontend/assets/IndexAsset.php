@@ -21,7 +21,7 @@ class IndexAsset extends AssetBundle
         'css/bootstrap.min.css',
         'css/classy-nav.css',
         'css/font-awesome.min.css',
-        'css/owl.carousel.css'
+        'css/owl.carousel.css',
     ];
 
     public $js = [
