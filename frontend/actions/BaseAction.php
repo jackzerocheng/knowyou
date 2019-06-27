@@ -30,6 +30,8 @@ class BaseAction extends Action
         if ($this->requireLogin) {
             $this->checkLogin();
         }
+
+        return parent::beforeRun();
     }
 
     public function checkLogin()

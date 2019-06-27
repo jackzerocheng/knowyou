@@ -21,7 +21,7 @@ class LoginAsset extends AssetBundle
     ];
 
     public $js = [
-        'http://data.jianmo.top/js/canva_moving_effect.js'
+        'http://data.jianmo.top/js/login_form_1/canva_moving_effect.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

@@ -1,6 +1,6 @@
 <?php
 /**
- * Message: 评论API
+ * Message: 评论相关接口
  * User: jzc
  * Date: 2019/4/19
  * Time: 3:48 PM
@@ -22,7 +22,7 @@ class CommentController extends CommonController
         return [
             'reply' => [
                 'class' => 'frontend\actions\Comment\ReplyAction'
-            ]
+            ],
         ];
     }
 

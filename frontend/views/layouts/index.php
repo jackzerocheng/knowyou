@@ -71,7 +71,10 @@ $menuList = (new MenuModel())->getMenuList();
         <link rel="icon" href="<?=Url::to('@web/favicon.ico') ?>">
         <?php $this->head() ?>
     </head>
+
+
     <body>
+
     <?php $this->beginBody() ?>
 <!--     头部     -->
     <!-- Preloader -->

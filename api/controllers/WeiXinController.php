@@ -42,6 +42,14 @@ class WeiXinController extends CommonController
         /*
          * 接收消息并处理
          * 处理失败后直接回复空字符串或者content为success
+         *
+<xml><ToUserName><![CDATA[gh_d25dec3d1fd1]]></ToUserName>
+<FromUserName><![CDATA[o9Nli0hUvk5LZpMUx1s_w7o9qe2g]]></FromUserName>
+<CreateTime>1559742845</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[测试]]></Content>
+<MsgId>22330148114493287</MsgId>
+</xml>
          */
         $data = file_get_contents("php://input");
         Yii::warning('wei_xin post_data:'.$data, CATEGORIES_WARN);
