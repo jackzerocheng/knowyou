@@ -12,18 +12,18 @@ namespace frontend\controllers;
 
 class ContactController extends CommonController
 {
+    public $enableCsrfValidation = false;
     public $layout = 'index';
+
     public function actions()
     {
         return [
-            'test' => [
+            'index' => [
                 'class' => 'frontend\actions\Contact\IndexAction'
+            ],
+            'reply' => [
+                'class' => 'frontend\actions\Contact\ReplyAction'
             ]
         ];
-    }
-
-    public function actionIndex()
-    {
-        echo 'index';
     }
 }

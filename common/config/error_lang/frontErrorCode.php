@@ -16,5 +16,9 @@ return array(
     'not_login' => array(
         'code' => 100003,
         'msg'  => '未登录'
+    ),
+    'reply_suggestion_fail' => array(
+        'code' => 100010,
+        'msg'  => '提交留言失败'
     )
 );

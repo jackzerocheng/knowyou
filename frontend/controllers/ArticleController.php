@@ -23,6 +23,11 @@ class ArticleController extends CommonController
 {
     public $layout = 'index';
 
+    public function actions()
+    {
+        return [];
+    }
+
     //文章详情页
     public function actionIndex()
     {

@@ -33,7 +33,8 @@ class SessionModel extends Model
 
     public function createUidSession($uid)
     {
-        return $this->session->set(self::SESSION_USER_ID, $uid);
+        $this->session->set(self::SESSION_USER_ID, $uid);
+        return true;
     }
 
     public function removeUidSession()

@@ -169,8 +169,8 @@ $day = date('d', strtotime($article_info['created_at']));
                     }
 
                     $.ajax({
-                        url: <?=Url::to('comment/reply') ?>,
-                        contentType: "application/x-www-form-urlencode",
+                        url: '<?=Url::to(['comment/reply']) ?>',
+                        contentType: "application/x-www-form-urlencoded;charset=utf-8",
                         type: "post",
                         data: {
                             article_id: <?=$article_info['id'] ?>,
@@ -189,7 +189,7 @@ $day = date('d', strtotime($article_info['created_at']));
                         error: function(result) {
                             alert("发布失败，请重试或检查网络");
                         }
-                    })
+                    });
 
                     return false;
                 }

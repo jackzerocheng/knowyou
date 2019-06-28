@@ -34,6 +34,7 @@ class TestController extends CommonController
 
     public function actionIndex()
     {
+        var_dump(Yii::$app->request->post());
         $controller = Yii::$app->controller;
         echo $controller->module->id . $controller->id . $controller->action->id;
         echo "<br>\n";

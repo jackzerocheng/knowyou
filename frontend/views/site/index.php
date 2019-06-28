@@ -167,7 +167,7 @@ $this->title = '简 · 默';
                                 <?php
                                 if (!empty($tag_map)) {
                                     foreach ($tag_map as $_tag) {
-                                        echo "<li><a href='{$_tag['type']}'>{$_tag['name']}</a></li>";
+                                        echo "<li><a href='".Url::toRoute(['article/list'])."?tag=".$_tag['type']."'>{$_tag['name']}</a></li>";
                                     }
                                 } else {
                                     echo "什么都没有。。(T.T)";

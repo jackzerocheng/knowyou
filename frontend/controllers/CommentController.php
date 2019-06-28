@@ -9,10 +9,6 @@
 
 namespace frontend\controllers;
 
-use common\models\ArticleModel;
-use common\models\CommentModel;
-use Yii;
-
 class CommentController extends CommonController
 {
     public $enableCsrfValidation = false;
