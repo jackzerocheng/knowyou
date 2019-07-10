@@ -51,7 +51,7 @@ $this->title = '简 · 默';
                         <a href="#" class="post-tag">Lifestyle</a>
                         <h4><a href="#" class="post-headline">欢迎来到 简 · 默</a></h4>
                         <p>人来人往，春去秋来，世界之大，何处为家。愿 远方的你、孤独的你、可爱的你，心中存一份净土</p>
-                        <a href="<?=Url::to(['article/create']) ?>"><button class="btn original-btn">我要发文</button></a>
+                        <a href="<?=Url::to(['article/create-show']) ?>"><button class="btn original-btn">我要发文</button></a>
                     </div>
                 </div>
             </div>
@@ -152,7 +152,7 @@ $this->title = '简 · 默';
 
                 <!-- Load More -->
                 <div class="load-more-btn mt-100 wow fadeInUp" data-wow-delay="0.7s" data-wow-duration="1000ms">
-                    <a href="<?=Url::to(['article/create']) ?>"><button class="btn original-btn">我要发文</button></a>
+                    <a href="<?=Url::to(['article/create-show']) ?>"><button class="btn original-btn">我要发文</button></a>
                 </div>
             </div>
 

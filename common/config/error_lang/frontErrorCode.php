@@ -20,5 +20,9 @@ return array(
     'reply_suggestion_fail' => array(
         'code' => 100010,
         'msg'  => '提交留言失败'
-    )
+    ),
+    'create_article_failed' => array(
+        'code' => 100011,
+        'msg'  => '发布文章失败'
+    ),
 );

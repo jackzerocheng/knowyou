@@ -15,10 +15,16 @@ class ArticleRedis extends BaseCache
 {
     protected $useRedis = true;
 
-    const REDIS_ACTIVE_ARTICLE_SET = 'active_article_id:';//活跃文章ID
-    const REDIS_ARTICLE_READ_NUMBER = 'article_read_number:';//文章阅读数
-    const REDIS_ARTICLE_TOTAL = 'article_total:';//文章总数统计
-    const REDIS_BASE_ARTICLE_ID = 'base_article_id:';//文章基础ID
+    //活跃文章ID集合
+    const REDIS_ACTIVE_ARTICLE_SET = 'active_article_id:';
+    //文章阅读数
+    const REDIS_ARTICLE_READ_NUMBER = 'article_read_number:';
+    //文章总数统计
+    const REDIS_ARTICLE_TOTAL = 'article_total:';
+    //文章基础ID
+    const REDIS_BASE_ARTICLE_ID = 'base_article_id:';
+    //文章热度ID集合
+    const REDIS_HOTTEST_ARTICLE_ZSET = 'hottest_article_zset';
 
     /**
      * @param int $start - 排名，越小越新
@@ -29,7 +35,7 @@ class ArticleRedis extends BaseCache
     {
         $ids = $this->cache->zrange(self::REDIS_ACTIVE_ARTICLE_SET, $start, $number - 1);
 
-        return !empty($ids) ? $ids : [];
+        return $ids ?? [];
     }
 
     /**
@@ -43,10 +49,12 @@ class ArticleRedis extends BaseCache
     {
         $rs = $this->cache->zadd(self::REDIS_ACTIVE_ARTICLE_SET, $time, $id);
 
-        //所需的只有前100条
-        $number = $this->cache->zcard(self::REDIS_ACTIVE_ARTICLE_SET);
-        if ($number > 500) {
-            $this->cache->zremrangebyrank(self::REDIS_ACTIVE_ARTICLE_SET, 100, 1000);
+        if (mt_rand(0, 1000) > 990) {//1/100概率，执行清除多余数据
+            //所需的只有前100条
+            $number = $this->cache->zcard(self::REDIS_ACTIVE_ARTICLE_SET);
+            if ($number > 500) {
+                $this->cache->zremrangebyrank(self::REDIS_ACTIVE_ARTICLE_SET, 100, 1000);
+            }
         }
 
         return $rs;
@@ -103,5 +111,51 @@ class ArticleRedis extends BaseCache
     {
         $baseId = ($value - $value % 4) / 4;
         return $this->set(self::REDIS_BASE_ARTICLE_ID, $baseId);
+    }
+
+    /** 文章最热列表 */
+
+    /**
+     * @param $id
+     * @param int $score  // 默认初始分数为10
+     * @return mixed
+     */
+    public function setHottestArticle($id, $score = 10)
+    {
+        $rs = $this->cache->zadd(self::REDIS_HOTTEST_ARTICLE_ZSET, $score, $id);
+
+        if (mt_rand(0, 1000) > 990) {//随机清除
+            //集合长度校验
+            $number = $this->cache->zcard(self::REDIS_HOTTEST_ARTICLE_ZSET);
+            if ($number > 500) {
+                $this->cache->zremrangebyrank(self::REDIS_HOTTEST_ARTICLE_ZSET, 100, 1000);
+            }
+        }
+
+        return $rs;
+    }
+
+    /**
+     * 获取列表
+     * @param int $start
+     * @param int $number
+     * @return array
+     */
+    public function getHottestArticle($start = 0, $number = 20)
+    {
+        $ids = $this->cache->zrange(self::REDIS_HOTTEST_ARTICLE_ZSET, $start, $number - 1);
+
+        return $ids ?? [];
+    }
+
+    /**
+     * 有序集合增加分数
+     * @param $id
+     * @param int $increment
+     * @return mixed
+     */
+    public function incrHottestScore($id, $increment = 1)
+    {
+        return $this->cache->zincrby(self::REDIS_HOTTEST_ARTICLE_ZSET, $increment, $id);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Message:
+ * Message: 标签Model
  * User: jzc
  * Date: 2018/10/30
  * Time: 5:34 PM
@@ -19,26 +19,34 @@ class TagModel extends Model
     const TAG_STATUS_STOPPED = 2;
     const TAG_STATUS_DELETED = 3;
 
-    const TAG_TYPE_UNDEFINED = 1;
-    public $tagMap = [
-        self::TAG_TYPE_UNDEFINED => '未分类'
-    ];
+    public $cache;
+
+    public function __construct(array $config = [])
+    {
+        $this->cache = new TagCache();
+
+        parent::__construct($config);
+    }
 
     public function getTagInfo($condition, $useCache = true)
     {
         $tagInfo = array();
         if ($useCache) {//查询缓存
-            $tagInfo = (new TagCache())->getTagInfo($condition);
+            $tagInfo = $this->cache->getTagInfo($condition);
         }
 
         if (empty($tagInfo)) {
             $list = $this->getListByCondition($condition);
-            foreach ($list as $_list) {
-                $tagInfo[$_list['type']] = $_list;
+
+            if (!empty($list)) {
+                foreach ($list as $_list) {
+                    $tagInfo[$_list['type']] = $_list;
+                }
+
+                //添加缓存
+                $this->cache->setTagInfo(json_encode($tagInfo));
             }
 
-            //添加缓存
-            (new TagCache())->setTagInfo(json_encode($tagInfo));
         }
 
         return $tagInfo;

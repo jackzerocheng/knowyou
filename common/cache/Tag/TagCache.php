@@ -16,6 +16,11 @@ class TagCache extends BaseCache
 {
     const CACHE_TAG_INFO = 'tag_info:';
 
+    /**
+     * 获取缓存中的Tag列表
+     * @param null $condition //仅支持普通一维数组等值检索
+     * @return array
+     */
     public function getTagInfo($condition = null)
     {
         $rs = array();
@@ -25,7 +30,14 @@ class TagCache extends BaseCache
             $data = json_decode($data, true);
             if (!empty($condition)) {//过滤筛选条件
                 foreach ($data as $k => $v) {
-                    if (empty(array_diff($condition, $v))) {
+                    $match = true;
+                    foreach ($condition as $conKey => $conVal) {
+                        if ($v[$conKey] != $conVal) {
+                            $match = false;
+                        }
+                    }
+
+                    if ($match) {
                         $rs[$k] = $v;
                     }
                 }

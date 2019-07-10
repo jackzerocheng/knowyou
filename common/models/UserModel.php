@@ -255,7 +255,11 @@ class UserModel extends Model
             $userInfo = $this->getOneByCondition($uid, ['uid' => $uid]);
 
             if (!empty($userInfo)) {
-                $userInfo['article_number'] = (new ArticleModel())->getCountByCondition(['uid' => $userInfo['uid'], 'status'=> ArticleModel::ARTICLE_STATUS_NORMAL]);
+                //用户文章数
+                $userInfo['article_number'] = (new ArticleModel())->getTableCountByCondition(
+                    $userInfo['uid'],
+                    ['uid' => $userInfo['uid'], 'status'=> ArticleModel::ARTICLE_STATUS_NORMAL]
+                );
 
                 $this->cache->setUserInfo($uid, json_encode($userInfo));
             }

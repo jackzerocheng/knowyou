@@ -1,6 +1,6 @@
 <?php
 /**
- * Message: 文章model
+ * Message: 文章model - 一个用户的文章全都分布在一个表内
  * User: jzc
  * Date: 2018/10/22
  * Time: 3:31 PM
@@ -36,8 +36,9 @@ class ArticleModel extends Model
     const ARTICLE_COVER_DEFAULT = 'http://data.jianmo.top/img/default/default_cover.png';//文章默认封面
     const TABLE_PARTITION = 4;
 
-    private $redis;//redis缓存
-    private $cache;//mem缓存
+    //这里设为public用于实例化对象调用方法，不然model中方法太多
+    public $redis;//redis缓存
+    public $cache;//mem缓存
 
     public function __construct(array $config = [])
     {
@@ -104,6 +105,22 @@ class ArticleModel extends Model
     }
 
     /**
+     * 最热列表 - 前20条
+     * @return array
+     */
+    public function getHottestArticle()
+    {
+        $articleList = [];
+
+        $ids = $this->redis->getHottestArticle();
+        if (!empty($ids)) {
+            $articleList = $this->getListByIds($ids);
+        }
+
+        return $articleList;
+    }
+
+    /**
      * 获取文章阅读数
      * @param $id
      * @return int
@@ -123,16 +140,6 @@ class ArticleModel extends Model
         }
 
         return $readNumber;
-    }
-
-    /**
-     * 自增阅读数
-     * @param $id
-     * @return mixed
-     */
-    public function incrArticleReadNumber($id)
-    {
-        return $this->redis->incrArticleReadNumber($id);
     }
 
     /**
@@ -166,7 +173,7 @@ class ArticleModel extends Model
 
         //无缓存
         if (empty($articleInfo)) {
-            $articleInfo = $this->getOneByCondition(['id' => $id], []);
+            $articleInfo = $this->getOneByCondition($id, ['id' => $id]);
 
             if (!empty($articleInfo)) {
                 $this->cache->setArticleInfo($id, json_encode($articleInfo));
@@ -207,6 +214,17 @@ class ArticleModel extends Model
         }
 
         return $result;
+    }
+
+    /**
+     * 获取单表内的记录数
+     * @param $id
+     * @param $condition
+     * @return int
+     */
+    public function getTableCountByCondition($id, $condition)
+    {
+        return (new Article($id))->getCountByCondition($condition);
     }
 
     /**
@@ -256,9 +274,6 @@ class ArticleModel extends Model
         $index = intval($id) % Article::TABLE_PARTITION;
         $article = new Article($index);
         $data = $article->getOneByCondition($condition);
-        if (!empty($data)) {
-            $data['tag_msg'] = (new TagModel())->tagMap[$data['tag']];
-        }
 
         return $data;
     }
@@ -275,7 +290,7 @@ class ArticleModel extends Model
         }
 
         $articleID = $this->redis->getArticleId($data['uid']);
-        if (!empty($this->getArticleInfo($articleID))) {//redis异常
+        if (empty($articleID) || !empty($this->getArticleInfo($articleID))) {//redis异常或当前ID已被使用
             $maxArticleId = $this->getMaxArticleId();
 
             $articleID = $maxArticleId - $maxArticleId % TABLE_PARTITION + 4 + $data['uid'] % TABLE_PARTITION;
@@ -300,8 +315,6 @@ class ArticleModel extends Model
 
         $transaction->commit();
 
-        $this->redis->incrArticleTotal();//文章总数
-
         Yii::info("new article data;article_id:{$articleID};article_index_id:{$articleIndexID}", CATEGORIES_INFO);
         return $articleID;
     }
@@ -317,5 +330,18 @@ class ArticleModel extends Model
     public function updateBatch($key, $data, $index)
     {
         return (new Article($key))->updateBatch($data, $index);
+    }
+
+    public function incrHotScore($articleInfo, $increment = 1)
+    {
+        $datePass = time() - strtotime($articleInfo['created_at']) - ONE_WEEK;//每篇文章都有一周的保护期，热度不随时间减少
+        if ($datePass > 0) {
+            //过一周后文章则根据阅读数，点赞数，不喜欢数，时间共同决定热度
+            $hotScore = $this->getArticleReadNumber($articleInfo['id']) - $datePass;
+            $this->redis->setHottestArticle($articleInfo['id'], $hotScore);
+            return $hotScore;
+        }
+
+        return $this->redis->incrHottestScore($articleInfo['id'], $increment);
     }
 }

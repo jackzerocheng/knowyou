@@ -92,4 +92,24 @@ class BaseAction extends Action
 
         Response::json($result);
     }
+
+    public function checkParams($params, $needKeys)
+    {
+        if (empty($params)) {
+            return false;
+        }
+
+        //筛选输入
+        foreach ($params as $k => $v) {
+            if (!in_array($k, $needKeys) || empty($v)) {
+                unset($params[$k]);
+            }
+        }
+
+        if (!empty(array_diff($needKeys, array_keys($params)))) {//键值比对
+            return false;
+        }
+
+        return true;
+    }
 }
